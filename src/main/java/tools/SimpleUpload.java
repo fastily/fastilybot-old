@@ -6,10 +6,10 @@ import java.nio.file.Paths;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import fastily.ctools.util.FCLI;
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.util.FCLI;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Simple utility to upload files to Commons.

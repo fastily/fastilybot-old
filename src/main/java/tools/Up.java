@@ -10,11 +10,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Simple Wikimedia Commons Uploader

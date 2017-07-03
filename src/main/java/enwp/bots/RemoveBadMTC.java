@@ -2,11 +2,11 @@ package enwp.bots;
 
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Untags non-eligible files for Commons.

@@ -2,11 +2,11 @@ package enwp.reports;
 
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Lists enwp files that are tagged keep local, but orphaned.

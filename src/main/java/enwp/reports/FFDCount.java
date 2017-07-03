@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fastily.ctools.util.Toolbox;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Keeps track of daily FfD count in a graph on wiki.

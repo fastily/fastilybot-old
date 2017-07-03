@@ -3,14 +3,14 @@ package tools;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import fastily.ctools.tplate.ParsedItem;
-import fastily.ctools.util.TParse;
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.WTP;
+import fastily.wpkit.tplate.ParsedItem;
+import fastily.wpkit.util.TParse;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Deletes the current day's PROD'd files. CAVEAT: Be sure to check each file before using.

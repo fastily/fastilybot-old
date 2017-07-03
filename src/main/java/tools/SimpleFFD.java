@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Dumb utility which carries out actual deletions of uncontested FfD nominations. Be sure to close any discussions

@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 

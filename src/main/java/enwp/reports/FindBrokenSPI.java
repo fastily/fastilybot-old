@@ -3,12 +3,12 @@ package enwp.reports;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Finds broken SPI pages on enwp.

@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.ctools.util.WikiX;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Leaves courtesy notifications (where possible) for users whose files were nominated at FfD.

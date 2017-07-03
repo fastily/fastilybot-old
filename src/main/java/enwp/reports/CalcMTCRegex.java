@@ -3,12 +3,12 @@ package enwp.reports;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Pre-computes regexes for MTC!

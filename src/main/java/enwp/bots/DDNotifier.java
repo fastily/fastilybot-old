@@ -11,14 +11,14 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
-import fastily.enwp.WPStrings;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Checks daily deletion categories on enwp and notifies users if they have not been notified.

@@ -2,11 +2,11 @@ package enwp.bots;
 
 import java.util.ArrayList;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Fills in date parameter (and other missing parameters) for files in [[Category:Wikipedia files with the same name on

@@ -2,11 +2,11 @@ package enwp.bots;
 
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Removes {{Orphan image}} from freely licensed files which contain file links in the main space.

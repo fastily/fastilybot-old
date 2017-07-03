@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-import fastily.ctools.util.Toolbox;
-import fastily.ctools.util.WikiX;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.util.WikiX;
 
 /**
  * Finds files on enwp nominated for deletion on Commons and flags the local file.

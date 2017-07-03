@@ -2,11 +2,11 @@ package tools;
 
 import java.util.ArrayList;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Delete orphaned non-free files from the specified dated category.

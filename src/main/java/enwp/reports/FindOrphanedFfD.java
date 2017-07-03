@@ -2,10 +2,10 @@ package enwp.reports;
 
 import java.util.ArrayList;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 import fastily.jwiki.core.MQuery;
 
 /**

@@ -1,8 +1,8 @@
 package enwp.reports;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Reports on the largest MTC files according to this

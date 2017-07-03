@@ -3,11 +3,11 @@ package enwp.bots;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.wpkit.WTP;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Finds and flags orphaned free media files on enwp.

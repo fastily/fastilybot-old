@@ -6,13 +6,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WPStrings;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
+import fastily.wpkit.WPStrings;
+import fastily.wpkit.util.Toolbox;
 
 import static java.nio.file.StandardOpenOption.*;
 

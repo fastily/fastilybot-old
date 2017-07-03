@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import fastily.ctools.tplate.ParsedItem;
-import fastily.ctools.util.TParse;
-import fastily.ctools.util.Toolbox;
-import fastily.enwp.WTP;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wpkit.WTP;
+import fastily.wpkit.tplate.ParsedItem;
+import fastily.wpkit.util.TParse;
+import fastily.wpkit.util.Toolbox;
 
 /**
  * Finds local enwp files transferred to Commons which have then been deleted on Commons.

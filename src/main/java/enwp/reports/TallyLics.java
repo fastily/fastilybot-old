@@ -10,7 +10,7 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WPStrings;
+import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.util.Toolbox;
 import okhttp3.HttpUrl;
 import okhttp3.Request;

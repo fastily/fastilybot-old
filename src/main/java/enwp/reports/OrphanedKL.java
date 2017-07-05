@@ -4,8 +4,8 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WPStrings;
-import fastily.wpkit.WTP;
+import fastily.wpkit.text.WPStrings;
+import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.Toolbox;
 
 /**

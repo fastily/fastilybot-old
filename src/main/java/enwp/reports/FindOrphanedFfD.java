@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WPStrings;
+import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.util.Toolbox;
 import fastily.jwiki.core.MQuery;
 

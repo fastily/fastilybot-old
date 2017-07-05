@@ -15,8 +15,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.WPStrings;
-import fastily.wpkit.WTP;
+import fastily.wpkit.text.WPStrings;
+import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
 

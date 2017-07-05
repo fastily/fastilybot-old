@@ -1,7 +1,7 @@
 package enwp.reports;
 
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WPStrings;
+import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.util.Toolbox;
 
 /**

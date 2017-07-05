@@ -1,13 +1,7 @@
 # fastilybot
 Fastily's Wikipedia Bots
 
-* [FastilyBot](https://en.wikipedia.org/wiki/User:FastilyBot)
-
-### Dependencies
-* [jwiki](https://github.com/fastily/jwiki)
-
-### Minimum System Requirements
-* JDK/JRE ≥ 8u40
+![JDK-1.8+](https://upload.wikimedia.org/wikipedia/commons/7/75/Blue_JDK_1.8%2B_Shield_Badge.svg)
 
 ### See Also
 * [toollabs reports](https://tools.wmflabs.org/fastilybot/)

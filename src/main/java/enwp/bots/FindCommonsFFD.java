@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WTP;
+import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
 

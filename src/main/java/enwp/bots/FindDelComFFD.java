@@ -9,7 +9,7 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WTP;
+import fastily.wpkit.text.WTP;
 import fastily.wpkit.tplate.ParsedItem;
 import fastily.wpkit.util.TParse;
 import fastily.wpkit.util.Toolbox;

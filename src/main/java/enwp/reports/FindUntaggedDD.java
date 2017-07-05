@@ -11,7 +11,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
-import fastily.wpkit.WPStrings;
+import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.util.Toolbox;
 
 import static java.nio.file.StandardOpenOption.*;

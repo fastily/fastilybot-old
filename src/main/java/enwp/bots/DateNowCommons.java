@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WTP;
+import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
 

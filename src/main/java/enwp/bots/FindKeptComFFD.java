@@ -4,10 +4,9 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Finds local enwp files which were nominated for deletion on Commons but kept.
@@ -20,7 +19,7 @@ public final class FindKeptComFFD
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The regex matching Template:Nominated for deletion on Commons.
@@ -30,7 +29,7 @@ public final class FindKeptComFFD
 	/**
 	 * The ncd template to fill out
 	 */
-	private static final String ncd = WPStrings.makeNCDBotTemplate(wiki.whoami());
+	private static final String ncd = BotUtils.makeNCDBotTemplate(wiki.whoami());
 	
 	/**
 	 * Main driver

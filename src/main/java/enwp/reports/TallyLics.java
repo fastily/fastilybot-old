@@ -10,10 +10,9 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
+import util.BotUtils;
 
 /**
  * Counts up free license tags and checks if a Commons counterpart exists.
@@ -26,7 +25,7 @@ public class TallyLics
 	/**
 	 * The Wiki objects to use
 	 */
-	private static Wiki enwp = Toolbox.getFastilyBot(), com = Toolbox.getCommons(enwp);
+	private static Wiki enwp = BotUtils.getFastilyBot(), com = BotUtils.getCommons(enwp);
 
 	/**
 	 * The title to post the report to.
@@ -58,7 +57,7 @@ public class TallyLics
 	{
 		Collections.sort(enwptpl);
 
-		String dump = WPStrings.updatedAt
+		String dump = BotUtils.updatedAt
 				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n";
 
 		int i = 0;

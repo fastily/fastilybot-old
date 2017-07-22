@@ -8,8 +8,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Finds files on enwp nominated for deletion on Commons and flags the local file.
@@ -22,7 +22,7 @@ public class FindCommonsFFD
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki enwp = Toolbox.getFastilyBot();
+	private static Wiki enwp = BotUtils.getFastilyBot();
 
 	/**
 	 * Matches wikitext usages of Template:Now Commons

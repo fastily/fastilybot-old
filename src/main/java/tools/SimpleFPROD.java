@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.tplate.ParsedItem;
 import fastily.wpkit.util.TParse;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
+import util.DateUtils;
 
 /**
  * Deletes the current day's PROD'd files. CAVEAT: Be sure to check each file before using.
@@ -23,7 +23,7 @@ public class SimpleFPROD
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastily();
+	private static Wiki wiki = BotUtils.getFastily();
 
 	/**
 	 * Main driver
@@ -36,7 +36,7 @@ public class SimpleFPROD
 		ArrayList<String> ftl = new ArrayList<>();
 
 		MQuery.getPageText(wiki, wiki
-				.getCategoryMembers("Category:Proposed deletion as of " + Toolbox.dateAsDMY(Toolbox.getUTCofNow().minusDays(8)), NS.FILE))
+				.getCategoryMembers("Category:Proposed deletion as of " + DateUtils.dateAsDMY(DateUtils.getUTCofNow().minusDays(8)), NS.FILE))
 				.forEach((k, v) -> {
 					try
 					{
@@ -53,6 +53,6 @@ public class SimpleFPROD
 				});
 
 		for (String s : MQuery.exists(wiki, true, ftl))
-			wiki.delete(s, WPStrings.csdG8talk);
+			wiki.delete(s, BotUtils.csdG8talk);
 	}
 }

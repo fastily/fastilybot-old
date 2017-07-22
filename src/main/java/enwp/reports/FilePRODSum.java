@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
+import fastily.wpkit.text.ReportUtils;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.tplate.ParsedItem;
 import fastily.wpkit.tplate.Template;
 import fastily.wpkit.util.TParse;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
 
 /**
  * Lists files nominated for deletion via file PROD.
@@ -27,7 +27,7 @@ public class FilePRODSum
 	/**
 	 * The Wiki to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The date input format (read from PROD template)
@@ -42,7 +42,7 @@ public class FilePRODSum
 	/**
 	 * The report text to output.
 	 */
-	private static String reportText = "{{/header}}\n" + WPStrings.updatedAt
+	private static String reportText = "{{/header}}\n" + BotUtils.updatedAt
 			+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n ! Use count\n";
 
 	/**
@@ -63,7 +63,7 @@ public class FilePRODSum
 			{
 				Template t = ParsedItem.parse(wiki, k, TParse.extractTemplate(filePRODRegex, v)).tplates.get(0);
 				reportText += String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						WPStrings.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+						ReportUtils.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k));
 			}
 			catch (Throwable e)
@@ -75,7 +75,7 @@ public class FilePRODSum
 		reportText += "|}\n";
 
 		if (!fails.isEmpty())
-			reportText += Toolbox.listify("\n== Failed to Parse ==\n", fails, true);
+			reportText += ReportUtils.listify("\n== Failed to Parse ==\n", fails, true);
 
 		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText, "Updating report");
 	}

@@ -15,7 +15,7 @@ import enwp.bots.MTCHelper;
 import enwp.bots.RemoveBadMTC;
 import enwp.bots.UnflagOI;
 import enwp.reports.BigMTC;
-import enwp.reports.CalcMTCRegex;
+import enwp.reports.FCTRedirsForMTC;
 import enwp.reports.FFDCount;
 import enwp.reports.FilePRODSum;
 import enwp.reports.FindBrokenSPI;
@@ -104,7 +104,7 @@ public final class BMgr
 					TallyLics.main(pArgs);
 					break;
 				case 4:
-					CalcMTCRegex.main(pArgs);
+					FCTRedirsForMTC.main(pArgs);
 					break;
 				case 5:
 					FFDCount.main(pArgs);

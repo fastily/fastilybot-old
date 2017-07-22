@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
 
 /**
  * Keeps track of daily FfD count in a graph on wiki.
@@ -26,7 +26,7 @@ public class FFDCount
 	/**
 	 * The Wiki to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * Location of {@code ffd-count.txt} for storage of results.

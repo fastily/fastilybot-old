@@ -8,8 +8,8 @@ import org.apache.commons.cli.Options;
 
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.util.FCLI;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Simple utility to upload files to Commons.
@@ -17,7 +17,7 @@ import fastily.wpkit.util.WikiX;
  * @author Fastily
  *
  */
-public class SimpleUpload
+public class QUpload
 {
 	/**
 	 * The Wiki object to use
@@ -33,9 +33,9 @@ public class SimpleUpload
 	{
 		CommandLine l = FCLI.gnuParse(makeOptList(), args, "SimpleUpload [-c] [-d] [-h] files");
 
-		wiki = Toolbox.getFSock();
+		wiki = BotUtils.getFSock();
 		if (l.hasOption('c'))
-			wiki = Toolbox.getCommons(wiki);
+			wiki = BotUtils.getCommons(wiki);
 
 		String extRegex = WikiX.allowedFileExtsRegex(wiki), desc = l.getOptionValue('d', "");
 		

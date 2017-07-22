@@ -12,9 +12,9 @@ import java.util.stream.Stream;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.text.ReportUtils;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Simple Wikimedia Commons Uploader
@@ -27,7 +27,7 @@ public final class Up
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getCommons(Toolbox.getFastily());
+	private static Wiki wiki = BotUtils.getCommons(BotUtils.getFastily()); //TODO: Fixme
 
 	/**
 	 * The regex matching file extensions which can be uploaded to Commons
@@ -64,7 +64,7 @@ public final class Up
 				for (Path f : FL.toSet(Files.list(d).filter(f -> Files.isRegularFile(f) && f.toString().matches(extRegex))))
 					if (!wiki.upload(f, String.format(fnBase, name, ++i, getExt(f)),
 							String.format(infoT, name,
-									WPStrings.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
+									ReportUtils.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
 									wiki.whoami()),
 							""))
 						fails.add(f.toString());

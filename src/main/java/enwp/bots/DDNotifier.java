@@ -7,18 +7,20 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.WPStrings;
+import fastily.wpkit.text.ReportUtils;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Checks daily deletion categories on enwp and notifies users if they have not been notified.
@@ -31,7 +33,7 @@ public class DDNotifier
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The root configuration page.
@@ -73,7 +75,7 @@ public class DDNotifier
 	 */
 	public static void main(String[] args)
 	{
-		Toolbox.fetchPairedConfig(wiki, baseConfig + "Rules").forEach((k, v) -> procPair(k, v));
+		fetchPairedConfig(wiki, baseConfig + "Rules").forEach((k, v) -> procPair(k, v));
 	}
 
 	/**
@@ -108,9 +110,24 @@ public class DDNotifier
 
 			String x = String.format("%n{{subst:%s|1=%s}}%n", templ, notifyList.get(0));
 			if (notifyList.size() > 1)
-				x += Toolbox.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
+				x += ReportUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
 
-			wiki.addText(k, x + WPStrings.botNote, "BOT: Notify user of possible file issue(s)", false);
+			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of possible file issue(s)", false);
 		});
+	}
+	
+	/**
+	 * Parses a config page with key-value pairs. Empty lines and lines starting with '&gt;' are ignored. Key-value pairs
+	 * should be split by {@code ;}, one pair per line.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param title The title of the config page to parse
+	 * @return A HashMap with the parsed pairs.
+	 */
+	private static HashMap<String, String> fetchPairedConfig(Wiki wiki, String title)
+	{
+		return FL.toHM(
+				Stream.of(wiki.getPageText(title).split("\n")).filter(s -> !s.startsWith("<") && !s.isEmpty()).map(s -> s.split(";", 2)),
+				a -> a[0], a -> a[1]);
 	}
 }

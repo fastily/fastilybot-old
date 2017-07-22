@@ -5,8 +5,8 @@ import java.util.HashSet;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Untags non-eligible files for Commons.
@@ -19,7 +19,7 @@ public final class RemoveBadMTC
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * Regular expression matching {@code Template:Copy to Wikimedia Commons}

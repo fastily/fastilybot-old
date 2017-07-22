@@ -7,8 +7,8 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Pre-computes regexes for MTC!
@@ -16,17 +16,12 @@ import fastily.wpkit.util.WikiX;
  * @author Fastily
  *
  */
-public class CalcMTCRegex
+public class FCTRedirsForMTC
 {
-	/**
-	 * The Wiki object to use
-	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
-
 	/**
 	 * The title to post the report to.
 	 */
-	private static String reportPage = "Wikipedia:MTC!/Regexes";
+	private static String reportPage = "Wikipedia:MTC!/Redirects";
 
 	/**
 	 * The output text to be posted to the report.
@@ -40,16 +35,18 @@ public class CalcMTCRegex
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		
 		HashSet<String> rawL = new HashSet<>(wiki.getLinksOnPage(reportPage + "/IncludeAlso", NS.TEMPLATE));
 		rawL.addAll(TallyLics.comtpl);
 
 		MQuery.linksHere(wiki, true, new ArrayList<>(rawL)).forEach((k, v) -> {
-			v.add(k); // original template is included in results
-			output += String.format("%s;%s%n", k, FL.pipeFence(WikiX.stripNamespaces(wiki, v)));
+			v.add(0, k); // original template is included in results
+			output += FL.pipeFence(WikiX.stripNamespaces(wiki, v)) + "\n";
 		});
 
-		output += "</pre>";
-
+		output += "</pre>";		
+		
 		wiki.edit(reportPage, output, "Update report");
 	}
 }

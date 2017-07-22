@@ -9,8 +9,9 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
+import util.DateUtils;
 
 /**
  * Dumb utility which carries out actual deletions of uncontested FfD nominations. Be sure to close any discussions
@@ -24,7 +25,7 @@ public class SimpleFFD
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastily();
+	private static Wiki wiki = BotUtils.getFastily();
 
 	/**
 	 * The root page of Files for Discussion
@@ -52,7 +53,7 @@ public class SimpleFFD
 		if(args.length > 0)
 			 targetPage = ffdPrefix + args[0];
 		else
-			targetPage = ffdPrefix + Toolbox.dateAsYMD(Toolbox.getUTCofNow().minusDays(8));
+			targetPage = ffdPrefix + DateUtils.dateAsYMD(DateUtils.getUTCofNow().minusDays(8));
 		
 		ArrayList<Triple<Integer, String, Integer>> l = wiki.getSectionHeaders(targetPage);
 		l.removeIf(t -> t.x != 4);

@@ -7,8 +7,8 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.text.ReportUtils;
+import util.BotUtils;
 
 /**
  * Finds broken SPI pages on enwp.
@@ -21,7 +21,7 @@ public final class FindBrokenSPI
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The title to post reports on
@@ -48,7 +48,7 @@ public final class FindBrokenSPI
 				l.add(v);
 		});
 
-		wiki.edit(report, Toolbox.listify("{{/Header}}\n" + WPStrings.updatedAt, l, false),
+		wiki.edit(report, ReportUtils.listify("{{/Header}}\n" + BotUtils.updatedAt, l, false),
 				String.format("BOT: Update list (%d items)", l.size()));
 	}
 }

@@ -13,10 +13,10 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.WPStrings;
+import fastily.wpkit.text.ReportUtils;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Leaves courtesy notifications (where possible) for users whose files were nominated at FfD.
@@ -29,7 +29,7 @@ public final class FFDNotifier
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The start of today
@@ -73,8 +73,8 @@ public final class FFDNotifier
 
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
-				x += Toolbox.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
-			wiki.addText(k, x + WPStrings.botNote, "BOT: Notify user of FfD", false);
+				x += ReportUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
+			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of FfD", false);
 		});
 	}
 }

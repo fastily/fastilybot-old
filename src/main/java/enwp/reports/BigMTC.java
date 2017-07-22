@@ -1,8 +1,8 @@
 package enwp.reports;
 
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.text.ReportUtils;
+import util.BotUtils;
 
 /**
  * Reports on the largest MTC files according to this
@@ -16,7 +16,7 @@ public class BigMTC
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The title to leave the report at
@@ -30,7 +30,7 @@ public class BigMTC
 	 */
 	public static void main(String[] args)
 	{
-		wiki.edit(reportPage, Toolbox.listify(WPStrings.updatedAt, Toolbox.fetchLabsReportListAsFiles(wiki, "report5"), true),
+		wiki.edit(reportPage, ReportUtils.listify(BotUtils.updatedAt, BotUtils.fetchLabsReportListAsFiles(wiki, "report5"), true),
 				"Updating report");
 	}
 }

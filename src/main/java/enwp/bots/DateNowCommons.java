@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Fills in date parameter (and other missing parameters) for files in [[Category:Wikipedia files with the same name on
@@ -20,7 +20,7 @@ public class DateNowCommons
 	/**
 	 * The Wiki Object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * Matches {{Now Commons}} templates

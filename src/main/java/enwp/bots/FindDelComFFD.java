@@ -12,7 +12,7 @@ import fastily.jwiki.util.FL;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.tplate.ParsedItem;
 import fastily.wpkit.util.TParse;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
 
 /**
  * Finds local enwp files transferred to Commons which have then been deleted on Commons.
@@ -25,7 +25,7 @@ public final class FindDelComFFD
 	/**
 	 * The Wiki objects to use
 	 */
-	private static Wiki enwp = Toolbox.getFastilyBot(), com = Toolbox.getCommons(enwp);
+	private static Wiki enwp = BotUtils.getFastilyBot(), com = BotUtils.getCommons(enwp);
 
 	/**
 	 * A Pattern representation of {@code Template:Nominated for deletion on Commons}

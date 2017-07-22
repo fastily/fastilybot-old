@@ -2,11 +2,10 @@ package enwp.bots;
 
 import java.util.HashSet;
 
-import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
 
 /**
  * Removes {{Orphan image}} from freely licensed files which contain file links in the main space.
@@ -19,7 +18,7 @@ public final class UnflagOI
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * A regex matching the Orphan image template
@@ -33,23 +32,19 @@ public final class UnflagOI
 	 */
 	public static void main(String[] args)
 	{
-		HashSet<String> oL = Toolbox.fetchLabsReportListAsFiles(wiki, "report3");
-		oL.removeAll(Toolbox.fetchLabsReportListAsFiles(wiki, "report4"));
+		// Generate the set of files with no links of any sort
+		HashSet<String> oL = BotUtils.fetchLabsReportListAsFiles(wiki, "report3");
+		oL.removeAll(BotUtils.fetchLabsReportListAsFiles(wiki, "report4"));
 		
+		// Get all files tagged with Orphan image which are not orphans
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.removeAll(oL);
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
 
-		
-		System.out.println(l.size());
+		// Restrict working set to Free files only
+		l.retainAll(BotUtils.fetchLabsReportListAsFiles(wiki, "report6"));
 		
 		for(String s : l)
-			System.out.println(s);
-		
-		
-//		MQuery.fileUsage(wiki, wiki.whatTranscludesHere(WTP.orphan.title, NS.FILE)).forEach((k, v) -> {
-//			if(!wiki.filterByNS(v, NS.MAIN).isEmpty())
-//				wiki.replaceText(k, oiRegex, "BOT: File contains inbound links");
-//		});
+			wiki.replaceText(s, oiRegex, "BOT: File contains inbound links");
 	}
 }

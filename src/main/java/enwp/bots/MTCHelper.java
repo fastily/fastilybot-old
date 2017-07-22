@@ -5,10 +5,9 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.Toolbox;
 import fastily.wpkit.util.WikiX;
+import util.BotUtils;
 
 /**
  * Find and fix tags for files tagged for transfer to Commons which have already transferred.
@@ -21,7 +20,7 @@ public final class MTCHelper
 	/**
 	 * The Wiki to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * Creates the regular expression matching Copy to Wikimedia Commons
@@ -36,7 +35,7 @@ public final class MTCHelper
 	/**
 	 * The ncd template to fill out
 	 */
-	private static String ncdT = WPStrings.makeNCDBotTemplate(wiki.whoami());
+	private static String ncdT = BotUtils.makeNCDBotTemplate(wiki.whoami());
 
 	/**
 	 * Main driver
@@ -45,7 +44,7 @@ public final class MTCHelper
 	 */
 	public static void main(String[] args)
 	{
-		HashSet<String> l = Toolbox.fetchLabsReportListAsFiles(wiki, "report1");
+		HashSet<String> l = BotUtils.fetchLabsReportListAsFiles(wiki, "report1");
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 

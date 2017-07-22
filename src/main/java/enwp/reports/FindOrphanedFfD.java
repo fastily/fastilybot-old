@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.text.ReportUtils;
+import util.BotUtils;
 import fastily.jwiki.core.MQuery;
 
 /**
@@ -19,7 +19,7 @@ public class FindOrphanedFfD
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The title to post the report to.
@@ -39,6 +39,6 @@ public class FindOrphanedFfD
 				l.add(k);
 		});
 
-		wiki.edit(reportPage, Toolbox.listify(WPStrings.updatedAt, l, true), String.format("Updating report (%d items)", l.size()));
+		wiki.edit(reportPage, ReportUtils.listify(BotUtils.updatedAt, l, true), String.format("Updating report (%d items)", l.size()));
 	}
 }

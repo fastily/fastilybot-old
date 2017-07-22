@@ -11,8 +11,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import fastily.wpkit.text.ReportUtils;
+import util.BotUtils;
 
 import static java.nio.file.StandardOpenOption.*;
 
@@ -27,7 +27,7 @@ public final class FindUntaggedDD
 	/**
 	 * The Wiki object to use
 	 */
-	private static final Wiki wiki = Toolbox.getFastilyBot();
+	private static final Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * The title of the report page
@@ -44,7 +44,7 @@ public final class FindUntaggedDD
 	/**
 	 * The regex matching eligible daily deletion categories for review
 	 */
-	private static final String ddCatRegex = ".*? " + WPStrings.DMYRegex;
+	private static final String ddCatRegex = ".*? " + BotUtils.DMYRegex;
 
 	/**
 	 * The local storage path for caching the previous run's daily deletion files
@@ -78,7 +78,7 @@ public final class FindUntaggedDD
 		if (sections.size() > maxOldReports)
 			text = text.substring(0, sections.get(maxOldReports).z);
 
-		wiki.edit(reportPage, Toolbox.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
+		wiki.edit(reportPage, ReportUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
 				"Updating report");
 
 		dump(l, false);

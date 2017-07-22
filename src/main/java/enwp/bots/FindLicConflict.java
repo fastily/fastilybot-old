@@ -6,7 +6,7 @@ import java.util.HashSet;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
 
 /**
  * Finds enwp files which are flagged as both free and non-free.
@@ -19,7 +19,7 @@ public final class FindLicConflict
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastilyBot();
+	private static Wiki wiki = BotUtils.getFastilyBot();
 
 	/**
 	 * Main driver
@@ -28,7 +28,7 @@ public final class FindLicConflict
 	 */
 	public static void main(String[] args) throws Throwable
 	{
-		HashSet<String> fl = Toolbox.fetchLabsReportListAsFiles(wiki, "report2");
+		HashSet<String> fl = BotUtils.fetchLabsReportListAsFiles(wiki, "report2");
 		
 		for(String s : wiki.getLinksOnPage(String.format("User:%s/Task5/Ignore", wiki.whoami())))
 			fl.removeAll(wiki.whatTranscludesHere(s, NS.FILE));

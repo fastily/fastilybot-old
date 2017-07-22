@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.WPStrings;
-import fastily.wpkit.util.Toolbox;
+import util.BotUtils;
+import util.DateUtils;
 
 /**
  * Delete orphaned non-free files from the specified dated category.
@@ -19,7 +19,7 @@ public final class OrphanedFU
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = Toolbox.getFastily();
+	private static Wiki wiki = BotUtils.getFastily();
 
 	/**
 	 * Main driver.
@@ -33,7 +33,7 @@ public final class OrphanedFU
 		if (args.length > 0)
 			cat += args[0];
 		else
-			cat += Toolbox.dateAsDMY(Toolbox.getUTCofNow().minusDays(8));
+			cat += DateUtils.dateAsDMY(DateUtils.getUTCofNow().minusDays(8));
 
 		ArrayList<String> ftl = new ArrayList<>();
 		MQuery.fileUsage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
@@ -42,7 +42,7 @@ public final class OrphanedFU
 		});
 
 		MQuery.exists(wiki, true, ftl)
-				.forEach(s -> wiki.delete(s, WPStrings.csdG8talk));
+				.forEach(s -> wiki.delete(s, BotUtils.csdG8talk));
 
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup");

@@ -13,6 +13,7 @@ import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
 import fastily.wpkit.text.ReportUtils;
 import util.BotUtils;
+import util.DateUtils;
 
 import static java.nio.file.StandardOpenOption.*;
 
@@ -44,7 +45,7 @@ public final class FindUntaggedDD
 	/**
 	 * The regex matching eligible daily deletion categories for review
 	 */
-	private static final String ddCatRegex = ".*? " + BotUtils.DMYRegex;
+	private static final String ddCatRegex = ".*? " + DateUtils.DMYRegex;
 
 	/**
 	 * The local storage path for caching the previous run's daily deletion files

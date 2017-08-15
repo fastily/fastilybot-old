@@ -25,6 +25,10 @@ public class DateUtils
 	 * @see #dateAsDMY(TemporalAccessor)
 	 */
 	private static DateTimeFormatter DMY = DateTimeFormatter.ofPattern("d MMMM yyyy");
+	/**
+	 * Matches a date of the form dd-mmmm-yyyy.
+	 */
+	public static final String DMYRegex = "\\d{1,2}? (January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}?";
 
 	/**
 	 * Constructors disallowed

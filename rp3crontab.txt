@@ -14,7 +14,7 @@ BOTHOME="/home/pi/scripts"
 00 6 * * 1,3,5 cd "$BOTHOME" && java -jar BMgr.jar -b 8 > task8.txt 2>&1 # FindDelComFFD
 
 # Weekly
-#30 11 * * 0 cd "$BOTHOME" && java -jar BMgr.jar -b 4 > task4.txt 2>&1 # UnflagOI
+30 11 * * 0 cd "$BOTHOME" && java -jar BMgr.jar -b 4 > task4.txt 2>&1 # UnflagOI
 30 13 * * 0 cd "$BOTHOME" && java -jar BMgr.jar -b 5 > task5.txt 2>&1 # FindLicConflict
 30 15 * * 0 cd "$BOTHOME" && java -jar BMgr.jar -b 9 > task9.txt 2>&1 # FindKeptComFFD
 30 17 * * 0 cd "$BOTHOME" && java -jar BMgr.jar -b 10 > task10.txt 2>&1 # FlagOI

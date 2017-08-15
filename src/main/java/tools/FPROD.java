@@ -18,7 +18,7 @@ import util.DateUtils;
  * @author Fastily
  *
  */
-public class SimpleFPROD
+public class FPROD
 {
 	/**
 	 * The Wiki object to use

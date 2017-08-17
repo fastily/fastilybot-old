@@ -3,6 +3,7 @@ package util;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
@@ -22,12 +23,12 @@ public class BotUtils
 	 * Used as part of report headers.
 	 */
 	public static final String updatedAt = "This report updated at ~~~~~\n";
-	
+
 	/**
 	 * Wiki-text message stating that a bot did not nominate any files for deletion.
 	 */
 	public static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
-	
+
 	/**
 	 * Summary for speedy deletion criterion g8 - talk page
 	 */
@@ -47,9 +48,20 @@ public class BotUtils
 	 * @param user The user to get a Wiki object for
 	 * @return A Wiki object, or null on error
 	 */
-	private static Wiki getUser(String user)
+	private static Wiki getUserWP(String user)
 	{
 		return WikiGen.wg.get(user, "en.wikipedia.org");
+	}
+
+	/**
+	 * Gets the specified user on Commons.
+	 * 
+	 * @param user The username to get
+	 * @return A Wiki object, or null on error.
+	 */
+	public static Wiki getUserCOM(String user)
+	{
+		return WikiGen.wg.get(user, "commons.wikimedia.org");
 	}
 
 	/**
@@ -59,7 +71,7 @@ public class BotUtils
 	 */
 	public static Wiki getFastily()
 	{
-		return getUser("Fastily");
+		return getUserWP("Fastily");
 	}
 
 	/**
@@ -69,7 +81,7 @@ public class BotUtils
 	 */
 	public static Wiki getFSock()
 	{
-		return getUser("FSock");
+		return getUserWP("FSock");
 	}
 
 	/**
@@ -79,7 +91,7 @@ public class BotUtils
 	 */
 	public static Wiki getFastilyBot()
 	{
-		return getUser("FastilyBot");
+		return getUserWP("FastilyBot");
 	}
 
 	/**
@@ -94,7 +106,7 @@ public class BotUtils
 	}
 
 	/**
-	 * Fetch a simple report from fastilybot's toollabs dumps.
+	 * Fetch a simple, raw report from fastilybot's toollabs dumps.
 	 * 
 	 * @param wiki The Wiki object to use
 	 * @param report The name of the report, without the {@code .txt} extension.
@@ -121,18 +133,30 @@ public class BotUtils
 	}
 
 	/**
-	 * Fetch a simple report from fastilybot's toollabs dumps. Auto-formats each item in the report by adding a
-	 * {@code File:} prefix and by replacing underscores with spaces.
+	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code prefix} and where underscores are replaced by spaces.
 	 * 
 	 * @param wiki The Wiki object to use
 	 * @param report The name of the report, without the {@code .txt} extension.
-	 * @return A String HashSet with each item in the report, or the empty HashSet if something went wrong.
+	 * @param prefix The prefix to add to each entry (usually a namespace prefix).
+	 * @return A HashSet where each item is an entry in the report.
+	 */
+	public static HashSet<String> fetchLabsReportList(Wiki wiki, String report, String prefix)
+	{
+		return FL.toSet(Arrays.stream(fetchLabsReportList(wiki, report)).map(s -> prefix + s.replace('_', ' ')));
+	}
+
+	/**
+	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code File:} and where underscores are replaced by spaces.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param report The name of the report, without the {@code .txt} extension.
+	 * @return A HashSet with each item in the report, or the empty HashSet if something went wrong.
 	 */
 	public static HashSet<String> fetchLabsReportListAsFiles(Wiki wiki, String report)
 	{
-		return FL.toSet(Arrays.stream(fetchLabsReportList(wiki, report)).map(s -> "File:" + s.replace('_', ' ')));
+		return fetchLabsReportList(wiki, report, "File:");
 	}
-
+	
 	/**
 	 * Generates an {@code Template:Ncd} template for a bot user.
 	 * 
@@ -143,5 +167,16 @@ public class BotUtils
 	{
 		return String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()),
 				user);
+	}
+
+	/**
+	 * Removes a List from a HashSet. Copies a List into a HashSet and then removes it from {@code l}
+	 * 
+	 * @param l The HashSet to remove elements contained in {@code toRemove} from
+	 * @param toRemove The List of items to remove from {@code l}
+	 */
+	public static void removeListFromHS(HashSet<String> l, List<String> toRemove)
+	{
+		l.removeAll(new HashSet<>(toRemove));
 	}
 }

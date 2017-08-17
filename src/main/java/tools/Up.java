@@ -27,7 +27,7 @@ public final class Up
 	/**
 	 * The Wiki object to use
 	 */
-	private static Wiki wiki = BotUtils.getCommons(BotUtils.getFastily()); //TODO: Fixme
+	private static Wiki wiki = BotUtils.getUserCOM("Fastily");
 
 	/**
 	 * The regex matching file extensions which can be uploaded to Commons
@@ -37,7 +37,7 @@ public final class Up
 	/**
 	 * The String template for file description pages
 	 */
-	private static final String infoT = "=={{int:filedesc}}==\n{{Information\n|description=%s\n|date=%s\n|source={{Own}}\n|"
+	private static String infoT = "=={{int:filedesc}}==\n{{Information\n|description=%s\n|date=%s\n|source={{Own}}\n|"
 			+ "author=~~~\n}}\n\n=={{int:license-header}}==\n{{Self|Cc-by-sa-4.0}}\n\n[[Category:%s]]\n[[Category:Files by %s]]";
 
 	/**

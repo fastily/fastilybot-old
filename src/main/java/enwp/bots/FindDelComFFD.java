@@ -10,7 +10,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.tplate.ParsedItem;
+import fastily.wpkit.tp.WParser;
 import fastily.wpkit.util.TParse;
 import util.BotUtils;
 
@@ -45,12 +45,13 @@ public final class FindDelComFFD
 	 */
 	public static void main(String[] args)
 	{
+		
 		HashMap<String, String> comPairs = new HashMap<>();
 		pageTexts.forEach((k, v) -> {
 			try
 			{
-				String comFile = ParsedItem.parse(enwp, k, TParse.extractTemplate(nomDelTemplPattern, v)).tplates.get(0).get("1")
-						.getString();
+				
+				String comFile = WParser.parseText(enwp, TParse.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1").toString();
 				if (comFile != null)
 					comPairs.put(k, enwp.convertIfNotInNS(comFile, NS.FILE));
 			}

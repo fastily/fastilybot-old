@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.text.WTP;
 import util.BotUtils;
 
@@ -31,7 +31,7 @@ public class OrphanedKL
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit(String.format("User:%s/Orphaned Keep Local", wiki.whoami()), ReportUtils.listify(BotUtils.updatedAt, l, true),
+		wiki.edit(String.format("User:%s/Orphaned Keep Local", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, true),
 				"Updating report");
 	}
 }

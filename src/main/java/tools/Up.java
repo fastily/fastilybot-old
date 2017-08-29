@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
@@ -64,7 +64,7 @@ public final class Up
 				for (Path f : FL.toSet(Files.list(d).filter(f -> Files.isRegularFile(f) && f.toString().matches(extRegex))))
 					if (!wiki.upload(f, String.format(fnBase, name, ++i, getExt(f)),
 							String.format(infoT, name,
-									ReportUtils.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
+									StrUtil.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
 									wiki.whoami()),
 							""))
 						fails.add(f.toString());

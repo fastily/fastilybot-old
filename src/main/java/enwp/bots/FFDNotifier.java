@@ -13,7 +13,7 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.WikiX;
 import util.BotUtils;
@@ -73,7 +73,7 @@ public final class FFDNotifier
 
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
-				x += ReportUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
+				x += StrUtil.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
 			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of FfD", false);
 		});
 	}

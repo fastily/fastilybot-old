@@ -26,7 +26,7 @@ public class FCTRedirsForMTC
 	/**
 	 * The output text to be posted to the report.
 	 */
-	private static String output = "<!-- This is a bot-generated regex library for MTC!, please don't touch, thanks! -->\n<pre>\n";
+	private static String output = "<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n";
 
 	/**
 	 * Main driver

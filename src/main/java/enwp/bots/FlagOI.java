@@ -29,10 +29,10 @@ public class FlagOI
 	 */
 	public static void main(String[] args)
 	{
-		HashSet<String> l = BotUtils.fetchLabsReportListAsFiles(wiki, "report3");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
 		l.removeAll(WTP.orphan.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
-		l.removeAll(BotUtils.fetchLabsReportListAsFiles(wiki, "report4"));
+		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
 		l.removeAll(new HashSet<>(MQuery.exists(wiki, false, new ArrayList<>(l))));
 		
 		for(String s : l)

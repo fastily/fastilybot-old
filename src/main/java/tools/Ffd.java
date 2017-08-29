@@ -20,7 +20,7 @@ import util.DateUtils;
  * @author Fastily
  *
  */
-public class FFD
+public class Ffd
 {
 	/**
 	 * The Wiki object to use

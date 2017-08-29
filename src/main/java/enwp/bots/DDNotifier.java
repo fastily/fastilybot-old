@@ -17,7 +17,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.util.WikiX;
 import util.BotUtils;
@@ -110,7 +110,7 @@ public class DDNotifier
 
 			String x = String.format("%n{{subst:%s|1=%s}}%n", templ, notifyList.get(0));
 			if (notifyList.size() > 1)
-				x += ReportUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
+				x += StrUtil.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
 
 			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of possible file issue(s)", false);
 		});

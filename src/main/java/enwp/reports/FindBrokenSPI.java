@@ -7,7 +7,7 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import util.BotUtils;
 
 /**
@@ -48,7 +48,7 @@ public final class FindBrokenSPI
 				l.add(v);
 		});
 
-		wiki.edit(report, ReportUtils.listify("{{/Header}}\n" + BotUtils.updatedAt, l, false),
+		wiki.edit(report, StrUtil.listify("{{/Header}}\n" + BotUtils.updatedAt, l, false),
 				String.format("BOT: Update list (%d items)", l.size()));
 	}
 }

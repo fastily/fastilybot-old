@@ -44,7 +44,7 @@ public final class MTCHelper
 	 */
 	public static void main(String[] args)
 	{
-		HashSet<String> l = BotUtils.fetchLabsReportListAsFiles(wiki, "report1");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report1");
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 

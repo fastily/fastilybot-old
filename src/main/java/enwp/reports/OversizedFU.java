@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import util.BotUtils;
 
 /**
@@ -24,7 +24,7 @@ public class OversizedFU
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
 
-		HashSet<String> l = BotUtils.fetchLabsReportListAsFiles(wiki, "report7");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report7");
 
 		BotUtils.removeListFromHS(l,
 				wiki.getCategoryMembers("Category:Wikipedia non-free file size reduction requests for manual processing"));
@@ -34,7 +34,7 @@ public class OversizedFU
 		BotUtils.removeListFromHS(l, wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 		BotUtils.removeListFromHS(l, wiki.whatTranscludesHere("Template:Ffd", NS.FILE));
 
-		wiki.edit(String.format("User:%s/Oversized Fair-use Images", wiki.whoami()), ReportUtils.listify(BotUtils.updatedAt, l, true),
+		wiki.edit(String.format("User:%s/Oversized Fair-use Images", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, true),
 				"Updating report");
 	}
 }

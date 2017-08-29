@@ -14,7 +14,7 @@ import util.DateUtils;
  * @author Fastily
  *
  */
-public final class OrphanedFU
+public final class Orfud
 {
 	/**
 	 * The Wiki object to use

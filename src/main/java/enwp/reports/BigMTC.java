@@ -1,7 +1,7 @@
 package enwp.reports;
 
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.ReportUtils;
+import fastily.wpkit.text.StrUtil;
 import util.BotUtils;
 
 /**
@@ -30,7 +30,7 @@ public class BigMTC
 	 */
 	public static void main(String[] args)
 	{
-		wiki.edit(reportPage, ReportUtils.listify(BotUtils.updatedAt, BotUtils.fetchLabsReportListAsFiles(wiki, "report5"), true),
+		wiki.edit(reportPage, StrUtil.listify(BotUtils.updatedAt, BotUtils.fetchLabsReportAsFiles(wiki, "report5"), true),
 				"Updating report");
 	}
 }

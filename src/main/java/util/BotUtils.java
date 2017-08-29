@@ -110,9 +110,10 @@ public class BotUtils
 	 * 
 	 * @param wiki The Wiki object to use
 	 * @param report The name of the report, without the {@code .txt} extension.
+	 * @param prefix The prefix to add to each entry (usually a namespace prefix).
 	 * @return A String Array with each item in the report, or the empty Array if something went wrong.
 	 */
-	public static String[] fetchLabsReportList(Wiki wiki, String report)
+	public static HashSet<String> fetchLabsReportSet(Wiki wiki, String report, String prefix)
 	{
 		try
 		{
@@ -122,27 +123,14 @@ public class BotUtils
 					.execute();
 
 			if (r.isSuccessful())
-				return r.body().string().split("\n");
+				return FL.toSet(Arrays.stream(r.body().string().split("\n")).map(s -> prefix + s.replace('_', ' ')));
 		}
 		catch (Throwable e)
 		{
 			e.printStackTrace();
 		}
 
-		return new String[0];
-	}
-
-	/**
-	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code prefix} and where underscores are replaced by spaces.
-	 * 
-	 * @param wiki The Wiki object to use
-	 * @param report The name of the report, without the {@code .txt} extension.
-	 * @param prefix The prefix to add to each entry (usually a namespace prefix).
-	 * @return A HashSet where each item is an entry in the report.
-	 */
-	public static HashSet<String> fetchLabsReportList(Wiki wiki, String report, String prefix)
-	{
-		return FL.toSet(Arrays.stream(fetchLabsReportList(wiki, report)).map(s -> prefix + s.replace('_', ' ')));
+		return new HashSet<>();
 	}
 
 	/**
@@ -152,9 +140,9 @@ public class BotUtils
 	 * @param report The name of the report, without the {@code .txt} extension.
 	 * @return A HashSet with each item in the report, or the empty HashSet if something went wrong.
 	 */
-	public static HashSet<String> fetchLabsReportListAsFiles(Wiki wiki, String report)
+	public static HashSet<String> fetchLabsReportAsFiles(Wiki wiki, String report)
 	{
-		return fetchLabsReportList(wiki, report, "File:");
+		return fetchLabsReportSet(wiki, report, "File:");
 	}
 	
 	/**

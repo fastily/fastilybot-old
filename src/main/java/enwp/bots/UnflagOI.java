@@ -33,8 +33,8 @@ public final class UnflagOI
 	public static void main(String[] args)
 	{
 		// Generate the set of files with no links of any sort
-		HashSet<String> oL = BotUtils.fetchLabsReportListAsFiles(wiki, "report3");
-		oL.removeAll(BotUtils.fetchLabsReportListAsFiles(wiki, "report4"));
+		HashSet<String> oL = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
+		oL.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
 		
 		// Get all files tagged with Orphan image which are not orphans
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
@@ -42,7 +42,7 @@ public final class UnflagOI
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
 
 		// Restrict working set to Free files only
-		l.retainAll(BotUtils.fetchLabsReportListAsFiles(wiki, "report6"));
+		l.retainAll(BotUtils.fetchLabsReportAsFiles(wiki, "report6"));
 		
 		for(String s : l)
 			wiki.replaceText(s, oiRegex, "BOT: File contains inbound links");

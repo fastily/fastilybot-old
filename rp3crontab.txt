@@ -22,9 +22,10 @@ BOTHOME="/home/pi/scripts"
 # DB Reports
 45 0,6,12,18 * * * cd "$BOTHOME" && java -jar BMgr.jar -r 1 > report1.txt 2>&1 # FindUntaggedDD
 45 23 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 2 > report2.txt 2>&1 # FindOrphanedFfD
-45 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 3 > report3.txt 2>&1 # TallyLics
-45 21 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 4 > report4.txt 2>&1 # CalcMTCRegex
-45 20 * * * cd "$BOTHOME" && java -jar BMgr.jar -r 5 > report5.txt 2>&1 # FFDCount
-45 19 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 6 > report6.txt 2>&1 # OrphanedKL
-45 18 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 7 > report7.txt 2>&1 # BigMTC
+30 23 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 3 > report3.txt 2>&1 # TallyLics
+15 23 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 4 > report4.txt 2>&1 # CalcMTCRegex
+00 23 * * * cd "$BOTHOME" && java -jar BMgr.jar -r 5 > report5.txt 2>&1 # FFDCount
+45 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 6 > report6.txt 2>&1 # OrphanedKL
+30 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 7 > report7.txt 2>&1 # OversizedFU
 50 0,6,12,18 * * * cd "$BOTHOME" && java -jar BMgr.jar -r 8 > report8.txt 2>&1 # FilePRODSum
+15 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 9 > report9.txt 2>&1 # HiddenDrafts

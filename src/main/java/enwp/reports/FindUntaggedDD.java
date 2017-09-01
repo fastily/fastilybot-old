@@ -33,7 +33,7 @@ public final class FindUntaggedDD
 	/**
 	 * The title of the report page
 	 */
-	private static final String reportPage = "User:FastilyBot/Recently Untagged Dated Deletion Files";
+	private static final String reportPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
 
 	/**
 	 * The list of root categories to inspect
@@ -55,7 +55,7 @@ public final class FindUntaggedDD
 	/**
 	 * The maximum number of old reports to keep on {@code reportPage}.
 	 */
-	private static final int maxOldReports = 25;
+	private static final int maxOldReports = 50;
 
 	/**
 	 * Main driver
@@ -86,7 +86,7 @@ public final class FindUntaggedDD
 	}
 
 	/**
-	 * Dumps a HashSet to <code>wpddfiles</code>
+	 * Dumps a HashSet to {@code wpddfiles}
 	 * 
 	 * @param l The HashSet to use
 	 * @param exit Set true to exit the program after this method completes.

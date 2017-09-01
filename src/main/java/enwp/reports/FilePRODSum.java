@@ -43,7 +43,7 @@ public class FilePRODSum
 	 * The report text to output.
 	 */
 	private static String reportText = "{{/header}}\n" + BotUtils.updatedAt
-			+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n ! Use count\n";
+			+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n";
 
 	/**
 	 * Main driver
@@ -70,6 +70,7 @@ public class FilePRODSum
 			catch (Throwable e)
 			{
 				fails.add(k);
+				e.printStackTrace();
 			}
 		});
 

@@ -14,14 +14,15 @@ import enwp.bots.FlagOI;
 import enwp.bots.MTCHelper;
 import enwp.bots.RemoveBadMTC;
 import enwp.bots.UnflagOI;
-import enwp.reports.BigMTC;
 import enwp.reports.FCTRedirsForMTC;
 import enwp.reports.FFDCount;
 import enwp.reports.FilePRODSum;
 import enwp.reports.FindBrokenSPI;
 import enwp.reports.FindOrphanedFfD;
 import enwp.reports.FindUntaggedDD;
+import enwp.reports.HiddenDrafts;
 import enwp.reports.OrphanedKL;
+import enwp.reports.OversizedFU;
 import enwp.reports.TallyLics;
 import fastily.wpkit.util.FCLI;
 
@@ -113,10 +114,13 @@ public final class BMgr
 					OrphanedKL.main(pArgs);
 					break;
 				case 7:
-					BigMTC.main(pArgs);
+					OversizedFU.main(pArgs);
 					break;
 				case 8:
 					FilePRODSum.main(pArgs);
+					break;
+				case 9:
+					HiddenDrafts.main(pArgs);
 					break;
 				default:
 					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");

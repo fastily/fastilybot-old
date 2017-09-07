@@ -1,13 +1,15 @@
 package util;
 
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.WikiGen;
+import fastily.wpkit.util.WGen;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -22,7 +24,7 @@ public class BotUtils
 	/**
 	 * Used as part of report headers.
 	 */
-	public static final String updatedAt = "This report updated at ~~~~~\n";
+	public static final String updatedAt = "This report updated at <onlyinclude>~~~~~</onlyinclude>\n";
 
 	/**
 	 * Wiki-text message stating that a bot did not nominate any files for deletion.
@@ -50,7 +52,7 @@ public class BotUtils
 	 */
 	private static Wiki getUserWP(String user)
 	{
-		return WikiGen.wg.get(user, "en.wikipedia.org");
+		return WGen.get(user, "en.wikipedia.org");
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class BotUtils
 	 */
 	public static Wiki getUserCOM(String user)
 	{
-		return WikiGen.wg.get(user, "commons.wikimedia.org");
+		return WGen.get(user, "commons.wikimedia.org");
 	}
 
 	/**
@@ -166,5 +168,21 @@ public class BotUtils
 	public static void removeListFromHS(HashSet<String> l, List<String> toRemove)
 	{
 		l.removeAll(new HashSet<>(toRemove));
+	}
+	
+	/**
+	 * Determine if a set of link(s) has existed on a page over a given time period.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param title The title to query
+	 * @param l The list of link(s) to look for in the history of {@code title}.
+	 * @param start The time to start looking at (inclusive). Optional - set null to disable.
+	 * @param end The time to stop the search at (exclusive). Optional - set null to disable.
+	 * @return A list of link(s) that were found at some point in the page's history.
+	 */
+	public static ArrayList<String> detLinksInHist(Wiki wiki, String title, ArrayList<String> l, Instant start, Instant end)
+	{
+		ArrayList<String> texts = FL.toAL(wiki.getRevisions(title, -1, false, start, end).stream().map(r -> r.text));
+		return FL.toAL(l.stream().filter(s -> texts.stream().noneMatch(t -> t.matches("(?si).*?\\[\\[:??(\\Q" + s + "\\E)\\]\\].*?"))));
 	}
 }

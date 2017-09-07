@@ -104,7 +104,7 @@ public class DDNotifier
 			if (talkPageBL.contains(k))
 				return;
 
-			ArrayList<String> notifyList = WikiX.detLinksInHist(wiki, k, v, start, end);
+			ArrayList<String> notifyList = BotUtils.detLinksInHist(wiki, k, v, start, end);
 			if (notifyList.isEmpty())
 				return;
 

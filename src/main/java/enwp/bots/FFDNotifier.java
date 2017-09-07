@@ -67,7 +67,7 @@ public final class FFDNotifier
 		});
 
 		l.l.forEach((k, v) -> {
-			ArrayList<String> rl = WikiX.detLinksInHist(wiki, k, v, start, end);
+			ArrayList<String> rl = BotUtils.detLinksInHist(wiki, k, v, start, end);
 			if (rl.isEmpty())
 				return;
 

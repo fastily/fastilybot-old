@@ -3,7 +3,6 @@ package enwp.reports;
 import java.util.HashSet;
 
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.StrUtil;
 import util.BotUtils;
 
 /**
@@ -28,7 +27,20 @@ public class HiddenDrafts
 		BotUtils.removeListFromHS(l, wiki.whatTranscludesHere("Template:Mfd"));
 		BotUtils.removeListFromHS(l, wiki.getCategoryMembers("Category:Candidates for speedy deletion"));
 
-		wiki.edit(String.format("User:%s/Hidden Drafts", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, false),
-				"Updating report");
+		StringBuilder b = new StringBuilder(BotUtils.updatedAt + "\n{| class=\"wikitable sortable\"\n! No.\n! Name\n! Last Changed\n");
+		int i = 0;
+		for (String s : l)
+			try
+			{
+				b.append(String.format("|-\n| %d\n| [[%s]]\n| %s\n", ++i, s, wiki.getRevisions(s, 1, false, null, null).get(0).timestamp));
+			}
+			catch (Throwable e)
+			{
+				e.printStackTrace();
+			}
+
+		b.append("|}");
+
+		wiki.edit(String.format("User:%s/Hidden Drafts", wiki.whoami()), b.toString(), "Updating report");
 	}
 }

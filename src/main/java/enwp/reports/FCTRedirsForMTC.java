@@ -11,7 +11,7 @@ import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
- * Pre-computes regexes for MTC!
+ * Precomputes regexes for MTC!
  * 
  * @author Fastily
  *
@@ -24,29 +24,25 @@ public class FCTRedirsForMTC
 	private static String reportPage = "Wikipedia:MTC!/Redirects";
 
 	/**
-	 * The output text to be posted to the report.
-	 */
-	private static String output = "<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n";
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used
 	 */
 	public static void main(String[] args)
-	{
+	{		
 		Wiki wiki = BotUtils.getFastilyBot();
 		
 		HashSet<String> rawL = new HashSet<>(wiki.getLinksOnPage(reportPage + "/IncludeAlso", NS.TEMPLATE));
 		rawL.addAll(TallyLics.comtpl);
 
+		StringBuilder b = new StringBuilder("<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n");
 		MQuery.linksHere(wiki, true, new ArrayList<>(rawL)).forEach((k, v) -> {
 			v.add(0, k); // original template is included in results
-			output += FL.pipeFence(WikiX.stripNamespaces(wiki, v)) + "\n";
+			b.append(FL.pipeFence(WikiX.stripNamespaces(wiki, v)) + "\n");
 		});
 
-		output += "</pre>";		
+		b.append("</pre>");	
 		
-		wiki.edit(reportPage, output, "Update report");
+		wiki.edit(reportPage, b.toString(), "Update report");
 	}
 }

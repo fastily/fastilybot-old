@@ -17,17 +17,13 @@ import util.BotUtils;
 public final class FindLicConflict
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used.
 	 */
 	public static void main(String[] args) throws Throwable
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
 		HashSet<String> fl = BotUtils.fetchLabsReportAsFiles(wiki, "report2");
 		
 		for(String s : wiki.getLinksOnPage(String.format("User:%s/Task5/Ignore", wiki.whoami())))

@@ -34,7 +34,7 @@ public class OversizedFU
 		BotUtils.removeListFromHS(l, wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 		BotUtils.removeListFromHS(l, wiki.whatTranscludesHere("Template:Ffd", NS.FILE));
 
-		wiki.edit(String.format("User:%s/Oversized Fair-use Images", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, true),
+		wiki.edit(String.format("Wikipedia:Database reports/Large fair-use images", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, true),
 				"Updating report");
 	}
 }

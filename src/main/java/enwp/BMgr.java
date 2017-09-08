@@ -20,7 +20,6 @@ import enwp.reports.FilePRODSum;
 import enwp.reports.FindBrokenSPI;
 import enwp.reports.FindOrphanedFfD;
 import enwp.reports.FindUntaggedDD;
-import enwp.reports.HiddenDrafts;
 import enwp.reports.OrphanedKL;
 import enwp.reports.OversizedFU;
 import enwp.reports.TallyLics;
@@ -118,9 +117,6 @@ public final class BMgr
 					break;
 				case 8:
 					FilePRODSum.main(pArgs);
-					break;
-				case 9:
-					HiddenDrafts.main(pArgs);
 					break;
 				default:
 					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");

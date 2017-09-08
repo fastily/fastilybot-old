@@ -31,7 +31,7 @@ public class OrphanedKL
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit(String.format("User:%s/Orphaned Keep Local", wiki.whoami()), StrUtil.listify(BotUtils.updatedAt, l, true),
+		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", StrUtil.listify(BotUtils.updatedAt, l, true),
 				"Updating report");
 	}
 }

@@ -11,7 +11,6 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.tp.WParser;
-import fastily.wpkit.util.TParse;
 import util.BotUtils;
 
 /**
@@ -51,7 +50,7 @@ public final class FindDelComFFD
 			try
 			{
 				
-				String comFile = WParser.parseText(enwp, TParse.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1").toString();
+				String comFile = WParser.parseText(enwp, BotUtils.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1").toString();
 				if (comFile != null)
 					comPairs.put(k, enwp.convertIfNotInNS(comFile, NS.FILE));
 			}

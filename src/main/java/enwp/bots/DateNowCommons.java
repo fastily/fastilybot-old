@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
@@ -36,7 +35,7 @@ public class DateNowCommons
 	{
 		ArrayList<String> l = wiki
 				.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
-		l.removeAll(WikiX.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
+		l.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
 
 		for (String s : l)
 			wiki.replaceText(s, ncRegex, "{{Subst:Ncd}}", "BOT: Dating {{Now Commons}}");

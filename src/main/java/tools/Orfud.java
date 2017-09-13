@@ -38,7 +38,7 @@ public final class Orfud
 		ArrayList<String> ftl = new ArrayList<>();
 		MQuery.fileUsage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
 			if (v.isEmpty() && wiki.delete(k, "[[WP:CSD#F5|F5]]: Unused non-free media file for more than 7 days"))
-				ftl.add(wiki.convertIfNotInNS(wiki.nss(k), NS.FILE_TALK));
+				ftl.add(wiki.convertIfNotInNS(k, NS.FILE_TALK));
 		});
 
 		MQuery.exists(wiki, true, ftl)

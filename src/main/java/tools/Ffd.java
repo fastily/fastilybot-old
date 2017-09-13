@@ -9,7 +9,6 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
-import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 import util.DateUtils;
 
@@ -59,7 +58,7 @@ public class Ffd
 		l.removeIf(t -> t.x != 4);
 
 		MQuery.exists(wiki, true,
-				FL.toAL(WikiX.listPageSections(l, wiki.getPageText(targetPage)).stream()
+				FL.toAL(BotUtils.listPageSections(l, wiki.getPageText(targetPage)).stream()
 						.filter(t -> checkText(t.z) && wiki.whichNS(t.y).equals(NS.FILE)).map(t -> t.y)))
 				.stream().forEach(s -> wiki.delete(s, String.format(ffdLinkTP, targetPage, s)));
 	}

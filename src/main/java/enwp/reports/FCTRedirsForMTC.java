@@ -7,7 +7,6 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
@@ -38,7 +37,7 @@ public class FCTRedirsForMTC
 		StringBuilder b = new StringBuilder("<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n");
 		MQuery.linksHere(wiki, true, new ArrayList<>(rawL)).forEach((k, v) -> {
 			v.add(0, k); // original template is included in results
-			b.append(FL.pipeFence(WikiX.stripNamespaces(wiki, v)) + "\n");
+			b.append(FL.pipeFence(wiki.nss(v)) + "\n");
 		});
 
 		b.append("</pre>");	

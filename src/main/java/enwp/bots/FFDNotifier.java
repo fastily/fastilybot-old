@@ -13,9 +13,7 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
@@ -61,7 +59,7 @@ public final class FFDNotifier
 	{
 		MultiMap<String, String> l = new MultiMap<>();
 		wiki.getSectionHeaders(targetFFD).stream().filter(t -> t.x == 4 && wiki.whichNS(t.y).equals(NS.FILE)).forEach(t -> {
-			String author = WikiX.getPageAuthor(wiki, t.y);
+			String author = BotUtils.getPageAuthor(wiki, t.y);
 			if (author != null && !noBots.contains(author = wiki.convertIfNotInNS(author, NS.USER_TALK)))
 				l.put(author, t.y);
 		});
@@ -73,7 +71,7 @@ public final class FFDNotifier
 
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
-				x += StrUtil.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
+				x += BotUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
 			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of FfD", false);
 		});
 	}

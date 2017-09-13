@@ -5,7 +5,6 @@ import java.util.HashSet;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
@@ -34,7 +33,7 @@ public final class RemoveBadMTC
 	public static void main(String[] args) throws Throwable
 	{
 		HashSet<String> mtcFiles = WTP.mtc.getTransclusionSet(wiki, NS.FILE);
-		mtcFiles.removeAll(WikiX.getCategoryMembersR(wiki, "Category:Copy to Wikimedia Commons reviewed by a human").y);
+		mtcFiles.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Copy to Wikimedia Commons reviewed by a human").y);
 		mtcFiles.removeAll(wiki.getCategoryMembers("Category:Copy to Wikimedia Commons (inline-identified)"));
 		
 		for (String blt : wiki.getLinksOnPage(String.format("User:%s/Task2/Blacklist", wiki.whoami())))

@@ -11,7 +11,6 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
-import fastily.wpkit.text.StrUtil;
 import util.BotUtils;
 import util.DateUtils;
 
@@ -79,7 +78,7 @@ public final class FindUntaggedDD
 		if (sections.size() > maxOldReports)
 			text = text.substring(0, sections.get(maxOldReports).z);
 
-		wiki.edit(reportPage, StrUtil.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
+		wiki.edit(reportPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
 				"Updating report");
 
 		dump(l, false);

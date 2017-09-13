@@ -4,12 +4,18 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.WGen;
+import fastily.jwiki.util.FSystem;
+import fastily.jwiki.util.Triple;
+import fastily.jwiki.util.Tuple;
+import fastily.jwiki.util.WGen;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -158,17 +164,6 @@ public class BotUtils
 		return String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()),
 				user);
 	}
-
-	/**
-	 * Removes a List from a HashSet. Copies a List into a HashSet and then removes it from {@code l}
-	 * 
-	 * @param l The HashSet to remove elements contained in {@code toRemove} from
-	 * @param toRemove The List of items to remove from {@code l}
-	 */
-	public static void removeListFromHS(HashSet<String> l, List<String> toRemove)
-	{
-		l.removeAll(new HashSet<>(toRemove));
-	}
 	
 	/**
 	 * Determine if a set of link(s) has existed on a page over a given time period.
@@ -184,5 +179,149 @@ public class BotUtils
 	{
 		ArrayList<String> texts = FL.toAL(wiki.getRevisions(title, -1, false, start, end).stream().map(r -> r.text));
 		return FL.toAL(l.stream().filter(s -> texts.stream().noneMatch(t -> t.matches("(?si).*?\\[\\[:??(\\Q" + s + "\\E)\\]\\].*?"))));
+	}
+	
+	/**
+	 * Recursively searches a category for members.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param root The root/parent category to start searching in
+	 * @return A Tuple in the form: ( categories visited, members found )
+	 */
+	public static Tuple<HashSet<String>, HashSet<String>> getCategoryMembersR(Wiki wiki, String root)
+	{
+		HashSet<String> seen = new HashSet<>(), l = new HashSet<>();
+		getCategoryMembersR(wiki, root, seen, l);
+
+		return new Tuple<>(seen, l);
+	}
+
+	/**
+	 * Recursively searches a category for members.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param root The root/parent category to start searching in
+	 * @param seen Lists the categories visited. Tracking this avoids circular self-categorizing categories.
+	 * @param l Lists the category members encountered.
+	 */
+	private static void getCategoryMembersR(Wiki wiki, String root, HashSet<String> seen, HashSet<String> l)
+	{
+		seen.add(root);
+
+		ArrayList<String> results = wiki.getCategoryMembers(root);
+		ArrayList<String> cats = wiki.filterByNS(results, NS.CATEGORY);
+
+		results.removeAll(cats); // cats go in seen
+		l.addAll(results);
+
+		for (String s : cats)
+		{
+			if (seen.contains(s))
+				continue;
+
+			getCategoryMembersR(wiki, s, seen, l);
+		}
+	}
+	
+	/**
+	 * Lists section headers on a page. This method takes inputs from {@code getSectionHeaders()} and
+	 * {@code getPageText()}
+	 * 
+	 * @param sectionData A response from {@code getSectionHeaders()}.
+	 * @param text The text from the same page, via {@code getPageText()}
+	 * @return A List with a Triple containing [ Header Level , Header Title, The Full Header and Section Text ]
+	 */
+	public static ArrayList<Triple<Integer, String, String>> listPageSections(ArrayList<Triple<Integer, String, Integer>> sectionData,
+			String text)
+	{
+		ArrayList<Triple<Integer, String, String>> results = new ArrayList<>();
+
+		if (sectionData.isEmpty())
+			return results;
+
+		Triple<Integer, String, Integer> curr;
+		for (int i = 0; i < sectionData.size() - 1; i++)
+		{
+			curr = sectionData.get(i);
+			results.add(new Triple<>(curr.x, curr.y, text.substring(curr.z, sectionData.get(i + 1).z)));
+		}
+
+		curr = sectionData.get(sectionData.size() - 1);
+		results.add(new Triple<>(curr.x, curr.y, text.substring(curr.z)));
+
+		return results;
+	}
+	
+	/**
+	 * Get the page author of a page. This is based on the first available public revision to a page.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param title The title to query
+	 * @return The page author, without the {@code User:} prefix, or null on error.
+	 */
+	public static String getPageAuthor(Wiki wiki, String title)
+	{
+		try
+		{
+			return wiki.getRevisions(title, 1, true, null, null).get(0).user;
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get the most recent editor of a page.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param title The title to query
+	 * @return The most recent editor to a page, without the {@code User:} prefix, or null on error.
+	 */
+	public static String getLastEditor(Wiki wiki, String title)
+	{
+		try
+		{
+			return wiki.getRevisions(title, 1, false, null, null).get(0).user;
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Extracts a template from text.
+	 * 
+	 * @param p The template's Regex
+	 * @param text The text to look for {@code p} in
+	 * @return The template, or the empty string if nothing was found.
+	 */
+	public static String extractTemplate(Pattern p, String text) //TODO: Bad form, fix me.
+	{
+		Matcher m = p.matcher(text);
+		return m.find() ? m.group() : "";
+	}
+	
+	/**
+	 * Generates a Wiki-text ready, wiki-linked, unordered list from a list of titles.
+	 * 
+	 * @param header A header/lead string to apply at the beginning of the returned String.
+	 * @param titles The titles to use
+	 * @param doEscape Set as true to escape titles. i.e. adds a {@code :} before each link so that files and categories
+	 *           are properly escaped and appear as links.
+	 * @return A String with the titles as a linked, unordered list, in Wiki-text.
+	 */
+	public static String listify(String header, Collection<String> titles, boolean doEscape)
+	{
+		String fmtStr = "* [[" + (doEscape ? ":" : "") + "%s]]" + FSystem.lsep;
+
+		StringBuilder x = new StringBuilder(header);
+		for (String s : titles)
+			x.append(String.format(fmtStr, s));
+
+		return x.toString();
 	}
 }

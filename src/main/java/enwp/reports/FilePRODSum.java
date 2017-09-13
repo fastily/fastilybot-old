@@ -9,11 +9,10 @@ import java.util.regex.Pattern;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.text.StrUtil;
 import fastily.wpkit.text.WTP;
 import fastily.wpkit.tp.WParser;
 import fastily.wpkit.tp.WTemplate;
-import fastily.wpkit.util.TParse;
+import fastily.wpkit.util.WikiX;
 import util.BotUtils;
 
 /**
@@ -61,10 +60,10 @@ public class FilePRODSum
 		MQuery.getPageText(wiki, fl).forEach((k, v) -> {
 			try
 			{
-				WTemplate t = WParser.parseText(wiki, TParse.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
+				WTemplate t = WParser.parseText(wiki, BotUtils.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
 				reportText += String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						StrUtil.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+						WikiX.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k));
 			}
 			catch (Throwable e)
@@ -77,7 +76,7 @@ public class FilePRODSum
 		reportText += "|}\n";
 
 		if (!fails.isEmpty())
-			reportText += StrUtil.listify("\n== Failed to Parse ==\n", fails, true);
+			reportText += BotUtils.listify("\n== Failed to Parse ==\n", fails, true);
 
 		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText, "Updating report");
 	}

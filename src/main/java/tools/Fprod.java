@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.jwiki.tp.WParser;
+import fastily.jwiki.tp.WTemplate;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.tp.WParser;
-import fastily.wpkit.tp.WTemplate;
 import util.BotUtils;
 import util.DateUtils;
 

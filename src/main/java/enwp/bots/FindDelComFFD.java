@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.jwiki.tp.WParser;
 import fastily.jwiki.util.FL;
 import fastily.wpkit.text.WTP;
-import fastily.wpkit.tp.WParser;
 import util.BotUtils;
 
 /**

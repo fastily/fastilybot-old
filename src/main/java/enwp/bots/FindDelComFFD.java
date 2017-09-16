@@ -10,7 +10,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.text.WTP;
+import fastily.wpkit.WTP;
 import util.BotUtils;
 
 /**

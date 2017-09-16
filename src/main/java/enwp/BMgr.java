@@ -23,7 +23,7 @@ import enwp.reports.FindUntaggedDD;
 import enwp.reports.OrphanedKL;
 import enwp.reports.OversizedFU;
 import enwp.reports.TallyLics;
-import fastily.wpkit.util.FCLI;
+import fastily.wpkit.FCLI;
 
 /**
  * CLI interface which makes it easy to launch enwp bots/reports

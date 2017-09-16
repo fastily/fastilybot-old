@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.util.WikiX;
+import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**

@@ -13,7 +13,7 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.text.WTP;
+import fastily.wpkit.WTP;
 import util.BotUtils;
 
 /**

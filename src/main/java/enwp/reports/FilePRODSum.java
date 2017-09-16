@@ -11,8 +11,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.tp.WTemplate;
-import fastily.wpkit.text.WTP;
-import fastily.wpkit.util.WikiX;
+import fastily.wpkit.WTP;
+import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**

@@ -5,10 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
@@ -323,5 +325,24 @@ public class BotUtils
 			x.append(String.format(fmtStr, s));
 
 		return x.toString();
+	}
+	
+	/**
+	 * Gets the first shared (non-local) duplicate for each file with a duplicate. Filters out files which do not have
+	 * duplicates.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param titles The titles to get duplicates for
+	 * @return A Map where each key is the original, and each value is the first duplicate found.
+	 */
+	public static HashMap<String, String> getFirstOnlySharedDuplicate(Wiki wiki, ArrayList<String> titles)
+	{
+		HashMap<String, String> l = new HashMap<>();
+		MQuery.getSharedDuplicatesOf(wiki, titles).forEach((k, v) -> {
+			if (!v.isEmpty())
+				l.put(k, v.get(0));
+		});
+
+		return l;
 	}
 }

@@ -18,17 +18,14 @@ import util.BotUtils;
 public class FlagOI
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used.
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		
 		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
 		l.removeAll(WTP.orphan.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));

@@ -15,18 +15,8 @@ import util.BotUtils;
  * @author Fastily
  *
  */
-public final class FindBrokenSPI
+public final class BrokenSPI
 {
-	/**
-	 * The Wiki object to use
-	 */
-	private static final Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * The title to post reports on
-	 */
-	private static final String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
-
 	/**
 	 * Main driver
 	 * 
@@ -34,6 +24,9 @@ public final class FindBrokenSPI
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
+		
 		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
 				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
 

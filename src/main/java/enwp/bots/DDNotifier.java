@@ -7,7 +7,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class DDNotifier
 	 * The root configuration page.
 	 */
 	private static String baseConfig = String.format("User:%s/Task6/", wiki.whoami());
-	
+
 	/**
 	 * The start of today, and the start of yesterday (target date)
 	 */
@@ -63,8 +62,8 @@ public class DDNotifier
 	/**
 	 * The list of files with templates that trigger the bot unnecessarily.
 	 */
-	private static final HashSet<String> idkL = FL.toSet(wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream()
-			.flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
+	private static final HashSet<String> idkL = FL.toSet(
+			wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream().flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
 
 	/**
 	 * Main driver
@@ -73,7 +72,8 @@ public class DDNotifier
 	 */
 	public static void main(String[] args)
 	{
-		fetchPairedConfig(wiki, baseConfig + "Rules").forEach((k, v) -> procPair(k, v));
+		FL.toHM(Stream.of(wiki.getPageText(baseConfig + "Rules").split("\n")).filter(s -> !s.startsWith("<") && !s.isEmpty())
+				.map(s -> s.split(";", 2)), a -> a[0], a -> a[1]).forEach(DDNotifier::procPair);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class DDNotifier
 	 * @param templ The Template which will be used to notify users.
 	 */
 	private static void procPair(String rootCat, String templ)
-	{		
+	{
 		Optional<String> cat = wiki.getCategoryMembers(rootCat, NS.CATEGORY).stream().filter(s -> s.endsWith(targetDateStr)).findAny();
 		if (!cat.isPresent())
 			return;
@@ -92,12 +92,12 @@ public class DDNotifier
 		wiki.getCategoryMembers(cat.get(), NS.FILE).forEach(s -> {
 			if (idkL.contains(s))
 				return;
-			
+
 			String author = BotUtils.getPageAuthor(wiki, s);
-			if(author != null)
+			if (author != null)
 				ml.put(wiki.convertIfNotInNS(author, NS.USER_TALK), s);
 		});
-		
+
 		ml.l.forEach((k, v) -> {
 			if (talkPageBL.contains(k))
 				return;
@@ -112,20 +112,5 @@ public class DDNotifier
 
 			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of possible file issue(s)", false);
 		});
-	}
-	
-	/**
-	 * Parses a config page with key-value pairs. Empty lines and lines starting with '&gt;' are ignored. Key-value pairs
-	 * should be split by {@code ;}, one pair per line.
-	 * 
-	 * @param wiki The Wiki object to use
-	 * @param title The title of the config page to parse
-	 * @return A HashMap with the parsed pairs.
-	 */
-	private static HashMap<String, String> fetchPairedConfig(Wiki wiki, String title)
-	{
-		return FL.toHM(
-				Stream.of(wiki.getPageText(title).split("\n")).filter(s -> !s.startsWith("<") && !s.isEmpty()).map(s -> s.split(";", 2)),
-				a -> a[0], a -> a[1]);
 	}
 }

@@ -17,26 +17,19 @@ import util.BotUtils;
 public class DateNowCommons
 {
 	/**
-	 * The Wiki Object to use
-	 */
-	private static Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * Matches {{Now Commons}} templates
-	 */
-	private static String ncRegex = WTP.ncd.getRegex(wiki);
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		
 		ArrayList<String> l = wiki
 				.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
 		l.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
 
+		String ncRegex = WTP.ncd.getRegex(wiki);
 		for (String s : l)
 			wiki.replaceText(s, ncRegex, "{{Subst:Ncd}}", "BOT: Dating {{Now Commons}}");
 	}

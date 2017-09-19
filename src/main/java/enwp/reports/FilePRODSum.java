@@ -11,8 +11,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.tp.WTemplate;
+import fastily.jwiki.util.FSystem;
 import fastily.wpkit.WTP;
-import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**
@@ -63,7 +63,7 @@ public class FilePRODSum
 				WTemplate t = WParser.parseText(wiki, BotUtils.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
 				reportText += String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						WikiX.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+						FSystem.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k));
 			}
 			catch (Throwable e)

@@ -8,7 +8,6 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.wpkit.WTP;
-import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**
@@ -38,7 +37,7 @@ public class FindCommonsFFD
 	{
 		HashSet<String> fl = findComFFD();
 
-		WikiX.getFirstOnlySharedDuplicate(enwp, enwp.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
+		BotUtils.getFirstOnlySharedDuplicate(enwp, enwp.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
 			if (fl.contains(enwp.convertIfNotInNS(v, NS.FILE)))
 				enwp.replaceText(k, ncRegex, String.format("{{Nominated for deletion on Commons|%s}}", enwp.nss(v)),
 						"BOT: File is up for deletion on Commons");

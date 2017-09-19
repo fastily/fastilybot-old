@@ -16,22 +16,14 @@ import util.BotUtils;
 public final class UnflagOI
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static final Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * A regex matching the Orphan image template
-	 */
-	private static final String oiRegex = WTP.orphan.getRegex(wiki);
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, unused.
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+				
 		// Generate the set of files with no links of any sort
 		HashSet<String> oL = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
 		oL.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
@@ -44,6 +36,7 @@ public final class UnflagOI
 		// Restrict working set to Free files only
 		l.retainAll(BotUtils.fetchLabsReportAsFiles(wiki, "report6"));
 		
+		String oiRegex = WTP.orphan.getRegex(wiki);
 		for(String s : l)
 			wiki.replaceText(s, oiRegex, "BOT: File contains inbound links");
 	}

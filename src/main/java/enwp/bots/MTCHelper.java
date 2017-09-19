@@ -6,7 +6,6 @@ import java.util.HashSet;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.WTP;
-import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**
@@ -48,7 +47,7 @@ public final class MTCHelper
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 
-		WikiX.getFirstOnlySharedDuplicate(wiki, new ArrayList<>(l)).forEach((k, v) -> {
+		BotUtils.getFirstOnlySharedDuplicate(wiki, new ArrayList<>(l)).forEach((k, v) -> {
 			if (nowCommons.contains(k))
 				wiki.replaceText(k, tRegex, "BOT: File has already been copied to Commons");
 			else

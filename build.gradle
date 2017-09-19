@@ -14,3 +14,21 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
 }
+
+
+task bmgr(type: Jar) {
+  baseName = "BMgr"
+  version = "1.0.0"
+
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  manifest {
+    attributes 'Main-Class': 'enwp.BMgr'
+  }
+  
+  exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
+
+  with jar
+}

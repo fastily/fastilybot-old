@@ -5,7 +5,6 @@ import java.util.HashSet;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.wpkit.WTP;
-import fastily.wpkit.WikiX;
 import util.BotUtils;
 
 /**
@@ -40,7 +39,7 @@ public final class FindKeptComFFD
 	{
 		HashSet<String> cffdl = FindCommonsFFD.findComFFD();
 
-		WikiX.getFirstOnlySharedDuplicate(wiki,
+		BotUtils.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
 					if (!cffdl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
 						wiki.replaceText(k, nfdcRegex, String.format(ncd, v), "BOT: File is not up for deletion on Commons");

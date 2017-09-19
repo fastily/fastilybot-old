@@ -18,11 +18,6 @@ import util.BotUtils;
 public class FCTRedirsForMTC
 {
 	/**
-	 * The title to post the report to.
-	 */
-	private static String reportPage = "Wikipedia:MTC!/Redirects";
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used
@@ -30,6 +25,7 @@ public class FCTRedirsForMTC
 	public static void main(String[] args)
 	{		
 		Wiki wiki = BotUtils.getFastilyBot();
+		String reportPage = "Wikipedia:MTC!/Redirects";
 		
 		HashSet<String> rawL = new HashSet<>(wiki.getLinksOnPage(reportPage + "/IncludeAlso", NS.TEMPLATE));
 		rawL.addAll(TallyLics.comtpl);

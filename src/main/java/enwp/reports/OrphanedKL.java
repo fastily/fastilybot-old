@@ -16,17 +16,14 @@ import util.BotUtils;
 public class OrphanedKL
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used.
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 

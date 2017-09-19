@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WikiX;
+import fastily.jwiki.util.FSystem;
 import util.BotUtils;
 
 /**
@@ -31,7 +31,7 @@ public final class Up
 	/**
 	 * The regex matching file extensions which can be uploaded to Commons
 	 */
-	private static String extRegex = WikiX.allowedFileExtsRegex(wiki);
+	private static String extRegex = "(?i).+?\\.(" + FL.pipeFence(wiki.getAllowedFileExts()) + ")";
 
 	/**
 	 * The String template for file description pages
@@ -63,7 +63,7 @@ public final class Up
 				for (Path f : FL.toSet(Files.list(d).filter(f -> Files.isRegularFile(f) && f.toString().matches(extRegex))))
 					if (!wiki.upload(f, String.format(fnBase, name, ++i, getExt(f)),
 							String.format(infoT, name,
-									WikiX.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
+									FSystem.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
 									wiki.whoami()),
 							""))
 						fails.add(f.toString());

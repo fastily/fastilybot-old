@@ -17,9 +17,10 @@ import enwp.bots.UnflagOI;
 import enwp.reports.FCTRedirsForMTC;
 import enwp.reports.FFDCount;
 import enwp.reports.FilePRODSum;
-import enwp.reports.FindBrokenSPI;
+import enwp.reports.BrokenSPI;
 import enwp.reports.FindOrphanedFfD;
 import enwp.reports.FindUntaggedDD;
+import enwp.reports.NoFCT;
 import enwp.reports.OrphanedKL;
 import enwp.reports.OversizedFU;
 import enwp.reports.TallyLics;
@@ -46,7 +47,7 @@ public final class BMgr
 	 */
 	public static void main(String[] args) throws Throwable
 	{
-		CommandLine cl = FCLI.gnuParse(makeOpts(), args, "BotMgr [-r <report number> |-b <task number>] [--help] [Task/Report Args...]");
+		CommandLine cl = FCLI.gnuParse(makeOpts(), args, "BMgr [-r <report number> |-b <task number>] [--help] [Task/Report Args...]");
 
 		String[] pArgs = cl.getArgs();
 		if (cl.hasOption('b'))
@@ -59,7 +60,7 @@ public final class BMgr
 					RemoveBadMTC.main(pArgs);
 					break;
 				case 3:
-					FindBrokenSPI.main(pArgs);
+					BrokenSPI.main(pArgs);
 					break;
 				case 4:
 					UnflagOI.main(pArgs);
@@ -117,6 +118,9 @@ public final class BMgr
 					break;
 				case 8:
 					FilePRODSum.main(pArgs);
+					break;
+				case 9:
+					NoFCT.main(pArgs);
 					break;
 				default:
 					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");

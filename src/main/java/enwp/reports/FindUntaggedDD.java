@@ -54,7 +54,7 @@ public final class FindUntaggedDD
 	/**
 	 * The maximum number of old reports to keep on {@code reportPage}.
 	 */
-	private static final int maxOldReports = 50;
+	private static final int maxOldReports = 49;
 
 	/**
 	 * Main driver

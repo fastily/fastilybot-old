@@ -10,8 +10,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Finds local enwp files transferred to Commons which have then been deleted on Commons.

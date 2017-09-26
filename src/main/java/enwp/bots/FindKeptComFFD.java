@@ -4,8 +4,8 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Finds local enwp files which were nominated for deletion on Commons but kept.

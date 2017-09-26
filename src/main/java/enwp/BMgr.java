@@ -14,13 +14,13 @@ import enwp.bots.FlagOI;
 import enwp.bots.MTCHelper;
 import enwp.bots.RemoveBadMTC;
 import enwp.bots.UnflagOI;
-import enwp.reports.FCTRedirsForMTC;
-import enwp.reports.FFDCount;
-import enwp.reports.FilePRODSum;
+import enwp.reports.MTCRedirs;
+import enwp.reports.CountFfD;
+import enwp.reports.FprodSum;
 import enwp.reports.BrokenSPI;
-import enwp.reports.FindOrphanedFfD;
-import enwp.reports.FindUntaggedDD;
-import enwp.reports.NoFCT;
+import enwp.reports.OrphanedFfD;
+import enwp.reports.UntaggedDD;
+import enwp.reports.MissingFCT;
 import enwp.reports.OrphanedKL;
 import enwp.reports.OversizedFU;
 import enwp.reports.TallyLics;
@@ -96,19 +96,19 @@ public final class BMgr
 			switch (Integer.parseInt(cl.getOptionValue('r')))
 			{
 				case 1:
-					FindUntaggedDD.main(pArgs);
+					UntaggedDD.main(pArgs);
 					break;
 				case 2:
-					FindOrphanedFfD.main(pArgs);
+					OrphanedFfD.main(pArgs);
 					break;
 				case 3:
 					TallyLics.main(pArgs);
 					break;
 				case 4:
-					FCTRedirsForMTC.main(pArgs);
+					MTCRedirs.main(pArgs);
 					break;
 				case 5:
-					FFDCount.main(pArgs);
+					CountFfD.main(pArgs);
 					break;
 				case 6:
 					OrphanedKL.main(pArgs);
@@ -117,10 +117,10 @@ public final class BMgr
 					OversizedFU.main(pArgs);
 					break;
 				case 8:
-					FilePRODSum.main(pArgs);
+					FprodSum.main(pArgs);
 					break;
 				case 9:
-					NoFCT.main(pArgs);
+					MissingFCT.main(pArgs);
 					break;
 				default:
 					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");

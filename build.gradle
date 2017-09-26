@@ -8,11 +8,11 @@ repositories {
 }
 
 dependencies {
-    compile 'fastily:wpkit:0.0.1'
+    compile 'fastily:wpkit:0.0.2'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.1'
+    gradleVersion = '4.2'
 }
 
 

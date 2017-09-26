@@ -18,6 +18,7 @@ import fastily.jwiki.util.FSystem;
 import fastily.jwiki.util.Triple;
 import fastily.jwiki.util.Tuple;
 import fastily.jwiki.util.WGen;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -43,6 +44,11 @@ public class BotUtils
 	 * Summary for speedy deletion criterion g8 - talk page
 	 */
 	public static final String csdG8talk = "[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
+
+	/**
+	 * Generic http client for miscellaneous use.
+	 */
+	public static OkHttpClient httpClient = new OkHttpClient();
 
 	/**
 	 * Constructors disallowed
@@ -127,7 +133,7 @@ public class BotUtils
 	{
 		try
 		{
-			Response r = wiki.apiclient.client
+			Response r = httpClient
 					.newCall(
 							new Request.Builder().url(String.format("https://tools.wmflabs.org/fastilybot/r/%s.txt", report)).get().build())
 					.execute();
@@ -144,7 +150,8 @@ public class BotUtils
 	}
 
 	/**
-	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code File:} and where underscores are replaced by spaces.
+	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code File:} and where
+	 * underscores are replaced by spaces.
 	 * 
 	 * @param wiki The Wiki object to use
 	 * @param report The name of the report, without the {@code .txt} extension.
@@ -154,7 +161,7 @@ public class BotUtils
 	{
 		return fetchLabsReportSet(wiki, report, "File:");
 	}
-	
+
 	/**
 	 * Generates an {@code Template:Ncd} template for a bot user.
 	 * 
@@ -166,7 +173,7 @@ public class BotUtils
 		return String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()),
 				user);
 	}
-	
+
 	/**
 	 * Determine if a set of link(s) has existed on a page over a given time period.
 	 * 
@@ -182,7 +189,7 @@ public class BotUtils
 		ArrayList<String> texts = FL.toAL(wiki.getRevisions(title, -1, false, start, end).stream().map(r -> r.text));
 		return FL.toAL(l.stream().filter(s -> texts.stream().noneMatch(t -> t.matches("(?si).*?\\[\\[:??(\\Q" + s + "\\E)\\]\\].*?"))));
 	}
-	
+
 	/**
 	 * Recursively searches a category for members.
 	 * 
@@ -224,7 +231,7 @@ public class BotUtils
 			getCategoryMembersR(wiki, s, seen, l);
 		}
 	}
-	
+
 	/**
 	 * Lists section headers on a page. This method takes inputs from {@code getSectionHeaders()} and
 	 * {@code getPageText()}
@@ -253,7 +260,7 @@ public class BotUtils
 
 		return results;
 	}
-	
+
 	/**
 	 * Get the page author of a page. This is based on the first available public revision to a page.
 	 * 
@@ -293,7 +300,7 @@ public class BotUtils
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Extracts a template from text.
 	 * 
@@ -301,12 +308,12 @@ public class BotUtils
 	 * @param text The text to look for {@code p} in
 	 * @return The template, or the empty string if nothing was found.
 	 */
-	public static String extractTemplate(Pattern p, String text) //TODO: Bad form, fix me.
+	public static String extractTemplate(Pattern p, String text) // TODO: Bad form, fix me.
 	{
 		Matcher m = p.matcher(text);
 		return m.find() ? m.group() : "";
 	}
-	
+
 	/**
 	 * Generates a Wiki-text ready, wiki-linked, unordered list from a list of titles.
 	 * 
@@ -326,7 +333,7 @@ public class BotUtils
 
 		return x.toString();
 	}
-	
+
 	/**
 	 * Gets the first shared (non-local) duplicate for each file with a duplicate. Filters out files which do not have
 	 * duplicates.

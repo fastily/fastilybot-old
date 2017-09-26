@@ -22,7 +22,7 @@ import static java.nio.file.StandardOpenOption.*;
  * @author Fastily
  *
  */
-public final class FindUntaggedDD
+public final class UntaggedDD
 {
 	/**
 	 * The Wiki object to use

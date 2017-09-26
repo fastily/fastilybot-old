@@ -13,7 +13,7 @@ import fastily.jwiki.core.MQuery;
  * @author Fastily
  *
  */
-public class FindOrphanedFfD
+public class OrphanedFfD
 {
 	/**
 	 * Main driver

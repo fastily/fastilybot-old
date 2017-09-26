@@ -7,9 +7,9 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.tp.WTemplate;
-import fastily.wpkit.WTP;
 import util.BotUtils;
 import util.DateUtils;
+import util.WTP;
 
 /**
  * Deletes the current day's PROD'd files. CAVEAT: Be sure to check each file before using.

@@ -5,8 +5,8 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Find and fix tags for files tagged for transfer to Commons which have already transferred.

@@ -13,8 +13,8 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Leaves courtesy notifications (where possible) for users whose files were nominated at FfD.

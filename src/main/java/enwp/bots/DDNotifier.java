@@ -16,8 +16,8 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Checks daily deletion categories on enwp and notifies users if they have not been notified.

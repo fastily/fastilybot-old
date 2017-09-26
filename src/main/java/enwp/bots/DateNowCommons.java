@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Fills in date parameter (and other missing parameters) for files in [[Category:Wikipedia files with the same name on

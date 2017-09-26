@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Finds files on enwp nominated for deletion on Commons and flags the local file.

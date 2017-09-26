@@ -12,8 +12,8 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.tp.WTemplate;
 import fastily.jwiki.util.FSystem;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Lists files nominated for deletion via file PROD.
@@ -21,7 +21,7 @@ import util.BotUtils;
  * @author Fastily
  *
  */
-public class FilePRODSum
+public class FprodSum
 {
 	/**
 	 * The Wiki to use

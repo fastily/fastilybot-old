@@ -15,7 +15,7 @@ import util.BotUtils;
  * @author Fastily
  *
  */
-public class FCTRedirsForMTC
+public class MTCRedirs
 {
 	/**
 	 * Main driver

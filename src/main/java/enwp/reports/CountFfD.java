@@ -21,7 +21,7 @@ import util.BotUtils;
  * @author Fastily
  *
  */
-public class FFDCount
+public class CountFfD
 {
 	/**
 	 * The Wiki to use

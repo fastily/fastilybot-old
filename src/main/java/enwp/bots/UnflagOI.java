@@ -4,8 +4,8 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wpkit.WTP;
 import util.BotUtils;
+import util.WTP;
 
 /**
  * Removes {{Orphan image}} from freely licensed files which contain file links in the main space.

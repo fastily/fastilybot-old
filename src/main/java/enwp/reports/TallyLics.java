@@ -83,7 +83,7 @@ public class TallyLics
 			Matcher m = Pattern
 					.compile(
 							"(?<=\\<p\\>)\\d+(?= transclusion)")
-					.matcher(enwp.apiclient.client.newCall(
+					.matcher(BotUtils.httpClient.newCall(
 							new Request.Builder().url(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
 									.newBuilder().addQueryParameter("name", tp).build()).get().build())
 							.execute().body().string());

@@ -28,3 +28,5 @@ BOTHOME="/home/pi/scripts"
 45 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 6 > report6.txt 2>&1 # OrphanedKL
 30 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 7 > report7.txt 2>&1 # OversizedFU
 50 0,6,12,18 * * * cd "$BOTHOME" && java -jar BMgr.jar -r 8 > report8.txt 2>&1 # FilePRODSum
+15 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 9 > report9.txt 2>&1 # MissingFCT
+00 22 * * 2 cd "$BOTHOME" && java -jar BMgr.jar -r 10 > report10.txt 2>&1 # DupeOnCom

@@ -3,27 +3,8 @@ package enwp;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import enwp.bots.DDNotifier;
-import enwp.bots.DateNowCommons;
-import enwp.bots.FFDNotifier;
-import enwp.bots.FindCommonsFFD;
-import enwp.bots.FindDelComFFD;
-import enwp.bots.FindKeptComFFD;
-import enwp.bots.FindLicConflict;
-import enwp.bots.FlagOI;
-import enwp.bots.MTCHelper;
-import enwp.bots.RemoveBadMTC;
-import enwp.bots.UnflagOI;
-import enwp.reports.MTCRedirs;
-import enwp.reports.CountFfD;
-import enwp.reports.FprodSum;
-import enwp.reports.BrokenSPI;
-import enwp.reports.OrphanedFfD;
-import enwp.reports.UntaggedDD;
-import enwp.reports.MissingFCT;
-import enwp.reports.OrphanedKL;
-import enwp.reports.OversizedFU;
-import enwp.reports.TallyLics;
+import enwp.bots.*;
+import enwp.reports.*;
 import fastily.wpkit.FCLI;
 
 /**
@@ -121,6 +102,9 @@ public final class BMgr
 					break;
 				case 9:
 					MissingFCT.main(pArgs);
+					break;
+				case 10:
+					DupeOnCom.main(pArgs);
 					break;
 				default:
 					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");

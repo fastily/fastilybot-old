@@ -9,12 +9,12 @@ import fastily.jwiki.core.Wiki;
 import util.BotUtils;
 
 /**
- * Looks for files without a license tag.
+ * Lists enwp files with a duplicate on Commons.
  * 
  * @author Fastily
  *
  */
-public class MissingFCT
+public class DupeOnCom
 {
 	/**
 	 * Main driver
@@ -24,15 +24,11 @@ public class MissingFCT
 	public static void main(String[] args)
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
-		String rPage = "Wikipedia:Database reports/Files without a license tag";
+		String rPage = "Wikipedia:Database reports/Local files with a duplicate on Commons";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report8");
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report5"));
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report6"));
-		
-		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file"));
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report1");
 
-		for (String s : wiki.getLinksOnPage(rPage + "/Ignore"))
+		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
 		wiki.edit(rPage, BotUtils.listify(BotUtils.updatedAt, MQuery.exists(wiki, true, new ArrayList<>(l)), true), "Updating report");

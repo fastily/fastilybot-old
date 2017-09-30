@@ -25,16 +25,6 @@ import static java.nio.file.StandardOpenOption.*;
 public final class UntaggedDD
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static final Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * The title of the report page
-	 */
-	private static final String reportPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
-
-	/**
 	 * The list of root categories to inspect
 	 */
 	private static final ArrayList<String> ddCat = FL.toSAL("Category:Wikipedia files with unknown source",
@@ -64,6 +54,9 @@ public final class UntaggedDD
 	 */
 	public static void main(String[] args) throws Throwable
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
+
 		HashSet<String> l = FL.toSet(ddCat.stream().flatMap(rootCat -> wiki.getCategoryMembers(rootCat, NS.CATEGORY).stream())
 				.filter(cat -> cat.matches(ddCatRegex)).flatMap(cat -> wiki.getCategoryMembers(cat, NS.FILE).stream()));
 
@@ -73,12 +66,12 @@ public final class UntaggedDD
 		HashSet<String> cacheList = FL.toSet(Files.lines(wpddfiles));
 		cacheList.removeAll(l);
 
-		String text = wiki.getPageText(reportPage);
-		ArrayList<Triple<Integer, String, Integer>> sections = wiki.getSectionHeaders(reportPage);
+		String text = wiki.getPageText(rPage);
+		ArrayList<Triple<Integer, String, Integer>> sections = wiki.getSectionHeaders(rPage);
 		if (sections.size() > maxOldReports)
 			text = text.substring(0, sections.get(maxOldReports).z);
 
-		wiki.edit(reportPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
+		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
 				"Updating report");
 
 		dump(l, false);

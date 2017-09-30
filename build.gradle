@@ -28,7 +28,7 @@ task bmgr(type: Jar) {
     attributes 'Main-Class': 'enwp.BMgr'
   }
   
-  exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
+  exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**", "**/tools/**"
 
   with jar
 }

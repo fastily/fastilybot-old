@@ -1,11 +1,10 @@
 package enwp;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
-
 import enwp.bots.*;
 import enwp.reports.*;
-import fastily.wpkit.FCLI;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 
 /**
  * CLI interface which makes it easy to launch enwp bots/reports
@@ -13,12 +12,34 @@ import fastily.wpkit.FCLI;
  * @author Fastily
  *
  */
+@Command(name = "BMgr", description = "FastilyBot Bot Manager")
 public final class BMgr
 {
 	/**
-	 * Format String for errors caused by bad arguments
+	 * Flag which triggers help output
 	 */
-	private static final String badNumberFmt = "'%s' is not a valid %s number%n";
+	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message and exit")
+	private boolean helpRequested;
+
+	/**
+	 * Runs the specified bot task, if possible.
+	 */
+	@Option(names = { "-b" }, description = "Causes this bot task to run")
+	private int botNum;
+
+	/**
+	 * Runs the specified report task, if possible.
+	 */
+	@Option(names = { "-r" }, description = "Causes this report task run")
+	private int repNum;
+
+	/**
+	 * No public constructors
+	 */
+	private BMgr()
+	{
+
+	}
 
 	/**
 	 * Main driver
@@ -28,11 +49,18 @@ public final class BMgr
 	 */
 	public static void main(String[] args) throws Throwable
 	{
-		CommandLine cl = FCLI.gnuParse(makeOpts(), args, "BMgr [-r <report number> |-b <task number>] [--help] [Task/Report Args...]");
+		BMgr bmgr = CommandLine.populateCommand(new BMgr(), args);
+		if (bmgr.helpRequested || args.length == 0)
+		{
+			CommandLine.usage(bmgr, System.out);
+			return;
+		}
 
-		String[] pArgs = cl.getArgs();
-		if (cl.hasOption('b'))
-			switch (Integer.parseInt(cl.getOptionValue('b')))
+		String badNumberFmt = "'%d' is not a valid %s task number%n";
+		String[] pArgs = new String[0];
+
+		if (bmgr.botNum > 0)
+			switch (bmgr.botNum)
 			{
 				case 1:
 					MTCHelper.main(pArgs);
@@ -71,10 +99,10 @@ public final class BMgr
 					FFDNotifier.main(pArgs);
 					break;
 				default:
-					System.err.printf(badNumberFmt, cl.getOptionValue('b'), "task");
+					System.err.printf(badNumberFmt, bmgr.botNum, "bot");
 			}
-		else if (cl.hasOption('r'))
-			switch (Integer.parseInt(cl.getOptionValue('r')))
+		else if (bmgr.repNum > 0)
+			switch (bmgr.repNum)
 			{
 				case 1:
 					UntaggedDD.main(pArgs);
@@ -107,23 +135,9 @@ public final class BMgr
 					DupeOnCom.main(pArgs);
 					break;
 				default:
-					System.err.printf(badNumberFmt, cl.getOptionValue('r'), "report");
+					System.err.printf(badNumberFmt, bmgr.repNum, "report");
 			}
 		else
 			System.out.println("Invalid argument, please run with --help for usage instructions");
-	}
-
-	/**
-	 * Creates the Options list for the program
-	 * 
-	 * @return A list of Options
-	 */
-	private static Options makeOpts()
-	{
-		Options ol = FCLI.makeDefaultOptions();
-		ol.addOptionGroup(FCLI.makeOptGroup(FCLI.makeArgOption("b", "Triggers a bot task to be run", "Task number"),
-				FCLI.makeArgOption("r", "Triggers a report task to be run", "Report number")));
-
-		return ol;
 	}
 }

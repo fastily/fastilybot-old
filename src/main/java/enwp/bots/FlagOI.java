@@ -27,10 +27,15 @@ public class FlagOI
 		Wiki wiki = BotUtils.getFastilyBot();
 		
 		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
-		l.removeAll(WTP.orphan.getTransclusionSet(wiki, NS.FILE));
+		
+		for(String c : wiki.getLinksOnPage(String.format("User:%s/Task10/Ignore", wiki.whoami())))
+			l.removeAll(wiki.getCategoryMembers(c, NS.FILE));
+		
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
+		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
+		
 		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
-		l.removeAll(new HashSet<>(MQuery.exists(wiki, false, new ArrayList<>(l))));
+		l.removeAll(MQuery.exists(wiki, false, new ArrayList<>(l)));
 		
 		for(String s : l)
 			wiki.addText(s, "\n{{Orphan image}}", "BOT: Noting that file has no inbound file usage", false);

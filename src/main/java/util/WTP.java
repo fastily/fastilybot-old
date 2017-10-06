@@ -32,6 +32,11 @@ public final class WTP
 	public static final WTP fprod = new WTP("Template:Proposed deletion/dated files");
 
 	/**
+	 * Wraps {@code Template:Keep local}
+	 */
+	public static final WTP keeplocal = new WTP("Template:Keep local");
+
+	/**
 	 * Wraps {@code Template:Copy to Wikimedia Commons}
 	 */
 	public static final WTP mtc = new WTP("Template:Copy to Wikimedia Commons");
@@ -57,10 +62,10 @@ public final class WTP
 	public static final WTP orphan = new WTP("Template:Orphan image");
 
 	/**
-	 * Wraps {@code Template:Keep local}
+	 * Wraps {@code Template:Proposed deletion/dated}
 	 */
-	public static final WTP keeplocal = new WTP("Template:Keep local");
-
+	public static final WTP prod = new WTP("Template:Proposed deletion/dated");
+	
 	/**
 	 * The template title, including namespace
 	 */

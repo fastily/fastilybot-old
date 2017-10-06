@@ -18,13 +18,15 @@ public class DateUtils
 	 * 
 	 * @see #dateAsYMD(TemporalAccessor)
 	 */
-	private static DateTimeFormatter YMD = DateTimeFormatter.ofPattern("yyyy MMMM d");
+	public static final DateTimeFormatter YMD = DateTimeFormatter.ofPattern("yyyy MMMM d");
+	
 	/**
 	 * Formats dates as as day month year
 	 * 
 	 * @see #dateAsDMY(TemporalAccessor)
 	 */
-	private static DateTimeFormatter DMY = DateTimeFormatter.ofPattern("d MMMM yyyy");
+	public static final DateTimeFormatter DMY = DateTimeFormatter.ofPattern("d MMMM yyyy");
+	
 	/**
 	 * Matches a date of the form dd-mmmm-yyyy.
 	 */

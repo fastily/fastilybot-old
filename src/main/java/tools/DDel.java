@@ -1,5 +1,8 @@
 package tools;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -8,6 +11,7 @@ import java.util.regex.Pattern;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.jwiki.dwrap.Revision;
 import fastily.jwiki.tp.WParser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -74,10 +78,18 @@ public class DDel
 	private boolean doOrfud;
 
 	/**
+	 * Corresponds to CLI option to run prod
+	 * 
+	 * @see #prod(String)
+	 */
+	@Option(names = { "--prod" }, description = "Run prod")
+	private boolean doProd;
+
+	/**
 	 * Overrides the default process date with the specified date.
 	 */
 	@Option(names = { "-d", "--date" }, description = "Date to use")
-	private String dateToUse; // TODO: This should be a ZonedDateTime
+	private ZonedDateTime date;
 
 	/**
 	 * No public constructors
@@ -94,7 +106,9 @@ public class DDel
 	 */
 	public static void main(String[] args)
 	{
-		DDel ddel = CommandLine.populateCommand(new DDel(), args);
+		DDel ddel = new DDel();
+		new CommandLine(ddel).registerConverter(ZonedDateTime.class,
+				s -> ZonedDateTime.of(LocalDate.parse(s, DateUtils.DMY), LocalTime.of(0, 0), ZoneOffset.UTC)).parse(args);
 		if (ddel.helpRequested || args.length == 0)
 		{
 			CommandLine.usage(ddel, System.out);
@@ -104,26 +118,28 @@ public class DDel
 		wiki = BotUtils.getFastily();
 
 		if (ddel.doFPROD)
-			fprod(ddel.dateToUse != null ? ddel.dateToUse : DateUtils.dateAsDMY(eightDaysAgo));
+			fprod(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doFFD)
-			ffd(ddel.dateToUse != null ? ddel.dateToUse : DateUtils.dateAsYMD(eightDaysAgo));
+			ffd(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doEC)
 			emptyCats();
 		if (ddel.doOrfud)
-			orfud(ddel.dateToUse != null ? ddel.dateToUse : DateUtils.dateAsDMY(eightDaysAgo));
+			orfud(ddel.date != null ? ddel.date : eightDaysAgo);
+		if (ddel.doProd)
+			prod(ddel.date != null ? ddel.date : eightDaysAgo);
 	}
 
 	/**
 	 * Process specified date's file PROD
 	 * 
-	 * @param date The day of items to process, as DMY.
+	 * @param date The day of items to process.
 	 */
-	private static void fprod(String date)
+	private static void fprod(ZonedDateTime date)
 	{
 		ArrayList<String> ftl = new ArrayList<>();
 		String fprodTP = wiki.nss(WTP.fprod.title);
 
-		ArrayList<String> pages = wiki.getCategoryMembers("Category:Proposed deletion as of " + date, NS.FILE);
+		ArrayList<String> pages = wiki.getCategoryMembers("Category:Proposed deletion as of " + DateUtils.dateAsDMY(date), NS.FILE);
 		pages.removeAll(WTP.ffd.getTransclusionSet(wiki, NS.FILE));
 
 		MQuery.getPageText(wiki, pages).forEach((k, v) -> {
@@ -146,12 +162,12 @@ public class DDel
 	/**
 	 * Process the specified day's ffds.
 	 * 
-	 * @param date The day of items to process, as YMD.
+	 * @param date The day of items to process
 	 */
-	private static void ffd(String date)
+	private static void ffd(ZonedDateTime date)
 	{
 		Pattern tsRegex = Pattern.compile("\\d{4} \\(UTC\\)");
-		String ffdPage = "Wikipedia:Files for discussion/" + date;
+		String ffdPage = "Wikipedia:Files for discussion/" + DateUtils.dateAsYMD(date);
 
 		ArrayList<String> fl = new ArrayList<>();
 		BotUtils.listPageSections(wiki, ffdPage).stream().forEach(t -> {
@@ -194,11 +210,11 @@ public class DDel
 	/**
 	 * Process the day's orfud files.
 	 * 
-	 * @param date The day of items to process, as DMY.
+	 * @param date The day of items to process.
 	 */
-	private static void orfud(String date)
+	private static void orfud(ZonedDateTime date)
 	{
-		String cat = "Category:Orphaned non-free use Wikipedia files as of " + date;
+		String cat = "Category:Orphaned non-free use Wikipedia files as of " + DateUtils.dateAsDMY(date);
 
 		ArrayList<String> ftl = new ArrayList<>();
 		MQuery.fileUsage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
@@ -210,5 +226,37 @@ public class DDel
 
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup");
+	}
+
+	/**
+	 * Process the day's PRODs
+	 * 
+	 * @param date The day of items to process, as DMY.
+	 */
+	private static void prod(ZonedDateTime date)
+	{
+		String cat = "Category:Proposed deletion as of " + DateUtils.dateAsDMY(date);
+		Pattern pRgx = Pattern.compile(WTP.prod.getRegex(wiki));
+
+		ArrayList<String> tpl = new ArrayList<>();
+		for (String s : wiki.getCategoryMembers(cat, NS.MAIN))
+			try
+			{
+				ArrayList<Revision> revs = wiki.getRevisions(s, 3, false, null, null);
+				if (revs.size() < 3 || pRgx.matcher(revs.get(1).text).find() || pRgx.matcher(revs.get(2).text).find())
+					continue; // prev revs should not contain prod
+
+				String concern = WParser.parseText(wiki, revs.get(0).text).getTemplatesR().stream()
+						.filter(t -> t.title.equalsIgnoreCase("Proposed deletion/dated")).findFirst().get().get("concern").toString().trim();
+
+				if (!concern.isEmpty() && wiki.delete(s, "Expired [[Wikipedia:Proposed deletion|PROD]], concern was: " + concern))
+					tpl.add(s);
+			}
+			catch (Throwable e)
+			{
+				e.printStackTrace();
+			}
+
+		BotUtils.talkDeleter(wiki, NS.TALK, tpl, BotUtils.csdG8talk);
 	}
 }

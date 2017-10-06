@@ -233,16 +233,17 @@ public class BotUtils
 	}
 
 	/**
-	 * Lists section headers on a page. This method takes inputs from {@code getSectionHeaders()} and
-	 * {@code getPageText()}
+	 * Gets the text of a page, split by section header.
 	 * 
-	 * @param sectionData A response from {@code getSectionHeaders()}.
-	 * @param text The text from the same page, via {@code getPageText()}
-	 * @return A List with a Triple containing [ Header Level , Header Title, The Full Header and Section Text ]
+	 * @param wiki The Wiki object to use
+	 * @param title The page to get text for
+	 * @return A List with of Triple containing [ Header Level , Header Title, The Full Header and Section Text ]
 	 */
-	public static ArrayList<Triple<Integer, String, String>> listPageSections(ArrayList<Triple<Integer, String, Integer>> sectionData,
-			String text)
+	public static ArrayList<Triple<Integer, String, String>> listPageSections(Wiki wiki, String title)
 	{
+		ArrayList<Triple<Integer, String, Integer>> sectionData = wiki.getSectionHeaders(title);
+		String text = wiki.getPageText(title);
+
 		ArrayList<Triple<Integer, String, String>> results = new ArrayList<>();
 
 		if (sectionData.isEmpty())
@@ -351,5 +352,21 @@ public class BotUtils
 		});
 
 		return l;
+	}
+
+	/**
+	 * Convert pages in {@code titles} to {@code talkNS} and delete them using {@code wiki} with the reason
+	 * {@code reason}. Method checks to see if the talk page exists before deleting.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param talkNS Pages in {@code titles} will be converted to this namespace before being deleted
+	 * @param titles The titles to use
+	 * @param reason The reason to delete with.
+	 */
+	public static void talkDeleter(Wiki wiki, NS talkNS, ArrayList<String> titles, String reason)
+	{
+		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(page -> wiki.convertIfNotInNS(page, talkNS)))))
+			wiki.delete(s, reason);
+
 	}
 }

@@ -41,10 +41,16 @@ public class BotUtils
 	public static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
 
 	/**
-	 * Summary for speedy deletion criterion g8 - talk page
+	 * Summary for speedy deletion criterion G8 (talk page)
 	 */
 	public static final String csdG8talk = "[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
 
+	/**
+	 * Summary for speedy deletion criterion G6
+	 */
+	public static final String csdG6 = "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup";
+
+	
 	/**
 	 * Generic http client for miscellaneous use.
 	 */

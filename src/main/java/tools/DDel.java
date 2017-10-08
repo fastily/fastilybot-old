@@ -1,7 +1,6 @@
 package tools;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -40,25 +39,19 @@ public class DDel
 	private static ZonedDateTime eightDaysAgo = DateUtils.getUTCofNow().minusDays(8);
 
 	/**
-	 * Corresponds to CLI option to request help
-	 */
-	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message and exit")
-	private boolean helpRequested;
-
-	/**
 	 * Corresponds to CLI option to run fprod
 	 * 
 	 * @see #fprod(ZonedDateTime)
 	 */
-	@Option(names = { "--fprod" }, description = "Run FPROD")
+	@Option(names = { "--fprod" }, description = "Run fprod")
 	private boolean doFPROD;
 
 	/**
 	 * Corresponds to CLI option to run ffd
 	 * 
-	 * @see #ffd(String)
+	 * @see #ffd(ZonedDateTime)
 	 */
-	@Option(names = { "--ffd" }, description = "Run FFD")
+	@Option(names = { "--ffd" }, description = "Run ffd")
 	private boolean doFFD;
 
 	/**
@@ -72,7 +65,7 @@ public class DDel
 	/**
 	 * Corresponds to CLI option to run emptyCats
 	 * 
-	 * @see #orfud(String)
+	 * @see #orfud(ZonedDateTime)
 	 */
 	@Option(names = { "--orfud" }, description = "Run orfud")
 	private boolean doOrfud;
@@ -80,16 +73,30 @@ public class DDel
 	/**
 	 * Corresponds to CLI option to run prod
 	 * 
-	 * @see #prod(String)
+	 * @see #prod(ZonedDateTime)
 	 */
 	@Option(names = { "--prod" }, description = "Run prod")
 	private boolean doProd;
 
 	/**
+	 * Corresponds to CLI option to run rfu
+	 * 
+	 * @see #rfu(ZonedDateTime)
+	 */
+	@Option(names = { "--rfu" }, description = "Run rfu")
+	private boolean doRfu;
+
+	/**
 	 * Overrides the default process date with the specified date.
 	 */
-	@Option(names = { "-d", "--date" }, description = "Date to use")
+	@Option(names = { "-d", "--date" }, description = "Date to process, in DMY format")
 	private ZonedDateTime date;
+
+	/**
+	 * Corresponds to CLI option to request help
+	 */
+	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message and exit")
+	private boolean helpRequested;
 
 	/**
 	 * No public constructors
@@ -107,14 +114,14 @@ public class DDel
 	public static void main(String[] args)
 	{
 		DDel ddel = new DDel();
-		new CommandLine(ddel).registerConverter(ZonedDateTime.class,
-				s -> ZonedDateTime.of(LocalDate.parse(s, DateUtils.DMY), LocalTime.of(0, 0), ZoneOffset.UTC)).parse(args);
+		new CommandLine(ddel).registerConverter(ZonedDateTime.class, s -> LocalDate.parse(s, DateUtils.DMY).atStartOfDay(ZoneOffset.UTC))
+				.parse(args);
 		if (ddel.helpRequested || args.length == 0)
 		{
 			CommandLine.usage(ddel, System.out);
 			return;
 		}
-
+		
 		wiki = BotUtils.getFastily();
 
 		if (ddel.doFPROD)
@@ -127,6 +134,8 @@ public class DDel
 			orfud(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doProd)
 			prod(ddel.date != null ? ddel.date : eightDaysAgo);
+		if (ddel.doRfu)
+			rfu(ddel.date != null ? ddel.date : DateUtils.getUTCofNow().minusDays(1));
 	}
 
 	/**
@@ -225,13 +234,13 @@ public class DDel
 		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl, BotUtils.csdG8talk);
 
 		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup");
+			wiki.delete(cat, BotUtils.csdG6);
 	}
 
 	/**
 	 * Process the day's PRODs
 	 * 
-	 * @param date The day of items to process, as DMY.
+	 * @param date The day of items to process.
 	 */
 	private static void prod(ZonedDateTime date)
 	{
@@ -258,5 +267,29 @@ public class DDel
 			}
 
 		BotUtils.talkDeleter(wiki, NS.TALK, tpl, BotUtils.csdG8talk);
+	}
+
+	/**
+	 * Process the day's replaceable fair use files.
+	 * 
+	 * @param date The day of items to process.
+	 */
+	private static void rfu(ZonedDateTime date)
+	{
+		String cat = "Category:Replaceable non-free use to be decided after " + DateUtils.dateAsDMY(date);
+
+		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.FILE);
+		l.removeAll(wiki.getCategoryMembers("Category:Replaceable non-free use Wikipedia files disputed", NS.FILE));
+
+		ArrayList<String> ftl = new ArrayList<>();
+		for (String s : l)
+			if (wiki.delete(s,
+					"[[WP:CSD#F7|F7]]: Violates [[Wikipedia:Non-free content criteria|non-free content criterion]] [[Wikipedia:Non-free content criteria#1|#1]]"))
+				ftl.add(s);
+
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl, BotUtils.csdG8talk);
+
+		if (wiki.getCategorySize(cat) == 0)
+			wiki.delete(cat, BotUtils.csdG6);
 	}
 }

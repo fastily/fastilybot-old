@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import util.BStrings;
 import util.BotUtils;
 import util.WTP;
 
@@ -28,7 +29,7 @@ public final class FindKeptComFFD
 	/**
 	 * The ncd template to fill out
 	 */
-	private static final String ncd = BotUtils.makeNCDBotTemplate(wiki.whoami());
+	private static final String ncd = BStrings.ncdTemplateFor(wiki.whoami());
 	
 	/**
 	 * Main driver

@@ -12,6 +12,7 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
+import util.BStrings;
 import util.BotUtils;
 
 /**
@@ -57,7 +58,7 @@ public class TallyLics
 	{
 		Collections.sort(enwptpl);
 
-		String dump = BotUtils.updatedAt
+		String dump = BStrings.updatedAt
 				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n";
 
 		int i = 0;

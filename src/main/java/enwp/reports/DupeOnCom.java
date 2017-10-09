@@ -6,6 +6,7 @@ import java.util.HashSet;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import util.BStrings;
 import util.BotUtils;
 
 /**
@@ -32,6 +33,6 @@ public class DupeOnCom
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(BotUtils.updatedAt, MQuery.exists(wiki, true, new ArrayList<>(l)), true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, MQuery.exists(wiki, true, new ArrayList<>(l)), true), "Updating report");
 	}
 }

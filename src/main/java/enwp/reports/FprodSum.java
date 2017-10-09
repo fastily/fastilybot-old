@@ -12,6 +12,7 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.tp.WParser;
 import fastily.jwiki.tp.WTemplate;
 import fastily.jwiki.util.FSystem;
+import util.BStrings;
 import util.BotUtils;
 import util.WTP;
 
@@ -41,7 +42,7 @@ public class FprodSum
 	/**
 	 * The report text to output.
 	 */
-	private static String reportText = "{{/header}}\n" + BotUtils.updatedAt
+	private static String reportText = "{{/header}}\n" + BStrings.updatedAt
 			+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n";
 
 	/**

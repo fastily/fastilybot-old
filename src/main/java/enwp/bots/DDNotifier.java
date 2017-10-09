@@ -16,6 +16,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.MultiMap;
+import util.BStrings;
 import util.BotUtils;
 import util.WTP;
 
@@ -110,7 +111,7 @@ public class DDNotifier
 			if (notifyList.size() > 1)
 				x += BotUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
 
-			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of possible file issue(s)", false);
+			wiki.addText(k, x + BStrings.botNote, "BOT: Notify user of possible file issue(s)", false);
 		});
 	}
 }

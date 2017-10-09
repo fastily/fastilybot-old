@@ -15,6 +15,7 @@ import fastily.jwiki.tp.WParser;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import util.BStrings;
 import util.BotUtils;
 import util.DateUtils;
 import util.WTP;
@@ -165,7 +166,7 @@ public class DDel
 			}
 		});
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
 	}
 
 	/**
@@ -198,7 +199,7 @@ public class DDel
 			if (wiki.delete(s, String.format("[[%s#%s]]", ffdPage, s)))
 				ftpl.add(s);
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftpl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftpl);
 	}
 
 	/**
@@ -213,7 +214,7 @@ public class DDel
 						tpl.add(k);
 				});
 
-		BotUtils.talkDeleter(wiki, NS.CATEGORY_TALK, tpl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.CATEGORY_TALK, tpl);
 	}
 
 	/**
@@ -231,10 +232,10 @@ public class DDel
 				ftl.add(k);
 		});
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
 
 		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, BotUtils.csdG6);
+			wiki.delete(cat, BStrings.g6);
 	}
 
 	/**
@@ -266,7 +267,7 @@ public class DDel
 				e.printStackTrace();
 			}
 
-		BotUtils.talkDeleter(wiki, NS.TALK, tpl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.TALK, tpl);
 	}
 
 	/**
@@ -287,9 +288,9 @@ public class DDel
 					"[[WP:CSD#F7|F7]]: Violates [[Wikipedia:Non-free content criteria|non-free content criterion]] [[Wikipedia:Non-free content criteria#1|#1]]"))
 				ftl.add(s);
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl, BotUtils.csdG8talk);
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
 
 		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, BotUtils.csdG6);
+			wiki.delete(cat, BStrings.g6);
 	}
 }

@@ -13,6 +13,7 @@ import java.util.Locale;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.MultiMap;
+import util.BStrings;
 import util.BotUtils;
 import util.WTP;
 
@@ -72,7 +73,7 @@ public final class FFDNotifier
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
 				x += BotUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
-			wiki.addText(k, x + BotUtils.botNote, "BOT: Notify user of FfD", false);
+			wiki.addText(k, x + BStrings.botNote, "BOT: Notify user of FfD", false);
 		});
 	}
 }

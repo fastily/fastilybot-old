@@ -1,7 +1,6 @@
 package util;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,27 +29,6 @@ import okhttp3.Response;
  */
 public class BotUtils
 {
-	/**
-	 * Used as part of report headers.
-	 */
-	public static final String updatedAt = "This report updated at <onlyinclude>~~~~~</onlyinclude>\n";
-
-	/**
-	 * Wiki-text message stating that a bot did not nominate any files for deletion.
-	 */
-	public static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
-
-	/**
-	 * Summary for speedy deletion criterion G8 (talk page)
-	 */
-	public static final String csdG8talk = "[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
-
-	/**
-	 * Summary for speedy deletion criterion G6
-	 */
-	public static final String csdG6 = "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup";
-
-	
 	/**
 	 * Generic http client for miscellaneous use.
 	 */
@@ -166,18 +144,6 @@ public class BotUtils
 	public static HashSet<String> fetchLabsReportAsFiles(Wiki wiki, String report)
 	{
 		return fetchLabsReportSet(wiki, report, "File:");
-	}
-
-	/**
-	 * Generates an {@code Template:Ncd} template for a bot user.
-	 * 
-	 * @param user The bot username to use
-	 * @return The template.
-	 */
-	public static String makeNCDBotTemplate(String user) // TODO: Out of place?
-	{
-		return String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()),
-				user);
 	}
 
 	/**
@@ -367,12 +333,11 @@ public class BotUtils
 	 * @param wiki The Wiki object to use
 	 * @param talkNS Pages in {@code titles} will be converted to this namespace before being deleted
 	 * @param titles The titles to use
-	 * @param reason The reason to delete with.
 	 */
-	public static void talkDeleter(Wiki wiki, NS talkNS, ArrayList<String> titles, String reason)
+	public static void talkDeleter(Wiki wiki, NS talkNS, ArrayList<String> titles)
 	{
 		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(page -> wiki.convertIfNotInNS(page, talkNS)))))
-			wiki.delete(s, reason);
+			wiki.delete(s, BStrings.g8Talk);
 
 	}
 }

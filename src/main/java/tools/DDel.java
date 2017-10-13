@@ -248,8 +248,13 @@ public class DDel
 		String cat = "Category:Proposed deletion as of " + DateUtils.dateAsDMY(date);
 		Pattern pRgx = Pattern.compile(WTP.prod.getRegex(wiki));
 
+	   ArrayList<String> l = wiki.getCategoryMembers(cat, NS.MAIN);
+	   l.removeAll(wiki.whatTranscludesHere("Template:Article for deletion/dated", NS.MAIN));
+	   l.removeAll(wiki.whatTranscludesHere("Template:Prod blp/dated", NS.MAIN));
+	   l.removeAll(wiki.getCategoryMembers("Category:Candidates for speedy deletion", NS.MAIN));
+	   
 		ArrayList<String> tpl = new ArrayList<>();
-		for (String s : wiki.getCategoryMembers(cat, NS.MAIN))
+		for (String s : l)
 			try
 			{
 				ArrayList<Revision> revs = wiki.getRevisions(s, 3, false, null, null);

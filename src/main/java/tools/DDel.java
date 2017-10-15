@@ -64,6 +64,14 @@ public class DDel
 	private boolean doEC;
 
 	/**
+	 * Corresponds to CLI option to run nld
+	 * 
+	 * @see #nld(ZonedDateTime)
+	 */
+	@Option(names = { "--nld" }, description = "Run nld")
+	private boolean doNld;
+	
+	/**
 	 * Corresponds to CLI option to run emptyCats
 	 * 
 	 * @see #orfud(ZonedDateTime)
@@ -131,6 +139,8 @@ public class DDel
 			ffd(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doEC)
 			emptyCats();
+		if(ddel.doNld)
+			nld(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doOrfud)
 			orfud(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doProd)
@@ -217,6 +227,27 @@ public class DDel
 		BotUtils.talkDeleter(wiki, NS.CATEGORY_TALK, tpl);
 	}
 
+	/**
+	 * Process the day's nld files.
+	 * @param date The day of items to process
+	 */
+	private static void nld(ZonedDateTime date)
+	{
+		ArrayList<String> tpl = new ArrayList<>();
+		
+		String cat = "Category:Wikipedia files with unknown copyright status as of " + DateUtils.dateAsDMY(date);
+		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories");
+		
+		MQuery.getCategoriesOnPage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
+			if(!v.stream().anyMatch(whitelist::contains) && wiki.delete(k, "[[WP:CSD#F4|F4]]: Lack of licensing information"))
+				tpl.add(k);
+		});
+		
+		BotUtils.talkDeleter(wiki, NS.FILE_TALK, tpl);
+		if (wiki.getCategorySize(cat) == 0)
+			wiki.delete(cat, BStrings.g6);	
+	}
+	
 	/**
 	 * Process the day's orfud files.
 	 * 

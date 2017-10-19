@@ -27,7 +27,7 @@ public class OrphanedFfD
 		Wiki wiki = BotUtils.getFastilyBot();
 		
 		ArrayList<String> l = new ArrayList<>();
-		MQuery.linksHere(wiki, false, new ArrayList<>(WTP.ffd.getTransclusionSet(wiki, NS.FILE))).forEach((k, v) -> {
+		MQuery.linksHere(wiki, false, WTP.ffd.getTransclusionSet(wiki, NS.FILE)).forEach((k, v) -> {
 			if (!v.stream().anyMatch(s -> s.startsWith("Wikipedia:Files for discussion")))
 				l.add(k);
 		});

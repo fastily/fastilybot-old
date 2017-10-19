@@ -1,6 +1,5 @@
 package enwp.bots;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import fastily.jwiki.core.MQuery;
@@ -29,7 +28,7 @@ public final class FindLicConflict
 		for(String s : wiki.getLinksOnPage(String.format("User:%s/Task5/Ignore", wiki.whoami())))
 			fl.removeAll(wiki.whatTranscludesHere(s, NS.FILE));
 
-		for (String s : MQuery.exists(wiki, true, new ArrayList<>(fl)))
+		for (String s : MQuery.exists(wiki, true, fl))
 			wiki.addText(s, "{{Wrong-license}}\n", "BOT: Noting possible conflict in copyright status", true);
 	}
 }

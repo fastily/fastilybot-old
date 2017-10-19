@@ -233,10 +233,11 @@ public class DDel
 	 */
 	private static void nld(ZonedDateTime date)
 	{
-		ArrayList<String> tpl = new ArrayList<>();
-		
 		String cat = "Category:Wikipedia files with unknown copyright status as of " + DateUtils.dateAsDMY(date);
-		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories");
+		if(!wiki.exists(cat))
+			return;
+		
+		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories"), tpl = new ArrayList<>();
 		
 		MQuery.getCategoriesOnPage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
 			if(!v.stream().anyMatch(whitelist::contains) && wiki.delete(k, "[[WP:CSD#F4|F4]]: Lack of licensing information"))
@@ -256,7 +257,9 @@ public class DDel
 	private static void orfud(ZonedDateTime date)
 	{
 		String cat = "Category:Orphaned non-free use Wikipedia files as of " + DateUtils.dateAsDMY(date);
-
+		if(!wiki.exists(cat))
+			return;
+		
 		ArrayList<String> ftl = new ArrayList<>();
 		MQuery.fileUsage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
 			if (v.isEmpty() && wiki.delete(k, "[[WP:CSD#F5|F5]]: Unused non-free media file for more than 7 days"))
@@ -314,7 +317,9 @@ public class DDel
 	private static void rfu(ZonedDateTime date)
 	{
 		String cat = "Category:Replaceable non-free use to be decided after " + DateUtils.dateAsDMY(date);
-
+		if(!wiki.exists(cat))
+			return;
+		
 		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.FILE);
 		l.removeAll(wiki.getCategoryMembers("Category:Replaceable non-free use Wikipedia files disputed", NS.FILE));
 

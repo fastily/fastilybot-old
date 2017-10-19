@@ -1,6 +1,5 @@
 package enwp.reports;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import fastily.jwiki.core.MQuery;
@@ -35,7 +34,13 @@ public class MissingFCT
 
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore"))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
+		
+		HashSet<String> lcl = new HashSet<>(wiki.getLinksOnPage("User:FastilyBot/License categories"));
+		MQuery.getCategoriesOnPage(wiki, l).forEach((k, v) -> {
+			if(v.isEmpty() || v.stream().anyMatch(lcl::contains))
+				l.remove(k);
+		});
 
-		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, MQuery.exists(wiki, true, new ArrayList<>(l)), true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, l, true), "Updating report");
 	}
 }

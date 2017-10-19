@@ -1,6 +1,5 @@
 package enwp.bots;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import fastily.jwiki.core.MQuery;
@@ -35,7 +34,7 @@ public class FlagOI
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 		
 		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
-		l.removeAll(MQuery.exists(wiki, false, new ArrayList<>(l)));
+		l.removeAll(MQuery.exists(wiki, false, l));
 		
 		for(String s : l)
 			wiki.addText(s, "\n{{Orphan image}}", "BOT: Noting that file has no inbound file usage", false);

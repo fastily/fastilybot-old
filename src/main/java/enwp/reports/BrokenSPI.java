@@ -36,7 +36,7 @@ public final class BrokenSPI
 		spiCases.removeAll(wiki.getLinksOnPage(report + "/Ignore"));
 
 		ArrayList<String> l = new ArrayList<>();
-		MQuery.resolveRedirects(wiki, new ArrayList<>(spiCases)).forEach((k, v) -> {
+		MQuery.resolveRedirects(wiki, spiCases).forEach((k, v) -> {
 			if (k.equals(v)) // filter redirects
 				l.add(v);
 		});

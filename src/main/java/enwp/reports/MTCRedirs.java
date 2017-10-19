@@ -38,6 +38,6 @@ public class MTCRedirs
 
 		b.append("</pre>");	
 		
-		wiki.edit(reportPage, b.toString(), "Update report");
+		wiki.edit(reportPage, b.toString(), "Updating report");
 	}
 }

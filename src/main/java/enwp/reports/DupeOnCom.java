@@ -1,6 +1,5 @@
 package enwp.reports;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import fastily.jwiki.core.MQuery;
@@ -33,6 +32,6 @@ public class DupeOnCom
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, MQuery.exists(wiki, true, new ArrayList<>(l)), true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
 	}
 }

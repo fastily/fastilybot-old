@@ -71,7 +71,7 @@ public final class UntaggedDD
 		if (sections.size() > maxOldReports)
 			text = text.substring(0, sections.get(maxOldReports).z);
 
-		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, new ArrayList<>(cacheList)), true) + text,
+		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text,
 				"Updating report");
 
 		dump(l, false);

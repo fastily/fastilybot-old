@@ -12,40 +12,15 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.Triple;
 import util.BotUtils;
-import util.DateUtils;
-
-import static java.nio.file.StandardOpenOption.*;
 
 /**
- * Finds and reports on files in daily deletion categories which have recently been untagged.
+ * Reports files in daily deletion categories which were untagged since the previous run.
  * 
  * @author Fastily
  *
  */
-public final class UntaggedDD
+public class UntaggedDD
 {
-	/**
-	 * The list of root categories to inspect
-	 */
-	private static final ArrayList<String> ddCat = FL.toSAL("Category:Wikipedia files with unknown source",
-			"Category:Wikipedia files with unknown copyright status", "Category:Wikipedia files missing permission",
-			"Category:Disputed non-free Wikipedia files", "Category:Replaceable non-free use Wikipedia files");
-
-	/**
-	 * The regex matching eligible daily deletion categories for review
-	 */
-	private static final String ddCatRegex = ".*? " + DateUtils.DMYRegex;
-
-	/**
-	 * The local storage path for caching the previous run's daily deletion files
-	 */
-	private static final Path wpddfiles = Paths.get("WPDDFiles.txt");
-
-	/**
-	 * The maximum number of old reports to keep on {@code reportPage}.
-	 */
-	private static final int maxOldReports = 49;
-
 	/**
 	 * Main driver
 	 * 
@@ -56,14 +31,18 @@ public final class UntaggedDD
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
 		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
+		int maxOldReports = 49;
+		Path ddFL = Paths.get("WPDDFiles.txt");
 
-		HashSet<String> l = FL.toSet(ddCat.stream().flatMap(rootCat -> wiki.getCategoryMembers(rootCat, NS.CATEGORY).stream())
-				.filter(cat -> cat.matches(ddCatRegex)).flatMap(cat -> wiki.getCategoryMembers(cat, NS.FILE).stream()));
+		HashSet<String> l = FL.toSet(wiki.getLinksOnPage(rPage + "/Config", NS.CATEGORY).stream().flatMap(s -> wiki.getCategoryMembers(s, NS.FILE).stream()));
+		
+		if (!Files.exists(ddFL))
+		{
+			BotUtils.writeStringsToFile(ddFL, l);
+			return;
+		}
 
-		if (!Files.exists(wpddfiles))
-			dump(l, true);
-
-		HashSet<String> cacheList = FL.toSet(Files.lines(wpddfiles));
+		HashSet<String> cacheList = FL.toSet(Files.lines(ddFL));
 		cacheList.removeAll(l);
 
 		String text = wiki.getPageText(rPage);
@@ -74,20 +53,6 @@ public final class UntaggedDD
 		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text,
 				"Updating report");
 
-		dump(l, false);
-	}
-
-	/**
-	 * Dumps a HashSet to {@code wpddfiles}
-	 * 
-	 * @param l The HashSet to use
-	 * @param exit Set true to exit the program after this method completes.
-	 * @throws Throwable IO Error.
-	 */
-	private static void dump(HashSet<String> l, boolean exit) throws Throwable
-	{
-		Files.write(wpddfiles, l, CREATE, WRITE, TRUNCATE_EXISTING);
-		if (exit)
-			System.exit(0);
+		BotUtils.writeStringsToFile(ddFL, l);
 	}
 }

@@ -52,7 +52,7 @@ public final class Up
 	 */
 	public static void main(String[] args) throws Throwable
 	{
-		ArrayList<String> fails = new ArrayList<>();
+		ArrayList<Path> fails = new ArrayList<>();
 		
 		Stream.of(args).map(Paths::get).filter(Files::isDirectory).forEach(d -> {
 			int i = 0;
@@ -66,7 +66,7 @@ public final class Up
 									FSystem.iso8601dtf.format(ZonedDateTime.ofInstant(Files.getLastModifiedTime(f).toInstant(), ZoneOffset.UTC)), name,
 									wiki.whoami()),
 							""))
-						fails.add(f.toString());
+						fails.add(f);
 			}
 			catch (Throwable e)
 			{

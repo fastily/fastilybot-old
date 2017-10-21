@@ -23,12 +23,12 @@ public class BStrings
 	/**
 	 * Summary for speedy deletion criterion G8 (talk page)
 	 */
-	public static final String g8Talk = "[[WP:CSD#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
+	public static final String g8Talk = "[[Wikipedia:Criteria for speedy deletion#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
 	
 	/**
 	 * Summary for speedy deletion criterion G6
 	 */
-	public static final String g6 = "[[WP:CSD#G6|G6]]: Housekeeping and routine (non-controversial) cleanup";
+	public static final String g6 = "[[Wikipedia:Criteria for speedy deletion#G6|G6]]: Housekeeping and routine (non-controversial) cleanup";
 
 	/**
 	 * Constructors disallowed

@@ -1,5 +1,11 @@
 package util;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -338,6 +344,18 @@ public class BotUtils
 	{
 		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(page -> wiki.convertIfNotInNS(page, talkNS)))))
 			wiki.delete(s, BStrings.g8Talk);
+	}
 
+	/**
+	 * Writes Collection of String to disk at {@code path}, delineated by newlines. If {@code path} exists, then it will
+	 * be overwritten.
+	 * 
+	 * @param path The location on disk to write to
+	 * @param l The Collection to use
+	 * @throws Throwable Throwable IO Error
+	 */
+	public static void writeStringsToFile(Path path, Collection<String> l) throws Throwable
+	{
+		Files.write(path, l, CREATE, WRITE, TRUNCATE_EXISTING);
 	}
 }

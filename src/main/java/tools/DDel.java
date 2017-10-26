@@ -70,7 +70,7 @@ public class DDel
 	 */
 	@Option(names = { "--nld" }, description = "Run nld")
 	private boolean doNld;
-	
+
 	/**
 	 * Corresponds to CLI option to run emptyCats
 	 * 
@@ -130,7 +130,7 @@ public class DDel
 			CommandLine.usage(ddel, System.out);
 			return;
 		}
-		
+
 		wiki = BotUtils.getFastily();
 
 		if (ddel.doFPROD)
@@ -139,7 +139,7 @@ public class DDel
 			ffd(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doEC)
 			emptyCats();
-		if(ddel.doNld)
+		if (ddel.doNld)
 			nld(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doOrfud)
 			orfud(ddel.date != null ? ddel.date : eightDaysAgo);
@@ -176,7 +176,7 @@ public class DDel
 			}
 		});
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
+		BotUtils.talkDeleter(wiki, ftl);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class DDel
 			if (wiki.delete(s, String.format("[[%s#%s]]", ffdPage, s)))
 				ftpl.add(s);
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftpl);
+		BotUtils.talkDeleter(wiki, ftpl);
 	}
 
 	/**
@@ -224,31 +224,32 @@ public class DDel
 						tpl.add(k);
 				});
 
-		BotUtils.talkDeleter(wiki, NS.CATEGORY_TALK, tpl);
+		BotUtils.talkDeleter(wiki, tpl);
 	}
 
 	/**
 	 * Process the day's nld files.
+	 * 
 	 * @param date The day of items to process
 	 */
 	private static void nld(ZonedDateTime date)
 	{
 		String cat = "Category:Wikipedia files with unknown copyright status as of " + DateUtils.dateAsDMY(date);
-		if(!wiki.exists(cat))
+		if (!wiki.exists(cat))
 			return;
-		
+
 		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories"), tpl = new ArrayList<>();
-		
+
 		MQuery.getCategoriesOnPage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
-			if(!v.stream().anyMatch(whitelist::contains) && wiki.delete(k, "[[WP:CSD#F4|F4]]: Lack of licensing information"))
+			if (!v.stream().anyMatch(whitelist::contains) && wiki.delete(k, "[[WP:CSD#F4|F4]]: Lack of licensing information"))
 				tpl.add(k);
 		});
-		
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, tpl);
+
+		BotUtils.talkDeleter(wiki, tpl);
 		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, BStrings.g6);	
+			wiki.delete(cat, BStrings.g6);
 	}
-	
+
 	/**
 	 * Process the day's orfud files.
 	 * 
@@ -257,16 +258,16 @@ public class DDel
 	private static void orfud(ZonedDateTime date)
 	{
 		String cat = "Category:Orphaned non-free use Wikipedia files as of " + DateUtils.dateAsDMY(date);
-		if(!wiki.exists(cat))
+		if (!wiki.exists(cat))
 			return;
-		
+
 		ArrayList<String> ftl = new ArrayList<>();
 		MQuery.fileUsage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
 			if (v.isEmpty() && wiki.delete(k, "[[WP:CSD#F5|F5]]: Unused non-free media file for more than 7 days"))
 				ftl.add(k);
 		});
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
+		BotUtils.talkDeleter(wiki, ftl);
 
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, BStrings.g6);
@@ -282,11 +283,11 @@ public class DDel
 		String cat = "Category:Proposed deletion as of " + DateUtils.dateAsDMY(date);
 		Pattern pRgx = Pattern.compile(WTP.prod.getRegex(wiki));
 
-	   ArrayList<String> l = wiki.getCategoryMembers(cat, NS.MAIN);
-	   l.removeAll(wiki.whatTranscludesHere("Template:Article for deletion/dated", NS.MAIN));
-	   l.removeAll(wiki.whatTranscludesHere("Template:Prod blp/dated", NS.MAIN));
-	   l.removeAll(wiki.getCategoryMembers("Category:Candidates for speedy deletion", NS.MAIN));
-	   
+		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.MAIN);
+		l.removeAll(wiki.whatTranscludesHere("Template:Article for deletion/dated", NS.MAIN));
+		l.removeAll(wiki.whatTranscludesHere("Template:Prod blp/dated", NS.MAIN));
+		l.removeAll(wiki.getCategoryMembers("Category:Candidates for speedy deletion", NS.MAIN));
+
 		ArrayList<String> tpl = new ArrayList<>();
 		for (String s : l)
 			try
@@ -306,7 +307,7 @@ public class DDel
 				e.printStackTrace();
 			}
 
-		BotUtils.talkDeleter(wiki, NS.TALK, tpl);
+		BotUtils.talkDeleter(wiki, tpl);
 	}
 
 	/**
@@ -317,9 +318,9 @@ public class DDel
 	private static void rfu(ZonedDateTime date)
 	{
 		String cat = "Category:Replaceable non-free use to be decided after " + DateUtils.dateAsDMY(date);
-		if(!wiki.exists(cat))
+		if (!wiki.exists(cat))
 			return;
-		
+
 		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.FILE);
 		l.removeAll(wiki.getCategoryMembers("Category:Replaceable non-free use Wikipedia files disputed", NS.FILE));
 
@@ -329,7 +330,7 @@ public class DDel
 					"[[WP:CSD#F7|F7]]: Violates [[Wikipedia:Non-free content criteria|non-free content criterion]] [[Wikipedia:Non-free content criteria#1|#1]]"))
 				ftl.add(s);
 
-		BotUtils.talkDeleter(wiki, NS.FILE_TALK, ftl);
+		BotUtils.talkDeleter(wiki, ftl);
 
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, BStrings.g6);

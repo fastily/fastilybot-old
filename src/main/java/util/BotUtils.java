@@ -337,12 +337,11 @@ public class BotUtils
 	 * {@code reason}. Method checks to see if the talk page exists before deleting.
 	 * 
 	 * @param wiki The Wiki object to use
-	 * @param talkNS Pages in {@code titles} will be converted to this namespace before being deleted
 	 * @param titles The titles to use
 	 */
-	public static void talkDeleter(Wiki wiki, NS talkNS, ArrayList<String> titles)
+	public static void talkDeleter(Wiki wiki, ArrayList<String> titles)
 	{
-		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(page -> wiki.convertIfNotInNS(page, talkNS)))))
+		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(wiki::talkPageOf))))
 			wiki.delete(s, BStrings.g8Talk);
 	}
 

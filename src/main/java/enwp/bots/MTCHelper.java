@@ -18,38 +18,24 @@ import util.WTP;
 public final class MTCHelper
 {
 	/**
-	 * The Wiki to use
-	 */
-	private static Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * Creates the regular expression matching Copy to Wikimedia Commons
-	 */
-	private static String tRegex = WTP.mtc.getRegex(wiki);
-
-	/**
-	 * The list of pages transcluding {@code Template:Now Commons}
-	 */
-	private static HashSet<String> nowCommons = WTP.ncd.getTransclusionSet(wiki, NS.FILE);
-
-	/**
-	 * The ncd template to fill out
-	 */
-	private static String ncdT = BStrings.ncdTemplateFor(wiki.whoami());
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Not used - program does not accept arguments
 	 */
 	public static void main(String[] args)
 	{
+		Wiki wiki = BotUtils.getFastilyBot();
+
 		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report1");
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 
+		String tRegex = WTP.mtc.getRegex(wiki);
+		HashSet<String> ncdL = WTP.ncd.getTransclusionSet(wiki, NS.FILE);
+		String ncdT = BStrings.ncdTemplateFor(wiki.whoami());
+
 		BotUtils.getFirstOnlySharedDuplicate(wiki, new ArrayList<>(l)).forEach((k, v) -> {
-			if (nowCommons.contains(k))
+			if (ncdL.contains(k))
 				wiki.replaceText(k, tRegex, "BOT: File has already been copied to Commons");
 			else
 			{

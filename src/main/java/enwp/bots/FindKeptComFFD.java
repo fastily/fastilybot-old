@@ -17,28 +17,17 @@ import util.WTP;
 public final class FindKeptComFFD
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static final Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
-	 * The regex matching Template:Nominated for deletion on Commons.
-	 */
-	private static final String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
-
-	/**
-	 * The ncd template to fill out
-	 */
-	private static final String ncd = BStrings.ncdTemplateFor(wiki.whoami());
-	
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used.
 	 */
 	public static void main(String[] args)
 	{
-		HashSet<String> cffdl = FindCommonsFFD.findComFFD();
+		Wiki wiki = BotUtils.getFastilyBot();
+		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
+		String ncd = BStrings.ncdTemplateFor(wiki.whoami());
+		
+		HashSet<String> cffdl = new HashSet<>(BotUtils.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		BotUtils.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {

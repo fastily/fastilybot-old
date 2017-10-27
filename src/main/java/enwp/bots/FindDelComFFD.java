@@ -1,6 +1,5 @@
 package enwp.bots;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -60,7 +59,7 @@ public final class FindDelComFFD
 			}
 		});
 
-		FL.toHM(MQuery.exists(com, false, new ArrayList<>(comPairs.keySet())).stream()
+		FL.toHM(MQuery.exists(com, false, comPairs.keySet()).stream()
 				.filter(s -> !com.getLogs(comPairs.get(s), null, "delete", 1).isEmpty()), Function.identity(), comPairs::get)
 				.forEach((k, v) -> enwp.edit(k,
 						pageTexts.get(k).replaceAll(WTP.nomDelOnCom.getRegex(enwp), String.format("{{Deleted on Commons|%s}}", enwp.nss(v))),

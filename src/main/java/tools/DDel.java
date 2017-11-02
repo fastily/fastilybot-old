@@ -238,7 +238,8 @@ public class DDel
 		if (!wiki.exists(cat))
 			return;
 
-		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories"), tpl = new ArrayList<>();
+		ArrayList<String> whitelist = wiki.getLinksOnPage("User:FastilyBot/License categories");
+		ArrayList<String> tpl = new ArrayList<>();
 
 		MQuery.getCategoriesOnPage(wiki, wiki.getCategoryMembers(cat, NS.FILE)).forEach((k, v) -> {
 			if (!v.stream().anyMatch(whitelist::contains) && wiki.delete(k, "[[WP:CSD#F4|F4]]: Lack of licensing information"))
@@ -246,6 +247,7 @@ public class DDel
 		});
 
 		BotUtils.talkDeleter(wiki, tpl);
+
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, BStrings.g6);
 	}

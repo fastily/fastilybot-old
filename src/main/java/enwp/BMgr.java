@@ -117,7 +117,7 @@ public final class BMgr
 					MTCRedirs.main(pArgs);
 					break;
 				case 5:
-					CountFfD.main(pArgs);
+//					CountFfD.main(pArgs);
 					break;
 				case 6:
 					OrphanedKL.main(pArgs);

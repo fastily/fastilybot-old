@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +39,7 @@ public class BotUtils
 	/**
 	 * Generic http client for miscellaneous use.
 	 */
-	public static OkHttpClient httpClient = new OkHttpClient();
+	public static OkHttpClient httpClient = new OkHttpClient.Builder().readTimeout(2, TimeUnit.MINUTES).build();
 
 	/**
 	 * Constructors disallowed

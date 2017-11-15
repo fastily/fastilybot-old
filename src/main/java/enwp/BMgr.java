@@ -2,6 +2,7 @@ package enwp;
 
 import enwp.bots.*;
 import enwp.reports.*;
+import fastily.jwiki.util.WGen;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -18,8 +19,14 @@ public final class BMgr
 	/**
 	 * Flag which triggers help output
 	 */
-	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message and exit")
+	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message")
 	private boolean helpRequested;
+
+	/**
+	 * Flag which activates the WGen utility.
+	 */
+	@Option(names = { "--wgen" }, description = "Runs the WGen credential management utility")
+	private boolean runWGen;
 
 	/**
 	 * Runs the specified bot task, if possible.
@@ -53,6 +60,11 @@ public final class BMgr
 		if (bmgr.helpRequested || args.length == 0)
 		{
 			CommandLine.usage(bmgr, System.out);
+			return;
+		}
+		else if (bmgr.runWGen)
+		{
+			WGen.main(new String[0]);
 			return;
 		}
 
@@ -117,7 +129,7 @@ public final class BMgr
 					MTCRedirs.main(pArgs);
 					break;
 				case 5:
-//					CountFfD.main(pArgs);
+					// CountFfD.main(pArgs);
 					break;
 				case 6:
 					OrphanedKL.main(pArgs);

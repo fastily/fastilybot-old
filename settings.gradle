@@ -1,1 +1,3 @@
 rootProject.name = 'fastilybot'
+
+include 'fastilybot-shared', 'fastilybot-enwp', 'fastilybot-tools'

@@ -15,8 +15,8 @@ mkdir -p "$BINDIR" $"LOGDIR"
 
 ## Build program
 printf "Building BMgr\n"
-./gradlew clean build bmgr
-mv ./build/libs/BMgr.jar "${BINDIR}/"
+./gradlew clean build fastilybot-enwp:doDist
+mv ./fastilybot-enwp/build/libs/BMgr.jar "${BINDIR}/"
 
 ## Generate run script
 printf "Generating run script in ${BINDIR}\n"

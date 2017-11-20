@@ -12,6 +12,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.dwrap.Revision;
 import fastily.jwiki.tp.WParser;
+import fastily.jwiki.util.WGen;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -102,6 +103,12 @@ public class DDel
 	private ZonedDateTime date;
 
 	/**
+	 * Flag which activates the WGen utility.
+	 */
+	@Option(names = { "--wgen" }, description = "Runs the WGen credential management utility")
+	private boolean runWGen;
+	
+	/**
 	 * Corresponds to CLI option to request help
 	 */
 	@Option(names = { "-h", "--help" }, usageHelp = true, description = "Print this message and exit")
@@ -119,8 +126,9 @@ public class DDel
 	 * Main driver
 	 * 
 	 * @param args Program arguments. Run with {@code --help} to get the full list.
+	 * @throws Throwable I/O Error
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws Throwable
 	{
 		DDel ddel = new DDel();
 		new CommandLine(ddel).registerConverter(ZonedDateTime.class, s -> LocalDate.parse(s, DateUtils.DMY).atStartOfDay(ZoneOffset.UTC))
@@ -128,6 +136,11 @@ public class DDel
 		if (ddel.helpRequested || args.length == 0)
 		{
 			CommandLine.usage(ddel, System.out);
+			return;
+		}
+		else if (ddel.runWGen)
+		{
+			WGen.main(new String[0]);
 			return;
 		}
 

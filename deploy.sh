@@ -2,18 +2,27 @@
 
 #: Build and deploy BMgr to ~/bin
 #:
-#: Tested on Raspbian Jessie
+#: Tested on Raspbian Stretch
 #: 
 #: Author: Fastily
 
 BINDIR=~/bin
 LOGDIR=~/logs
 
-printf "Deploying BMgr\n"
+SCPTDIR="${0%/*}"
 
-mkdir -p "$BINDIR" $"LOGDIR"
+printf "This script will deploy BMgr\n"
+mkdir -p "$BINDIR" "$LOGDIR"
 
-## Build program
+## Build dependency jwiki
+cd /tmp
+git clone --depth 1 'https://github.com/fastily/jwiki.git'
+cd jwiki
+./gradlew build publishToMavenLocal -x test
+
+cd "$SCPTDIR"
+
+## Build BMgr
 printf "Building BMgr\n"
 ./gradlew clean build fastilybot-enwp:doDist
 mv ./fastilybot-enwp/build/libs/BMgr.jar "${BINDIR}/"

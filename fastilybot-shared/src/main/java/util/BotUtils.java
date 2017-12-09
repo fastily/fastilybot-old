@@ -21,7 +21,6 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.FSystem;
-import fastily.jwiki.util.Triple;
 import fastily.jwiki.util.Tuple;
 import fastily.jwiki.util.WGen;
 import okhttp3.OkHttpClient;
@@ -208,76 +207,6 @@ public class BotUtils
 				continue;
 
 			getCategoryMembersR(wiki, s, seen, l);
-		}
-	}
-
-	/**
-	 * Gets the text of a page, split by section header.
-	 * 
-	 * @param wiki The Wiki object to use
-	 * @param title The page to get text for
-	 * @return A List with of Triple containing [ Header Level , Header Title, The Full Header and Section Text ]
-	 */
-	public static ArrayList<Triple<Integer, String, String>> listPageSections(Wiki wiki, String title)
-	{
-		ArrayList<Triple<Integer, String, Integer>> sectionData = wiki.getSectionHeaders(title);
-		String text = wiki.getPageText(title);
-
-		ArrayList<Triple<Integer, String, String>> results = new ArrayList<>();
-
-		if (sectionData.isEmpty())
-			return results;
-
-		Triple<Integer, String, Integer> curr;
-		for (int i = 0; i < sectionData.size() - 1; i++)
-		{
-			curr = sectionData.get(i);
-			results.add(new Triple<>(curr.x, curr.y, text.substring(curr.z, sectionData.get(i + 1).z)));
-		}
-
-		curr = sectionData.get(sectionData.size() - 1);
-		results.add(new Triple<>(curr.x, curr.y, text.substring(curr.z)));
-
-		return results;
-	}
-
-	/**
-	 * Get the page author of a page. This is based on the first available public revision to a page.
-	 * 
-	 * @param wiki The Wiki object to use
-	 * @param title The title to query
-	 * @return The page author, without the {@code User:} prefix, or null on error.
-	 */
-	public static String getPageAuthor(Wiki wiki, String title)
-	{
-		try
-		{
-			return wiki.getRevisions(title, 1, true, null, null).get(0).user;
-		}
-		catch (Throwable e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Get the most recent editor of a page.
-	 * 
-	 * @param wiki The Wiki object to use
-	 * @param title The title to query
-	 * @return The most recent editor to a page, without the {@code User:} prefix, or null on error.
-	 */
-	public static String getLastEditor(Wiki wiki, String title)
-	{
-		try
-		{
-			return wiki.getRevisions(title, 1, false, null, null).get(0).user;
-		}
-		catch (Throwable e)
-		{
-			e.printStackTrace();
-			return null;
 		}
 	}
 

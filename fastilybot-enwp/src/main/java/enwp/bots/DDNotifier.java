@@ -94,7 +94,7 @@ public class DDNotifier
 			if (idkL.contains(s))
 				return;
 
-			String author = BotUtils.getPageAuthor(wiki, s);
+			String author = wiki.getPageCreator(s);
 			if (author != null)
 				ml.put(wiki.convertIfNotInNS(author, NS.USER_TALK), s);
 		});

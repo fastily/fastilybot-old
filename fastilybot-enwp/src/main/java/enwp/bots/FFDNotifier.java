@@ -26,11 +26,6 @@ import util.WTP;
 public final class FFDNotifier
 {
 	/**
-	 * The Wiki object to use
-	 */
-	private static final Wiki wiki = BotUtils.getFastilyBot();
-
-	/**
 	 * The start of today
 	 */
 	private static final ZonedDateTime today = ZonedDateTime.of(LocalDate.now(ZoneOffset.UTC), LocalTime.of(0, 0), ZoneOffset.UTC);
@@ -41,30 +36,27 @@ public final class FFDNotifier
 	private static final Instant start = today.toInstant(), end = Instant.now();
 
 	/**
-	 * The title of today's FfD
-	 */
-	private static String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", today.getYear(),
-			today.getMonth().getDisplayName(TextStyle.FULL, Locale.US), today.getDayOfMonth());
-
-	/**
-	 * List of users which do {@code nobots}. These are avoided.
-	 */
-	private static final HashSet<String> noBots = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
-
-	/**
 	 * Main driver
 	 * 
 	 * @param args Program arguments, not used.
 	 */
 	public static void main(String[] args)
 	{
+		// Constants
+		Wiki wiki = BotUtils.getFastilyBot();
+		String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", today.getYear(),
+				today.getMonth().getDisplayName(TextStyle.FULL, Locale.US), today.getDayOfMonth());
+		HashSet<String> noBots = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
+
+		// Associate possibly eligible files by user
 		MultiMap<String, String> l = new MultiMap<>();
-		wiki.getSectionHeaders(targetFFD).stream().filter(t -> t.x == 4 && wiki.whichNS(t.y).equals(NS.FILE)).forEach(t -> {
-			String author = BotUtils.getPageAuthor(wiki, t.y);
+		wiki.splitPageByHeader(targetFFD).stream().filter(t -> t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE)).forEach(t -> {
+			String author = wiki.getPageCreator(t.header);
 			if (author != null && !noBots.contains(author = wiki.convertIfNotInNS(author, NS.USER_TALK)))
-				l.put(author, t.y);
+				l.put(author, t.header);
 		});
 
+		// Skip files if user(s) have been notified, then notify accordingly
 		l.l.forEach((k, v) -> {
 			ArrayList<String> rl = BotUtils.detLinksInHist(wiki, k, v, start, end);
 			if (rl.isEmpty())

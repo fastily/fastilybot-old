@@ -203,17 +203,17 @@ public class DDel
 		String ffdPage = "Wikipedia:Files for discussion/" + DateUtils.dateAsYMD(date);
 
 		ArrayList<String> fl = new ArrayList<>();
-		BotUtils.listPageSections(wiki, ffdPage).stream().forEach(t -> {
-			if (t.x == 4 && wiki.whichNS(t.y).equals(NS.FILE) && !t.z.contains(wiki.whoami()))
+		wiki.splitPageByHeader(ffdPage).stream().forEach(t -> {
+			if (t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE) && !t.text.contains(wiki.whoami()))
 			{
 				// Skip threads with more than one post
-				Matcher m = tsRegex.matcher(t.z);
+				Matcher m = tsRegex.matcher(t.text);
 				int i = 0;
 				while (m.find())
 					if (++i > 1)
 						return;
 
-				fl.add(t.y);
+				fl.add(t.header);
 			}
 		});
 

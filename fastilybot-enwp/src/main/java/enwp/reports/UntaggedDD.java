@@ -9,8 +9,8 @@ import java.util.HashSet;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
-import fastily.jwiki.util.Triple;
 import util.BotUtils;
 
 /**
@@ -31,7 +31,7 @@ public class UntaggedDD
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
 		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
-		int maxOldReports = 49;
+		int maxOldReports = 50;
 		Path ddFL = Paths.get("WPDDFiles.txt");
 
 		HashSet<String> l = FL.toSet(wiki.getLinksOnPage(rPage + "/Config", NS.CATEGORY).stream().flatMap(s -> wiki.getCategoryMembers(s, NS.FILE).stream()));
@@ -46,10 +46,16 @@ public class UntaggedDD
 		cacheList.removeAll(l);
 
 		String text = wiki.getPageText(rPage);
-		ArrayList<Triple<Integer, String, Integer>> sections = wiki.getSectionHeaders(rPage);
-		if (sections.size() > maxOldReports)
-			text = text.substring(0, sections.get(maxOldReports).z);
-
+		ArrayList<PageSection> sections = wiki.splitPageByHeader(rPage);
+		if (sections.size() > maxOldReports) // TODO: hack, fixme
+		{
+			sections = new ArrayList<>(sections.subList(1, maxOldReports));
+			StringBuilder s = new StringBuilder();
+			for(PageSection ps : sections)
+				s.append(ps.text);
+			
+			text = s.toString();
+		}
 		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text,
 				"Updating report");
 

@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
+import fastily.jwiki.core.WParser;
 import fastily.jwiki.core.Wiki;
-import fastily.jwiki.tp.WParser;
 import fastily.jwiki.util.FL;
 import util.BotUtils;
 import util.WTP;

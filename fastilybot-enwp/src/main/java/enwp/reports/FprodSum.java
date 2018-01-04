@@ -8,9 +8,9 @@ import java.util.regex.Pattern;
 
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
+import fastily.jwiki.core.WParser;
+import fastily.jwiki.core.WParser.WTemplate;
 import fastily.jwiki.core.Wiki;
-import fastily.jwiki.tp.WParser;
-import fastily.jwiki.tp.WTemplate;
 import fastily.jwiki.util.FSystem;
 import util.BStrings;
 import util.BotUtils;

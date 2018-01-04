@@ -9,8 +9,8 @@ subprojects {
     }
 
     dependencies {
-      compile "info.picocli:picocli:2.1.0"
-      compile "fastily:jwiki:1.4.1"
+      compile "info.picocli:picocli:2.2.0"
+      compile "fastily:jwiki:1.5.0"
     }
 }
 
@@ -48,5 +48,5 @@ project(':fastilybot-tools') {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
+    gradleVersion = '4.4.1'
 }

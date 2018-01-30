@@ -339,6 +339,12 @@ public class DDel
 		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.FILE);
 		l.removeAll(wiki.getCategoryMembers("Category:Replaceable non-free use Wikipedia files disputed", NS.FILE));
 
+		// skip files not tagged non-free
+		MQuery.getCategoriesOnPage(wiki, l).forEach((k, v) -> {
+			if(!v.contains("Category:All non-free media"))
+				l.remove(k);
+		});
+		
 		ArrayList<String> ftl = new ArrayList<>();
 		for (String s : l)
 			if (wiki.delete(s,

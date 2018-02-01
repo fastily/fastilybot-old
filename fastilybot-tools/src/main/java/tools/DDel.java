@@ -63,7 +63,15 @@ public class DDel
 	 */
 	@Option(names = { "--ec" }, description = "Run emptyCats")
 	private boolean doEC;
-
+	
+	/**
+	 * Corresponds to CLI option to run dbSelf.
+	 * 
+	 * @see #dbSelf()
+	 */
+	@Option(names = { "--g7" }, description = "Run dbSelf")
+	private boolean doDbSelf;
+	
 	/**
 	 * Corresponds to CLI option to run nld
 	 * 
@@ -107,7 +115,7 @@ public class DDel
 	 */
 	@Option(names = { "--wgen" }, description = "Runs the WGen credential management utility")
 	private boolean runWGen;
-	
+
 	/**
 	 * Corresponds to CLI option to request help
 	 */
@@ -146,28 +154,76 @@ public class DDel
 
 		wiki = BotUtils.getFastily();
 
-		if (ddel.doFPROD)
-			fprod(ddel.date != null ? ddel.date : eightDaysAgo);
-		if (ddel.doFFD)
-			ffd(ddel.date != null ? ddel.date : eightDaysAgo);
 		if (ddel.doEC)
 			emptyCats();
+		if(ddel.doDbSelf)
+			dbSelf();
+		
+		ZonedDateTime d = ddel.date != null ? ddel.date : eightDaysAgo;
+		if (ddel.doFPROD)
+			fprod(d);
+		if (ddel.doFFD)
+			ffd(d);
 		if (ddel.doNld)
-			nld(ddel.date != null ? ddel.date : eightDaysAgo);
+			nld(d);
 		if (ddel.doOrfud)
-			orfud(ddel.date != null ? ddel.date : eightDaysAgo);
+			orfud(d);
 		if (ddel.doProd)
-			prod(ddel.date != null ? ddel.date : eightDaysAgo);
+			prod(d);
+
 		if (ddel.doRfu)
 			rfu(ddel.date != null ? ddel.date : DateUtils.getUTCofNow().minusDays(1));
 	}
 
 	/**
+	 * Deletes empty categories in CSD.
+	 */
+	protected static void emptyCats()
+	{
+		ArrayList<String> tpl = new ArrayList<>();
+		MQuery.getCategorySize(wiki, wiki.getCategoryMembers("Category:Candidates for speedy deletion as empty categories", NS.CATEGORY))
+				.forEach((k, v) -> {
+					if (v.equals(0) && wiki.delete(k, "[[WP:CSD#C1|C1]]: Empty category"))
+						tpl.add(k);
+				});
+	
+		BotUtils.talkDeleter(wiki, tpl);
+	}
+
+	/**
+	 * Deletes pages if the author requested it.
+	 */
+	protected static void dbSelf()
+	{
+		ArrayList<String> tpl = new ArrayList<>();
+		
+		Pattern u1r = Pattern.compile(new WTP("Template:Db-u1").getRegex(wiki));
+		Pattern g7r = Pattern.compile(new WTP("Template:Db-g7").getRegex(wiki));
+		
+		for(String s : wiki.getCategoryMembers("Category:Candidates for speedy deletion by user"))
+		{
+			ArrayList<Revision> topTwo = wiki.getRevisions(s, 2, false, null, null);
+			String secondRevText = topTwo.get(1).text;
+			NS ns = wiki.whichNS(s);
+			
+			if(ns.equals(NS.USER_TALK) || topTwo.size() < 2 || u1r.matcher(secondRevText).find() || g7r.matcher(secondRevText).find() || wiki.getPageCreator(s) != topTwo.get(0).user)
+				continue;
+			
+			if(ns.equals(NS.USER))
+				wiki.delete(s, "[[WP:CSD#U1|U1]]: User request to delete page in own userspace – If you wish to retrieve it, please see [[WP:REFUND]]");
+			else if(wiki.delete(s, "[[WP:CSD#G7|G7]]: One author who has requested deletion or blanked the page – If you wish to retrieve it, please see [[WP:REFUND]]"))
+				tpl.add(s);
+		}
+		
+		BotUtils.talkDeleter(wiki, tpl);
+	}
+	
+	/**
 	 * Process specified date's file PROD
 	 * 
 	 * @param date The day of items to process.
 	 */
-	private static void fprod(ZonedDateTime date)
+	protected static void fprod(ZonedDateTime date)
 	{
 		ArrayList<String> ftl = new ArrayList<>();
 		String fprodTP = wiki.nss(WTP.fprod.title);
@@ -197,7 +253,7 @@ public class DDel
 	 * 
 	 * @param date The day of items to process
 	 */
-	private static void ffd(ZonedDateTime date)
+	protected static void ffd(ZonedDateTime date)
 	{
 		Pattern tsRegex = Pattern.compile("\\d{4} \\(UTC\\)");
 		String ffdPage = "Wikipedia:Files for discussion/" + DateUtils.dateAsYMD(date);
@@ -226,26 +282,11 @@ public class DDel
 	}
 
 	/**
-	 * Deletes empty categories in CSD.
-	 */
-	private static void emptyCats()
-	{
-		ArrayList<String> tpl = new ArrayList<>();
-		MQuery.getCategorySize(wiki, wiki.getCategoryMembers("Category:Candidates for speedy deletion as empty categories", NS.CATEGORY))
-				.forEach((k, v) -> {
-					if (v.equals(0) && wiki.delete(k, "[[WP:CSD#C1|C1]]: Empty category"))
-						tpl.add(k);
-				});
-
-		BotUtils.talkDeleter(wiki, tpl);
-	}
-
-	/**
 	 * Process the day's nld files.
 	 * 
 	 * @param date The day of items to process
 	 */
-	private static void nld(ZonedDateTime date)
+	protected static void nld(ZonedDateTime date)
 	{
 		String cat = "Category:Wikipedia files with unknown copyright status as of " + DateUtils.dateAsDMY(date);
 		if (!wiki.exists(cat))
@@ -260,9 +301,7 @@ public class DDel
 		});
 
 		BotUtils.talkDeleter(wiki, tpl);
-
-		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, BStrings.g6);
+		deleteCatIfEmpty(cat);
 	}
 
 	/**
@@ -270,7 +309,7 @@ public class DDel
 	 * 
 	 * @param date The day of items to process.
 	 */
-	private static void orfud(ZonedDateTime date)
+	protected static void orfud(ZonedDateTime date)
 	{
 		String cat = "Category:Orphaned non-free use Wikipedia files as of " + DateUtils.dateAsDMY(date);
 		if (!wiki.exists(cat))
@@ -283,9 +322,7 @@ public class DDel
 		});
 
 		BotUtils.talkDeleter(wiki, ftl);
-
-		if (wiki.getCategorySize(cat) == 0)
-			wiki.delete(cat, BStrings.g6);
+		deleteCatIfEmpty(cat);
 	}
 
 	/**
@@ -293,7 +330,7 @@ public class DDel
 	 * 
 	 * @param date The day of items to process.
 	 */
-	private static void prod(ZonedDateTime date)
+	protected static void prod(ZonedDateTime date)
 	{
 		String cat = "Category:Proposed deletion as of " + DateUtils.dateAsDMY(date);
 		Pattern pRgx = Pattern.compile(WTP.prod.getRegex(wiki));
@@ -330,7 +367,7 @@ public class DDel
 	 * 
 	 * @param date The day of items to process.
 	 */
-	private static void rfu(ZonedDateTime date)
+	protected static void rfu(ZonedDateTime date)
 	{
 		String cat = "Category:Replaceable non-free use to be decided after " + DateUtils.dateAsDMY(date);
 		if (!wiki.exists(cat))
@@ -338,13 +375,8 @@ public class DDel
 
 		ArrayList<String> l = wiki.getCategoryMembers(cat, NS.FILE);
 		l.removeAll(wiki.getCategoryMembers("Category:Replaceable non-free use Wikipedia files disputed", NS.FILE));
+		filterForNFC(l);
 
-		// skip files not tagged non-free
-		MQuery.getCategoriesOnPage(wiki, l).forEach((k, v) -> {
-			if(!v.contains("Category:All non-free media"))
-				l.remove(k);
-		});
-		
 		ArrayList<String> ftl = new ArrayList<>();
 		for (String s : l)
 			if (wiki.delete(s,
@@ -352,6 +384,30 @@ public class DDel
 				ftl.add(s);
 
 		BotUtils.talkDeleter(wiki, ftl);
+		deleteCatIfEmpty(cat);
+	}
+
+	/**
+	 * Removes titles from {@code l} which do not contain the category {@code Category:All non-free media}
+	 * 
+	 * @param l The List to check.
+	 */
+	private static void filterForNFC(ArrayList<String> l)
+	{
+		MQuery.getCategoriesOnPage(wiki, l).forEach((k, v) -> {
+			if (!v.contains("Category:All non-free media"))
+				l.remove(k);
+		});
+	}
+
+	/**
+	 * Check if category is empty, and delete if it is.
+	 * 
+	 * @param cat The category to check.
+	 */
+	private static void deleteCatIfEmpty(String cat)
+	{
+		wiki.purge(cat);
 
 		if (wiki.getCategorySize(cat) == 0)
 			wiki.delete(cat, BStrings.g6);

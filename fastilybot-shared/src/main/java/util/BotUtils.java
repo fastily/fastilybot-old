@@ -15,10 +15,12 @@ import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
+import fastily.jwiki.dwrap.LogEntry;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.FSystem;
 import fastily.jwiki.util.Tuple;
@@ -271,10 +273,23 @@ public class BotUtils
 	 */
 	public static void talkDeleter(Wiki wiki, ArrayList<String> titles)
 	{
-		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.stream().map(wiki::talkPageOf))))
-			wiki.delete(s, BStrings.g8Talk);
+		talkDeleter(wiki, titles.stream());
 	}
 
+
+	/**
+	 * Convert pages in {@code titles} to {@code talkNS} and delete them using {@code wiki} with the reason
+	 * {@code reason}. Method checks to see if the talk page exists before deleting.
+	 * 
+	 * @param wiki The Wiki object to use
+	 * @param titles The titles to use
+	 */
+	public static void talkDeleter(Wiki wiki, Stream<String> titles)
+	{
+		for (String s : MQuery.exists(wiki, true, FL.toAL(titles.map(wiki::talkPageOf))))
+			wiki.delete(s, BStrings.g8Talk);
+	}
+	
 	/**
 	 * Writes Collection of String to disk at {@code path}, delineated by newlines. If {@code path} exists, then it will
 	 * be overwritten.
@@ -286,5 +301,19 @@ public class BotUtils
 	public static void writeStringsToFile(Path path, Collection<String> l) throws Throwable
 	{
 		Files.write(path, l, CREATE, WRITE, TRUNCATE_EXISTING);
+	}
+
+	/**
+	 * Checks if the most recent log entry of a page is restore.
+	 * 
+	 * @param wiki The Wiki to use
+	 * @param title Thet tile to check
+	 * @return True if the most recent log entry of a page is restore.
+	 */
+	public static boolean wasRecentlyRestored(Wiki wiki, String title)
+	{
+		ArrayList<LogEntry> l = wiki.getLogs(title, null, "delete", 1);
+		return !l.isEmpty() && l.get(0).action.equals("restore");
+
 	}
 }

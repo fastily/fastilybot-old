@@ -12,6 +12,7 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.WParser;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.dwrap.Revision;
+import fastily.jwiki.util.FL;
 import fastily.jwiki.util.WGen;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -63,7 +64,7 @@ public class DDel
 	 */
 	@Option(names = { "--ec" }, description = "Run emptyCats")
 	private boolean doEC;
-	
+
 	/**
 	 * Corresponds to CLI option to run dbSelf.
 	 * 
@@ -71,6 +72,14 @@ public class DDel
 	 */
 	@Option(names = { "--g7" }, description = "Run dbSelf")
 	private boolean doDbSelf;
+
+	/**
+	 * Corresponds to CLI option to run dbSelf.
+	 * 
+	 * @see #dbOrphanedTalk()
+	 */
+	@Option(names = { "--g8" }, description = "Run dbOrphanedTalk")
+	private boolean doDbOrphanedTalk;
 	
 	/**
 	 * Corresponds to CLI option to run nld
@@ -156,9 +165,11 @@ public class DDel
 
 		if (ddel.doEC)
 			emptyCats();
-		if(ddel.doDbSelf)
+		if (ddel.doDbSelf)
 			dbSelf();
-		
+		if(ddel.doDbOrphanedTalk)
+			dbOrphanedTalk();
+
 		ZonedDateTime d = ddel.date != null ? ddel.date : eightDaysAgo;
 		if (ddel.doFPROD)
 			fprod(d);
@@ -186,7 +197,7 @@ public class DDel
 					if (v.equals(0) && wiki.delete(k, "[[WP:CSD#C1|C1]]: Empty category"))
 						tpl.add(k);
 				});
-	
+
 		BotUtils.talkDeleter(wiki, tpl);
 	}
 
@@ -196,28 +207,45 @@ public class DDel
 	protected static void dbSelf()
 	{
 		ArrayList<String> tpl = new ArrayList<>();
-		
+
 		Pattern u1r = Pattern.compile(new WTP("Template:Db-u1").getRegex(wiki));
 		Pattern g7r = Pattern.compile(new WTP("Template:Db-g7").getRegex(wiki));
-		
-		for(String s : wiki.getCategoryMembers("Category:Candidates for speedy deletion by user"))
+
+		for (String s : wiki.getCategoryMembers("Category:Candidates for speedy deletion by user"))
 		{
 			ArrayList<Revision> topTwo = wiki.getRevisions(s, 2, false, null, null);
 			String secondRevText = topTwo.get(1).text;
 			NS ns = wiki.whichNS(s);
-			
-			if(ns.equals(NS.USER_TALK) || topTwo.size() < 2 || u1r.matcher(secondRevText).find() || g7r.matcher(secondRevText).find() || wiki.getPageCreator(s) != topTwo.get(0).user)
+
+			if (ns.equals(NS.USER_TALK) || topTwo.size() < 2 || u1r.matcher(secondRevText).find() || g7r.matcher(secondRevText).find()
+					|| wiki.getPageCreator(s) != topTwo.get(0).user)
 				continue;
-			
-			if(ns.equals(NS.USER))
-				wiki.delete(s, "[[WP:CSD#U1|U1]]: User request to delete page in own userspace – If you wish to retrieve it, please see [[WP:REFUND]]");
-			else if(wiki.delete(s, "[[WP:CSD#G7|G7]]: One author who has requested deletion or blanked the page – If you wish to retrieve it, please see [[WP:REFUND]]"))
+
+			if (ns.equals(NS.USER))
+				wiki.delete(s,
+						"[[WP:CSD#U1|U1]]: User request to delete page in own userspace – If you wish to retrieve it, please see [[WP:REFUND]]");
+			else if (wiki.delete(s,
+					"[[WP:CSD#G7|G7]]: One author who has requested deletion or blanked the page – If you wish to retrieve it, please see [[WP:REFUND]]"))
 				tpl.add(s);
 		}
-		
+
 		BotUtils.talkDeleter(wiki, tpl);
 	}
-	
+
+	/**
+	 * Deletes orphaned talk pages.
+	 */
+	protected static void dbOrphanedTalk()
+	{
+		ArrayList<String> l = wiki.getCategoryMembers("Category:Candidates for speedy deletion as dependent on a non-existent page");
+		l.removeAll(wiki.getCategoryMembers("Category:Wikipedia orphaned talk pages that should not be speedily deleted"));
+
+		MQuery.exists(wiki, false, FL.toAL(l.stream().filter(s -> {
+			NS ns = wiki.whichNS(s);
+			return ns.v % 2 == 1 && !ns.equals(NS.USER_TALK) && !s.toLowerCase().contains("archive");
+		}).map(wiki::talkPageBelongsTo))).forEach(s -> wiki.delete(wiki.talkPageOf(s), BStrings.g8Talk));
+	}
+
 	/**
 	 * Process specified date's file PROD
 	 * 

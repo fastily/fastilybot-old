@@ -1,52 +1,108 @@
-apply plugin: 'eclipse'
-
 subprojects {
-    apply plugin: 'java'
+  apply plugin: 'eclipse'
+  apply plugin: 'java'
 
-    repositories {
-      mavenLocal()
-      jcenter()
-    }
+  repositories {
+    mavenLocal()
+    jcenter()
+  }
+}
 
-    dependencies {
-      compile "info.picocli:picocli:2.3.0"
-      compile "fastily:jwiki:1.5.1"
+project(':fastilybot-shared') {
+  apply plugin: 'java-library'
+  apply plugin: 'maven'
+  apply plugin: 'maven-publish'
+
+  version="0.0.1"
+  group="fastilybot"
+
+  dependencies {
+    api "fastily:jwiki:1.5.1"
+  }
+
+  def pomConfig = {
+    inceptionYear '2018'
+    licenses {
+      license {
+        name 'GNU General Public License, Version 3.0'
+        url 'https://www.gnu.org/licenses/gpl-3.0.txt'
+        distribution 'repo'
+      }
     }
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+
+        pom.withXml {
+          asNode().children().last() + pomConfig
+        }
+
+        artifact sourceJar
+        artifact packageJavadoc
+      }
+    }
+  }
+
+
+  task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+  }
+
+  task packageJavadoc(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+  }
+
+
+  javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compileClasspath
+
+    options {
+      setMemberLevel JavadocMemberLevel.PUBLIC
+      setAuthor true
+
+      links "https://docs.oracle.com/javase/8/docs/api/"
+      links "https://square.github.io/okio/1.x/okio/"
+      links "https://square.github.io/okhttp/3.x/okhttp/"
+      links "https://fastily.github.io/jwiki/docs/gson/"
+      links "https://fastily.github.io/jwiki/docs/jwiki/"
+    }
+  }
 }
 
 project(':fastilybot-enwp') {
-    apply plugin: 'application'
+  apply plugin: 'application'
 
-    mainClassName = "enwp.BMgr"
+  mainClassName = "enwp.BMgr"
 
-    dependencies {
-        compile project(':fastilybot-shared')
+  dependencies {
+    compile "info.picocli:picocli:2.3.0"
+    compile project(':fastilybot-shared')
+  }
+
+
+  task doDist(type: Jar) {
+    baseName = "BMgr"
+
+    from {
+      configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
-
-    task doDist(type: Jar) {
-      baseName = "BMgr"
-
-      from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-      }
-
-      manifest {
-        attributes 'Main-Class': 'enwp.BMgr'
-      }
-      
-      exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
-
-      with jar
+    manifest {
+      attributes 'Main-Class': 'fastilybot.enwp.BMgr'
     }
-}
 
-project(':fastilybot-tools') {
-    dependencies {
-        compile project(':fastilybot-shared')
-    }
+    exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
+
+    with jar
+  }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
+  gradleVersion = '4.6'
 }

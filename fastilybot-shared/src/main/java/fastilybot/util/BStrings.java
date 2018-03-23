@@ -21,22 +21,6 @@ public class BStrings
 	public static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
 
 	/**
-	 * Summary for speedy deletion criterion G8 (talk page)
-	 */
-	public static final String g8Talk = "[[Wikipedia:Criteria for speedy deletion#G8|G8]]: [[Help:Talk page|Talk page]] of a deleted or non-existent page";
-
-	/**
-	 * Summary for speedy deletion criterion G6
-	 */
-	public static final String g6 = "[[Wikipedia:Criteria for speedy deletion#G6|G6]]: Housekeeping and routine (non-controversial) cleanup";
-
-	/**
-	 * Summary for speedy deletion criterion G13
-	 */
-	public static final String g13 = "[[WP:CSD#G13|G13]]: Abandoned draft or [[Wikipedia:Articles for creation|AfC]] submission – If you wish to "
-			+ "retrieve it, please see [[WP:REFUND/G13]]";
-
-	/**
 	 * Constructors disallowed
 	 */
 	private BStrings()

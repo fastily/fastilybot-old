@@ -1,8 +1,8 @@
-package fastilybot.enwp;
+package fastilybot;
 
 import fastily.jwiki.util.WGen;
-import fastilybot.enwp.bots.*;
-import fastilybot.enwp.reports.*;
+import fastilybot.bots.*;
+import fastilybot.reports.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

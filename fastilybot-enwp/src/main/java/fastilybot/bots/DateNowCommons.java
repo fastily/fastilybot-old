@@ -1,4 +1,4 @@
-package fastilybot.enwp.bots;
+package fastilybot.bots;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package fastilybot.enwp.reports;
+package fastilybot.reports;
 
 import java.util.ArrayList;
 import java.util.Collections;

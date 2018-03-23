@@ -1,4 +1,4 @@
-package fastilybot.enwp.reports;
+package fastilybot.reports;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

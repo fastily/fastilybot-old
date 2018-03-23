@@ -1,4 +1,4 @@
-package fastilybot.enwp.bots;
+package fastilybot.bots;
 
 import java.util.HashMap;
 import java.util.function.Function;

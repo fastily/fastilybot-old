@@ -1,4 +1,4 @@
-package fastilybot.enwp.bots;
+package fastilybot.bots;
 
 import java.time.Instant;
 import java.time.LocalDate;

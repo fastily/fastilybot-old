@@ -1,5 +1,7 @@
 package fastilybot;
 
+import java.util.ArrayList;
+
 import fastily.jwiki.util.WGen;
 import fastilybot.bots.*;
 import fastilybot.reports.*;
@@ -32,13 +34,13 @@ public final class BMgr
 	 * Runs the specified bot task, if possible.
 	 */
 	@Option(names = { "-b" }, description = "Causes this bot task to run")
-	private int botNum;
+	private ArrayList<Integer> botNums;
 
 	/**
 	 * Runs the specified report task, if possible.
 	 */
 	@Option(names = { "-r" }, description = "Causes this report task run")
-	private int repNum;
+	private ArrayList<Integer> repNums;
 
 	/**
 	 * No public constructors
@@ -71,85 +73,86 @@ public final class BMgr
 		String badNumberFmt = "'%d' is not a valid %s task number%n";
 		String[] pArgs = new String[0];
 
-		if (bmgr.botNum > 0)
-			switch (bmgr.botNum)
-			{
-				case 1:
-					MTCHelper.main(pArgs);
-					break;
-				case 2:
-					RemoveBadMTC.main(pArgs);
-					break;
-				case 3:
-					BrokenSPI.main(pArgs);
-					break;
-				case 4:
-					UnflagOI.main(pArgs);
-					break;
-				case 5:
-					FindLicConflict.main(pArgs);
-					break;
-				case 6:
-					DDNotifier.main(pArgs);
-					break;
-				case 7:
-					FindCommonsFFD.main(pArgs);
-					break;
-				case 8:
-					FindDelComFFD.main(pArgs);
-					break;
-				case 9:
-					FindKeptComFFD.main(pArgs);
-					break;
-				case 10:
-					FlagOI.main(pArgs);
-					break;
-				case 11:
-					DateNowCommons.main(pArgs);
-					break;
-				case 12:
-					FFDNotifier.main(pArgs);
-					break;
-				default:
-					System.err.printf(badNumberFmt, bmgr.botNum, "bot");
-			}
-		else if (bmgr.repNum > 0)
-			switch (bmgr.repNum)
-			{
-				case 1:
-					UntaggedDD.main(pArgs);
-					break;
-				case 2:
-					OrphanedFfD.main(pArgs);
-					break;
-				case 3:
-					TallyLics.main(pArgs);
-					break;
-				case 4:
-					MTCRedirs.main(pArgs);
-					break;
-				case 5:
-					// CountFfD.main(pArgs);
-					break;
-				case 6:
-					OrphanedKL.main(pArgs);
-					break;
-				case 7:
-					OversizedFU.main(pArgs);
-					break;
-				case 8:
-					FprodSum.main(pArgs);
-					break;
-				case 9:
-					MissingFCT.main(pArgs);
-					break;
-				case 10:
-					DupeOnCom.main(pArgs);
-					break;
-				default:
-					System.err.printf(badNumberFmt, bmgr.repNum, "report");
-			}
-		else
-			System.out.println("Invalid argument, please run with --help for usage instructions");
+		if (bmgr.botNums != null && !bmgr.botNums.isEmpty())
+			for (int i : bmgr.botNums)
+				switch (i)
+				{
+					case 1:
+						MTCHelper.main(pArgs);
+						break;
+					case 2:
+						RemoveBadMTC.main(pArgs);
+						break;
+					case 3:
+						BrokenSPI.main(pArgs);
+						break;
+					case 4:
+						UnflagOI.main(pArgs);
+						break;
+					case 5:
+						FindLicConflict.main(pArgs);
+						break;
+					case 6:
+						DDNotifier.main(pArgs);
+						break;
+					case 7:
+						FindCommonsFFD.main(pArgs);
+						break;
+					case 8:
+						FindDelComFFD.main(pArgs);
+						break;
+					case 9:
+						FindKeptComFFD.main(pArgs);
+						break;
+					case 10:
+						FlagOI.main(pArgs);
+						break;
+					case 11:
+						DateNowCommons.main(pArgs);
+						break;
+					case 12:
+						FFDNotifier.main(pArgs);
+						break;
+					default:
+						System.err.printf(badNumberFmt, i, "bot");
+				}
+		
+		if (bmgr.repNums != null && !bmgr.repNums.isEmpty())
+			for (int i : bmgr.repNums)
+				switch (i)
+				{
+					case 1:
+						UntaggedDD.main(pArgs);
+						break;
+					case 2:
+						OrphanedFfD.main(pArgs);
+						break;
+					case 3:
+						TallyLics.main(pArgs);
+						break;
+					case 4:
+						MTCRedirs.main(pArgs);
+						break;
+					case 5:
+						// CountFfD.main(pArgs);
+						break;
+					case 6:
+						OrphanedKL.main(pArgs);
+						break;
+					case 7:
+						OversizedFU.main(pArgs);
+						break;
+					case 8:
+						FprodSum.main(pArgs);
+						break;
+					case 9:
+						MissingFCT.main(pArgs);
+						break;
+					case 10:
+						DupeOnCom.main(pArgs);
+						break;
+					default:
+						System.err.printf(badNumberFmt, i, "report");
+				}
 	}
 }

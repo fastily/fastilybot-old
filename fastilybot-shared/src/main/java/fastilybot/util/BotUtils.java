@@ -54,29 +54,9 @@ public class BotUtils
 	 * @param user The user to get a Wiki object for
 	 * @return A Wiki object, or null on error
 	 */
-	private static Wiki getUserWP(String user)
+	public static Wiki getUserWP(String user)
 	{
 		return WGen.get(user, "en.wikipedia.org");
-	}
-
-	/**
-	 * Gets a Wiki (from WikiGen) for Fastily at en.wikipedia.org.
-	 * 
-	 * @return A Wiki object, or null on error
-	 */
-	public static Wiki getFastily()
-	{
-		return getUserWP("Fastily");
-	}
-
-	/**
-	 * Gets a Wiki (from WikiGen) for FSock at en.wikipedia.org.
-	 * 
-	 * @return A Wiki object, or null on error
-	 */
-	public static Wiki getFSock()
-	{
-		return getUserWP("FSock");
 	}
 
 	/**

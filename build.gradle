@@ -17,7 +17,7 @@ project(':fastilybot-shared') {
   group="fastilybot"
 
   dependencies {
-    api "fastily:jwiki:1.5.1"
+    api "fastily:jwiki:1.6.1"
   }
 
   def pomConfig = {
@@ -104,5 +104,5 @@ project(':fastilybot-enwp') {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.6'
+  gradleVersion = '4.7'
 }

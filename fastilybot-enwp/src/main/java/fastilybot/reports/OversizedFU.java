@@ -25,7 +25,7 @@ public class OversizedFU
 		Wiki wiki = BotUtils.getFastilyBot();
 		String rPage = "Wikipedia:Database reports/Large fair-use images";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report7");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 7);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 		
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))

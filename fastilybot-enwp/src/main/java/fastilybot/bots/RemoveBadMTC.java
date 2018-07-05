@@ -20,7 +20,7 @@ public final class RemoveBadMTC
 	 * 
 	 * @param args None, n/a
 	 */
-	public static void main(String[] args) throws Throwable
+	public static void main(String[] args)
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
 

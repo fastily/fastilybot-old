@@ -25,16 +25,16 @@ public final class UnflagOI
 		Wiki wiki = BotUtils.getFastilyBot();
 				
 		// Generate the set of files with no links of any sort
-		HashSet<String> oL = BotUtils.fetchLabsReportAsFiles(wiki, "report3");
-		oL.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report4"));
+		HashSet<String> oL = BotUtils.fetchLabsReportAsFiles(wiki, 3);
+		oL.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 4));
 		
 		// Get all files tagged with Orphan image which are not orphans
-		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 9);
 		l.removeAll(oL);
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
 
 		// Restrict working set to Free files only
-		l.retainAll(BotUtils.fetchLabsReportAsFiles(wiki, "report6"));
+		l.retainAll(BotUtils.fetchLabsReportAsFiles(wiki, 6));
 		
 		String oiRegex = WTP.orphan.getRegex(wiki);
 		for(String s : l)

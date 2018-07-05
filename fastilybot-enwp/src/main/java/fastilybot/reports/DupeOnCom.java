@@ -26,7 +26,7 @@ public class DupeOnCom
 		Wiki wiki = BotUtils.getFastilyBot();
 		String rPage = "Wikipedia:Database reports/Local files with a duplicate on Commons";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report1");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 		
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))

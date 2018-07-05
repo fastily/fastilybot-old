@@ -113,12 +113,12 @@ public class BotUtils
 	 * underscores are replaced by spaces.
 	 * 
 	 * @param wiki The Wiki object to use
-	 * @param report The name of the report, without the {@code .txt} extension.
+	 * @param rNum The report number to fetch.
 	 * @return A HashSet with each item in the report, or the empty HashSet if something went wrong.
 	 */
-	public static HashSet<String> fetchLabsReportAsFiles(Wiki wiki, String report)
+	public static HashSet<String> fetchLabsReportAsFiles(Wiki wiki, int rNum)
 	{
-		return fetchLabsReportSet(wiki, report, "File:");
+		return fetchLabsReportSet(wiki, "report" + rNum, "File:");
 	}
 
 	/**

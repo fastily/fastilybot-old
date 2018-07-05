@@ -26,9 +26,9 @@ public class MissingFCT
 		Wiki wiki = BotUtils.getFastilyBot();
 		String rPage = "Wikipedia:Database reports/Files without a license tag";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report8");
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report5"));
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, "report6"));
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 8);
+		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 5));
+		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 6));
 		
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file"));
 

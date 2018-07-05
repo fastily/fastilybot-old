@@ -6,13 +6,9 @@
 #: 
 #: Author: Fastily
 
-BINDIR=~/bin
-LOGDIR=~/logs
-
 SCPTDIR="${0%/*}"
 
-printf "This script will deploy BMgr\n"
-mkdir -p "$BINDIR" "$LOGDIR"
+printf "Deploying BMgr...\n"
 
 ## Build dependency jwiki
 cd /tmp
@@ -25,18 +21,9 @@ cd "$SCPTDIR"
 ## Build BMgr
 printf "Building BMgr\n"
 ./gradlew clean build fastilybot-enwp:doDist
-mv ./fastilybot-enwp/build/libs/BMgr.jar "${BINDIR}/"
+mv -f ./fastilybot-enwp/build/libs/BMgr.jar ~
 
-## Generate run script
-printf "Generating run script in ${BINDIR}\n"
-cat > "${BINDIR}"/bmgr.sh <<- EOM
-	#!/bin/bash
-	java -Xmx512M -jar "${BINDIR}/BMgr.jar" "-\${1}" \${2} > "${LOGDIR}/\${1}\${2}.txt" 2>&1
-EOM
-chmod a+x "${BINDIR}/bmgr.sh"
-
-## Deploy Crontab
-printf "Deploying new crontab\n"
+## install crontab
 crontab rp3crontab.txt
 
 printf "Done!\n"

@@ -26,7 +26,7 @@ public final class MTCHelper
 	{
 		Wiki wiki = BotUtils.getFastilyBot();
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, "report1");
+		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 

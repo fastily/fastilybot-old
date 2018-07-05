@@ -78,10 +78,10 @@ project(':fastilybot-shared') {
 project(':fastilybot-enwp') {
   apply plugin: 'application'
 
-  mainClassName = "enwp.BMgr"
+  mainClassName = "fastilybot.BMgr"
 
   dependencies {
-    compile "info.picocli:picocli:2.3.0"
+    compile "info.picocli:picocli:3.1.0"
     compile project(':fastilybot-shared')
   }
 
@@ -94,7 +94,7 @@ project(':fastilybot-enwp') {
     }
 
     manifest {
-      attributes 'Main-Class': 'fastilybot.enwp.BMgr'
+      attributes 'Main-Class': 'fastilybot.BMgr'
     }
 
     exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
@@ -104,5 +104,5 @@ project(':fastilybot-enwp') {
 }
 
 wrapper {
-    gradleVersion = '4.8'
+    gradleVersion = '4.8.1'
 }

@@ -9,17 +9,17 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 00 1 * * * java -Xmx512M -jar BMgr.jar -b 3,6,7,11 > bots-daily.txt 2>&1
 
 # (FFDNotifier)
-55 23 * * * java -jar BMgr.jar -b 12 >> bots-daily.txt 2>&1
+55 23 * * * java -Xmx512M -jar BMgr.jar -b 12 >> bots-daily.txt 2>&1
 
 
 ## Tri-Weekly
 # (MTCHelper, RemoveBadMTC, FindDelComFFD)
-00 4 * * 1,3,5 java -jar Xmx512M -jar BMgr.jar -b 1,2,8 > bots-tri-weekly.txt 2>&1
+00 4 * * 1,3,5 java -Xmx512M -jar BMgr.jar -b 1,2,8 > bots-tri-weekly.txt 2>&1
 
 
 ## Weekly
 # (UnflagOI, FindLicConflict, FindKeptComFFD, FlagOI)
-00 7 * * 0 java -jar Xmx512M -jar BMgr.jar -b 4,5,9,10 > bots-weekly.txt 2>&1
+00 7 * * 0 java -Xmx512M -jar BMgr.jar -b 4,5,9,10 > bots-weekly.txt 2>&1
 
 
 
@@ -29,13 +29,13 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 
 ## 4x Daily
 # (FindUntaggedDD)
-# 45 0,6,12,18 * * * bmgr.sh r 1  # FindUntaggedDD > reports-quad-daily.txt 2>&1
+# 45 0,6,12,18 * * * java -Xmx512M -jar BMgr.jar -r 1  # FindUntaggedDD > reports-quad-daily.txt 2>&1
 
 ## Daily
 # (FilePRODSum)
-00 12 * * * java -jar Xmx512M -jar BMgr.jar -r 8 > reports-daily.txt 2>&1
+00 12 * * * java -Xmx512M -jar BMgr.jar -r 8 > reports-daily.txt 2>&1
 
 
 ## Weekly
 # (FindOrphanedFfD, TallyLics, CalcMTCRegex, OrphanedKL, OversizedFU, MissingFCT, DupeOnCom)
-00 20 * * 2 java -jar Xmx512M -jar BMgr.jar -r 2,3,4,6,7,9,10 > reports-weekly.txt 2>&1
+00 20 * * 2 java -Xmx512M -jar BMgr.jar -r 2,3,4,6,7,9,10 > reports-weekly.txt 2>&1

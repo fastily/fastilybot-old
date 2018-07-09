@@ -26,6 +26,7 @@ public class FlagOI
 		Wiki wiki = BotUtils.getFastilyBot();
 		
 		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 3);
+		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 9)); // omit flagged orphaned files
 		
 		for(String c : wiki.getLinksOnPage(String.format("User:%s/Task10/Ignore", wiki.whoami())))
 			l.removeAll(wiki.getCategoryMembers(c, NS.FILE));

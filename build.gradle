@@ -81,7 +81,7 @@ project(':fastilybot-enwp') {
   mainClassName = "fastilybot.BMgr"
 
   dependencies {
-    compile "info.picocli:picocli:3.1.0"
+    compile 'info.picocli:picocli:3.3.0'
     compile project(':fastilybot-shared')
   }
 
@@ -104,5 +104,5 @@ project(':fastilybot-enwp') {
 }
 
 wrapper {
-    gradleVersion = '4.8.1'
+    gradleVersion = '4.9'
 }

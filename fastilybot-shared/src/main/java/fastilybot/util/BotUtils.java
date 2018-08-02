@@ -23,9 +23,9 @@ import fastily.jwiki.util.FL;
 import fastily.jwiki.util.FSystem;
 import fastily.jwiki.util.Tuple;
 import fastily.jwiki.util.WGen;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Static functions specific to fastilybot and tools.
@@ -81,6 +81,37 @@ public class BotUtils
 	}
 
 	/**
+	 * Performs a GET request on the specified URL and returns the response body as a String. Returns null if something
+	 * went wrong.
+	 * 
+	 * @param url The URL to send a GET request to
+	 * @return The response body as a String
+	 */
+	public static String httpGET(String url)
+	{
+		return httpGET(HttpUrl.parse(url));
+	}
+
+	/**
+	 * Performs a GET request on the specified HttpUrl and returns the response body as a String. Returns null if
+	 * something went wrong.
+	 * 
+	 * @param url The HttpUrl to send a GET request to
+	 * @return The response body as a String
+	 */
+	public static String httpGET(HttpUrl url)
+	{
+		try
+		{
+			return httpClient.newCall(new Request.Builder().url(url).get().build()).execute().body().string();
+		}
+		catch (Throwable e)
+		{
+			return null;
+		}
+	}
+
+	/**
 	 * Fetch a simple, raw report from fastilybot's toollabs dumps.
 	 * 
 	 * @param wiki The Wiki object to use
@@ -90,22 +121,8 @@ public class BotUtils
 	 */
 	public static HashSet<String> fetchLabsReportSet(Wiki wiki, String report, String prefix)
 	{
-		try
-		{
-			Response r = httpClient
-					.newCall(
-							new Request.Builder().url(String.format("https://tools.wmflabs.org/fastilybot/r/%s.txt", report)).get().build())
-					.execute();
-
-			if (r.isSuccessful())
-				return FL.toSet(Arrays.stream(r.body().string().split("\n")).map(s -> prefix + s.replace('_', ' ')));
-		}
-		catch (Throwable e)
-		{
-			e.printStackTrace();
-		}
-
-		return new HashSet<>();
+		String body = httpGET(String.format("https://tools.wmflabs.org/fastilybot/r/%s.txt", report));
+		return body != null ? FL.toSet(Arrays.stream(body.split("\n")).map(s -> prefix + s.replace('_', ' '))) : new HashSet<>();
 	}
 
 	/**
@@ -230,7 +247,7 @@ public class BotUtils
 
 		return l;
 	}
-	
+
 	/**
 	 * Writes Collection of String to disk at {@code path}, delineated by newlines. If {@code path} exists, then it will
 	 * be overwritten.

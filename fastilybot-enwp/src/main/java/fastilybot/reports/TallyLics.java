@@ -13,7 +13,6 @@ import fastily.jwiki.util.FL;
 import fastilybot.util.BStrings;
 import fastilybot.util.BotUtils;
 import okhttp3.HttpUrl;
-import okhttp3.Request;
 
 /**
  * Counts up free license tags and checks if a Commons counterpart exists.
@@ -81,16 +80,12 @@ public class TallyLics
 	{
 		try
 		{
-			Matcher m = Pattern
-					.compile(
-							"(?<=\\<p\\>)\\d+(?= transclusion)")
-					.matcher(BotUtils.httpClient.newCall(
-							new Request.Builder().url(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
-									.newBuilder().addQueryParameter("name", tp).build()).get().build())
-							.execute().body().string());
+			Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
+					.matcher(BotUtils.httpGET(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
+							.newBuilder().addQueryParameter("name", tp).build()));
 			if (m.find())
 			{
-				int cnt = Integer.parseInt(m.group());				
+				int cnt = Integer.parseInt(m.group());
 				return 0 < cnt && cnt < 20 ? enwp.whatTranscludesHere(enwp.convertIfNotInNS(tp, NS.TEMPLATE), NS.FILE).size() : cnt;
 			}
 		}

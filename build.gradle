@@ -81,7 +81,7 @@ project(':fastilybot-enwp') {
   mainClassName = "fastilybot.BMgr"
 
   dependencies {
-    compile 'info.picocli:picocli:3.3.0'
+    compile 'info.picocli:picocli:3.4.0'
     compile project(':fastilybot-shared')
   }
 

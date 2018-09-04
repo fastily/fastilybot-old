@@ -5,8 +5,8 @@ import java.util.HashSet;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
+import fastilybot.shared.Settings;
 
 /**
  * Looks for files without a license tag.
@@ -41,6 +41,6 @@ public class MissingFCT
 				l.remove(k);
 		});
 
-		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true), "Updating report");
 	}
 }

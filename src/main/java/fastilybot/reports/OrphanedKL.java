@@ -4,9 +4,9 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
+import fastilybot.shared.Settings;
 
 /**
  * Lists enwp files that are tagged keep local, but orphaned.
@@ -28,7 +28,7 @@ public class OrphanedKL
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BotUtils.listify(BStrings.updatedAt, l, true),
+		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BotUtils.listify(Settings.updatedAt, l, true),
 				"Updating report");
 	}
 }

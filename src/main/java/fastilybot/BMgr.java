@@ -2,7 +2,9 @@ package fastilybot;
 
 import java.util.ArrayList;
 
+import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.WGen;
+import fastily.wptoolbox.BotUtils;
 import fastilybot.bots.*;
 import fastilybot.reports.*;
 import picocli.CommandLine;
@@ -72,48 +74,63 @@ public class BMgr implements Runnable
 			return;
 		}
 
+		Wiki wiki = BotUtils.getFastilyBot();
+		
 		String[] pArgs = new String[0];
 		if (botNums != null && !botNums.isEmpty())
+		{
+			Bots b = new Bots(wiki);
+			
 			for (int i : botNums)
 				try
 				{
 					switch (i)
 					{
 						case 1:
-							MTCHelper.main(pArgs);
+							b.mtcHelper();
+//							MTCHelper.main(pArgs);
 							break;
 						case 2:
-							RemoveBadMTC.main(pArgs);
+							b.removeBadMTC();
+//							RemoveBadMTC.main(pArgs);
 							break;
 						case 3:
-							BrokenSPI.main(pArgs);
+							BrokenSPI.main(pArgs); //TODO
 							break;
 						case 4:
-							UnflagOI.main(pArgs);
+							b.unflagOI();
+//							UnflagOI.main(pArgs);
 							break;
 						case 5:
-							FindLicConflict.main(pArgs);
+							b.findLicConflict();
+//							FindLicConflict.main(pArgs);
 							break;
 						case 6:
-							DDNotifier.main(pArgs);
+							DDNotifier.main(pArgs); //TODO
 							break;
 						case 7:
-							FindCommonsFFD.main(pArgs);
+							b.findCommonsFFD();
+//							FindCommonsFFD.main(pArgs);
 							break;
 						case 8:
-							FindDelComFFD.main(pArgs);
+							b.findDelComFFD();
+//							FindDelComFFD.main(pArgs);
 							break;
 						case 9:
-							FindKeptComFFD.main(pArgs);
+							b.findKeptComFFD();
+//							FindKeptComFFD.main(pArgs);
 							break;
 						case 10:
-							FlagOI.main(pArgs);
+							b.flagOI();
+//							FlagOI.main(pArgs);
 							break;
 						case 11:
-							DateNowCommons.main(pArgs);
+							b.dateNowCommons();
+//							DateNowCommons.main(pArgs);
 							break;
 						case 12:
-							FFDNotifier.main(pArgs);
+							b.ffdNotifier();
+//							FFDNotifier.main(pArgs);
 							break;
 						default:
 							System.err.println("ERROR: Not a valid task number: " + i);
@@ -123,6 +140,7 @@ public class BMgr implements Runnable
 				{
 					e.printStackTrace();
 				}
+		}
 
 		if (repNums != null && !repNums.isEmpty())
 			for (int i : repNums)

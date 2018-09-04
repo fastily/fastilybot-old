@@ -10,8 +10,8 @@ import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
+import fastilybot.shared.Settings;
 import okhttp3.HttpUrl;
 
 /**
@@ -57,7 +57,7 @@ public class TallyLics
 	{
 		Collections.sort(enwptpl);
 
-		String dump = BStrings.updatedAt
+		String dump = Settings.updatedAt
 				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n";
 
 		int i = 0;

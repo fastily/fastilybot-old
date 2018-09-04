@@ -5,8 +5,8 @@ import java.util.HashSet;
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
+import fastilybot.shared.Settings;
 
 /**
  * Lists enwp files with a duplicate on Commons.
@@ -32,6 +32,6 @@ public class DupeOnCom
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
 	}
 }

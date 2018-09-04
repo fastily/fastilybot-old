@@ -12,9 +12,9 @@ import fastily.jwiki.core.WParser;
 import fastily.jwiki.core.WParser.WTemplate;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FSystem;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
+import fastilybot.shared.Settings;
 
 /**
  * Lists files nominated for deletion via file PROD.
@@ -42,7 +42,7 @@ public class FprodSum
 	/**
 	 * The report text to output.
 	 */
-	private static String reportText = "{{/header}}\n" + BStrings.updatedAt
+	private static String reportText = "{{/header}}\n" + Settings.updatedAt
 			+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n";
 
 	/**

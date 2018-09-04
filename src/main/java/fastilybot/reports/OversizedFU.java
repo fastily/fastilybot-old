@@ -4,8 +4,8 @@ import java.util.HashSet;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
+import fastilybot.shared.Settings;
 
 /**
  * Lists oversized (> 450x450) non-free bitmap images on enwp.
@@ -31,7 +31,7 @@ public class OversizedFU
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(BStrings.updatedAt, l, true),
+		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true),
 				"Updating report");
 	}
 }

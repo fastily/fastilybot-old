@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BStrings;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
+import fastilybot.shared.Settings;
 import fastily.jwiki.core.MQuery;
 
 /**
@@ -32,6 +32,6 @@ public class OrphanedFfD
 				l.add(k);
 		});
 
-		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BotUtils.listify(BStrings.updatedAt, l, true), String.format("Updating report (%d items)", l.size()));
+		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BotUtils.listify(Settings.updatedAt, l, true), String.format("Updating report (%d items)", l.size()));
 	}
 }

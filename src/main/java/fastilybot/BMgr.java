@@ -95,7 +95,8 @@ public class BMgr implements Runnable
 //							RemoveBadMTC.main(pArgs);
 							break;
 						case 3:
-							BrokenSPI.main(pArgs); //TODO
+							b.brokenSPI();
+//							BrokenSPI.main(pArgs);
 							break;
 						case 4:
 							b.unflagOI();
@@ -143,40 +144,51 @@ public class BMgr implements Runnable
 		}
 
 		if (repNums != null && !repNums.isEmpty())
+		{
+			Reports r = new Reports(wiki);
+			
 			for (int i : repNums)
 				try
 				{
 					switch (i)
 					{
 //						case 1:
+//							r.untaggedDD();
 //							UntaggedDD.main(pArgs);
 //							break;
 						case 2:
-							OrphanedFfD.main(pArgs);
+							r.orphanedFFD();
+//							OrphanedFfD.main(pArgs);
 							break;
 						case 3:
 							TallyLics.main(pArgs);
 							break;
 						case 4:
-							MTCRedirs.main(pArgs);
+							r.mtcRedirs();
+//							MTCRedirs.main(pArgs);
 							break;
 //						 case 5:
 //						 	CountFfD.main(pArgs);
 //						 	break;
 						case 6:
-							OrphanedKL.main(pArgs);
+							r.orphanedKL();
+//							OrphanedKL.main(pArgs);
 							break;
 						case 7:
-							OversizedFU.main(pArgs);
+							r.oversizedFU();
+//							OversizedFU.main(pArgs);
 							break;
 						case 8:
-							FprodSum.main(pArgs);
+							r.fprodSum();
+//							FprodSum.main(pArgs);
 							break;
 						case 9:
-							MissingFCT.main(pArgs);
+							r.missingFCT();
+//							MissingFCT.main(pArgs);
 							break;
 						case 10:
-							DupeOnCom.main(pArgs);
+							r.dupeOnCom();
+//							DupeOnCom.main(pArgs);
 							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);
@@ -186,5 +198,6 @@ public class BMgr implements Runnable
 				{
 					e.printStackTrace();
 				}
+		}
 	}
 }

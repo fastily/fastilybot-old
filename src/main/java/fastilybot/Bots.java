@@ -46,6 +46,30 @@ public class Bots
 	{
 		this.wiki = wiki;
 	}
+	
+	/**
+	 * Finds broken SPI pages on enwp and reports on them.
+	 */
+	public void brokenSPI()
+	{
+		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
+		
+		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
+				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
+
+		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI case status", NS.PROJECT));
+		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI archive notice", NS.PROJECT));
+		spiCases.removeAll(wiki.getLinksOnPage(report + "/Ignore"));
+
+		ArrayList<String> l = new ArrayList<>();
+		MQuery.resolveRedirects(wiki, spiCases).forEach((k, v) -> {
+			if (k.equals(v)) // filter redirects
+				l.add(v);
+		});
+
+		wiki.edit(report, BotUtils.listify("{{/Header}}\n" + Settings.updatedAt, l, false),
+				String.format("BOT: Update list (%d items)", l.size()));
+	}
 
 	/**
 	 * Fills in date parameter (and other missing parameters) for files in Category:Wikipedia files with the same name

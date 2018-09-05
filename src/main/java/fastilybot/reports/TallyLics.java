@@ -46,7 +46,7 @@ public class TallyLics
 	/**
 	 * The list of Commons templates with the same name as the enwp templates.
 	 */
-	protected static HashSet<String> comtpl = new HashSet<>(MQuery.exists(com, true, enwptpl));
+	public static HashSet<String> comtpl = new HashSet<>(MQuery.exists(com, true, enwptpl));
 
 	/**
 	 * Main driver

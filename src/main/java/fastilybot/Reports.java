@@ -1,14 +1,19 @@
 package fastilybot;
 
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.gson.reflect.TypeToken;
 
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
@@ -18,10 +23,11 @@ import fastily.jwiki.core.WParser.WTemplate;
 import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.FSystem;
+import fastily.jwiki.util.GSONP;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
-import fastilybot.reports.TallyLics;
 import fastilybot.shared.Settings;
+import okhttp3.HttpUrl;
 
 /**
  * Fastily's Wikipedia Reports
@@ -31,6 +37,11 @@ import fastilybot.shared.Settings;
  */
 public class Reports
 {
+	/**
+	 * The type representation for a map like [ String : Boolean ].
+	 */
+	private static final Type strBoolHM = new TypeToken<HashMap<String, Boolean>>(){}.getType();
+	
 	/**
 	 * The main Wiki object to use
 	 */
@@ -75,6 +86,7 @@ public class Reports
 
 		ArrayList<String> fl = wiki.getCategoryMembers("Category:All files proposed for deletion", NS.FILE);
 
+		// logic
 		HashMap<String, Integer> counts = new HashMap<>();
 		MQuery.fileUsage(wiki, fl).forEach((k, v) -> counts.put(k, v.size()));
 
@@ -102,7 +114,7 @@ public class Reports
 
 		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText.toString(), "Updating report");
 	}
-	
+
 	/**
 	 * Looks for files without a license tag.
 	 */
@@ -136,7 +148,12 @@ public class Reports
 		String reportPage = "Wikipedia:MTC!/Redirects";
 
 		HashSet<String> rawL = new HashSet<>(wiki.getLinksOnPage(reportPage + "/IncludeAlso", NS.TEMPLATE));
-		rawL.addAll(TallyLics.comtpl);
+		
+		HashMap<String, Boolean> m = GSONP.gson.fromJson(wiki.getPageText("User:FastilyBot/Free License Tags/Raw"), strBoolHM);
+		m.forEach((k, v) -> {
+			if(v)
+				rawL.add(k);
+		});
 
 		StringBuilder b = new StringBuilder(
 				"<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n");
@@ -193,6 +210,48 @@ public class Reports
 		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true), "Updating report");
 	}
 
+	
+	public void tallyLics()
+	{		
+		// constants
+		String reportPage = String.format("User:%s/Free License Tags", wiki.whoami());
+		
+		// refresh license tag cache
+		ArrayList<String> rawTL = FL.toAL(wiki.getLinksOnPage(reportPage + "/Sources", NS.CATEGORY).stream()
+				.flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
+		rawTL.removeAll(wiki.getLinksOnPage(reportPage + "/Ignore"));
+		
+		HashMap<String, Boolean> enwpOnCom = MQuery.exists(BotUtils.getCommons(wiki), rawTL);
+		wiki.edit(reportPage + "/Raw", GSONP.gson.toJson(enwpOnCom, strBoolHM), "Updating report");	
+
+		// Generate transclusion count table
+		Collections.sort(rawTL);
+		
+		StringBuffer dump = new StringBuffer(Settings.updatedAt
+				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n");
+		
+		int i = 0;
+		for (String s : rawTL)
+			try
+			{
+				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
+						.matcher(BotUtils.httpGET(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
+								.newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
+				
+				dump.append( String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s,
+						enwpOnCom.get(s)));
+				
+			}
+			catch (Throwable e)
+			{
+				e.printStackTrace();
+			}			
+		
+		dump.append("|}");
+		
+		wiki.edit(reportPage, dump.toString(), "Updating report");
+	}
+	
 	/**
 	 * Reports files in daily deletion categories which were untagged since the previous run.
 	 * 

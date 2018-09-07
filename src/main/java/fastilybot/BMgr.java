@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.WGen;
 import fastily.wptoolbox.BotUtils;
-import fastilybot.bots.*;
-import fastilybot.reports.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -76,7 +74,6 @@ public class BMgr implements Runnable
 
 		Wiki wiki = BotUtils.getFastilyBot();
 		
-		String[] pArgs = new String[0];
 		if (botNums != null && !botNums.isEmpty())
 		{
 			Bots b = new Bots(wiki);
@@ -107,7 +104,8 @@ public class BMgr implements Runnable
 //							FindLicConflict.main(pArgs);
 							break;
 						case 6:
-							DDNotifier.main(pArgs); //TODO
+							b.ddNotifier();
+//							DDNotifier.main(pArgs);
 							break;
 						case 7:
 							b.findCommonsFFD();
@@ -161,14 +159,15 @@ public class BMgr implements Runnable
 //							OrphanedFfD.main(pArgs);
 							break;
 						case 3:
-							TallyLics.main(pArgs);
+							r.tallyLics();
+//							TallyLics.main(pArgs);
 							break;
 						case 4:
 							r.mtcRedirs();
 //							MTCRedirs.main(pArgs);
 							break;
 //						 case 5:
-//						 	CountFfD.main(pArgs);
+//						 	r.freeLics();
 //						 	break;
 						case 6:
 							r.orphanedKL();

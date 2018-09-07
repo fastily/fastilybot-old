@@ -10,14 +10,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import com.google.gson.reflect.TypeToken;
 
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.WParser;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.jwiki.util.GSONP;
 import fastily.jwiki.util.MultiMap;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
@@ -88,6 +92,61 @@ public class Bots
 			wiki.replaceText(s, ncRegex, "{{Subst:Ncd}}", "BOT: Dating {{Now Commons}}");
 	}
 
+	/**
+	 * Checks daily deletion categories on enwp and notifies users if they have not been notified.
+	 */
+	public void ddNotifier()
+	{
+		//constants
+		String baseConfig = String.format("User:%s/Task/6/", wiki.whoami());
+		ZonedDateTime targetDT = ZonedDateTime.of(LocalDate.now(ZoneOffset.UTC), LocalTime.of(0, 0), ZoneOffset.UTC)
+				.minusDays(1);
+		
+		Instant start = Instant.from(targetDT), end = Instant.now();
+		
+		String targetDateStr = String.format("%d %s %d", targetDT.getDayOfMonth(),
+				targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getYear());
+		HashSet<String> talkPageBL = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
+		HashSet<String> idkL = FL.toSet(
+				wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream().flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
+
+		
+		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText(baseConfig + "Rules"), new TypeToken<HashMap<String, String>>(){}.getType());
+		
+		//logic
+		rules.forEach((rootCat, templ) -> {
+			
+			Optional<String> cat = wiki.getCategoryMembers(rootCat, NS.CATEGORY).stream().filter(s -> s.endsWith(targetDateStr)).findAny();
+			if (!cat.isPresent())
+				return;
+
+			MultiMap<String, String> ml = new MultiMap<>();
+			wiki.getCategoryMembers(cat.get(), NS.FILE).forEach(s -> {
+				if (idkL.contains(s))
+					return;
+
+				String author = wiki.getPageCreator(s);
+				if (author != null)
+					ml.put(wiki.convertIfNotInNS(author, NS.USER_TALK), s);
+			});
+
+			ml.l.forEach((k, v) -> {
+				if (talkPageBL.contains(k))
+					return;
+
+				ArrayList<String> notifyList = BotUtils.detLinksInHist(wiki, k, v, start, end);
+				if (notifyList.isEmpty())
+					return;
+
+				String x = String.format("%n{{subst:%s|1=%s}}%n", templ, notifyList.get(0));
+				if (notifyList.size() > 1)
+					x += BotUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
+
+				wiki.addText(k, x + Settings.botNote, "BOT: Notify user of possible file issue(s)", false);
+			});
+		});
+	}
+	
 	/**
 	 * Leaves courtesy notifications (where possible) for users whose files were nominated at FfD.
 	 */

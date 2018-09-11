@@ -26,7 +26,6 @@ import fastily.jwiki.util.FSystem;
 import fastily.jwiki.util.GSONP;
 import fastily.wptoolbox.BotUtils;
 import fastily.wptoolbox.WTP;
-import fastilybot.shared.Settings;
 import okhttp3.HttpUrl;
 
 /**
@@ -210,7 +209,9 @@ public class Reports
 		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true), "Updating report");
 	}
 
-	
+	/**
+	 * Counts up free license tags and checks if a Commons counterpart exists.
+	 */
 	public void tallyLics()
 	{		
 		// constants

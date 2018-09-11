@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,8 @@ import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
 import fastily.jwiki.util.MultiMap;
 import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.DateUtils;
 import fastily.wptoolbox.WTP;
-import fastilybot.shared.Settings;
-import fastilybot.shared.TemplateTools;
 
 /**
  * Fastily's Wikipedia Bots
@@ -36,6 +36,16 @@ import fastilybot.shared.TemplateTools;
  */
 public class Bots
 {
+	/**
+	 * Wiki-text message stating that a bot did not nominate any files for deletion.
+	 */
+	private String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
+	
+	/**
+	 * Template string for ncd instances.
+	 */
+	private String ncdFmt;
+	
 	/**
 	 * The main Wiki object to use
 	 */
@@ -49,6 +59,8 @@ public class Bots
 	protected Bots(Wiki wiki)
 	{
 		this.wiki = wiki;
+		
+		this.ncdFmt = String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()), wiki.whoami());
 	}
 	
 	/**
@@ -142,7 +154,7 @@ public class Bots
 				if (notifyList.size() > 1)
 					x += BotUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
 
-				wiki.addText(k, x + Settings.botNote, "BOT: Notify user of possible file issue(s)", false);
+				wiki.addText(k, x + botNote, "BOT: Notify user of possible file issue(s)", false);
 			});
 		});
 	}
@@ -177,7 +189,7 @@ public class Bots
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
 				x += BotUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
-			wiki.addText(k, x + Settings.botNote, "BOT: Notify user of FfD", false);
+			wiki.addText(k, x + botNote, "BOT: Notify user of FfD", false);
 		});
 	}
 
@@ -236,14 +248,14 @@ public class Bots
 	public void findKeptComFFD()
 	{
 		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
-		String ncd = TemplateTools.ncdTemplateFor(wiki.whoami());
+//		String ncd = TemplateTools.ncdTemplateFor(wiki.whoami());
 
 		HashSet<String> cffdl = new HashSet<>(BotUtils.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		BotUtils.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
 					if (!cffdl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
-						wiki.replaceText(k, nfdcRegex, String.format(ncd, v), "BOT: File is not up for deletion on Commons");
+						wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, v), "BOT: File is not up for deletion on Commons");
 				});
 	}
 
@@ -293,7 +305,7 @@ public class Bots
 
 		String tRegex = WTP.mtc.getRegex(wiki);
 		HashSet<String> ncdL = WTP.ncd.getTransclusionSet(wiki, NS.FILE);
-		String ncdT = TemplateTools.ncdTemplateFor(wiki.whoami());
+//		String ncdT = TemplateTools.ncdTemplateFor(wiki.whoami());
 
 		BotUtils.getFirstOnlySharedDuplicate(wiki, l).forEach((k, v) -> {
 			if (ncdL.contains(k))
@@ -305,7 +317,7 @@ public class Bots
 				if (oText.equals(nText)) // avoid in-line tags
 					return;
 
-				wiki.edit(k, String.format(ncdT, v) + nText, "BOT: File is available on Commons");
+				wiki.edit(k, String.format(ncdFmt, v) + nText, "BOT: File is available on Commons");
 			}
 		});
 	}

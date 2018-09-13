@@ -39,7 +39,7 @@ public class Bots
 	/**
 	 * Wiki-text message stating that a bot did not nominate any files for deletion.
 	 */
-	private String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
+	private static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
 	
 	/**
 	 * Template string for ncd instances.
@@ -93,8 +93,6 @@ public class Bots
 	 */
 	public void dateNowCommons()
 	{
-		Wiki wiki = BotUtils.getFastilyBot();
-
 		ArrayList<String> l = wiki
 				.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
 		l.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);

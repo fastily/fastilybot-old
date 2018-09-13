@@ -3,8 +3,8 @@ package fastilybot;
 import java.util.ArrayList;
 
 import fastily.jwiki.core.Wiki;
-import fastily.jwiki.util.WGen;
 import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.WGen;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -72,7 +72,7 @@ public class BMgr implements Runnable
 			return;
 		}
 
-		Wiki wiki = BotUtils.getFastilyBot();
+		Wiki wiki = BotUtils.getUserWP("FastilyBot");
 		
 		if (botNums != null && !botNums.isEmpty())
 		{

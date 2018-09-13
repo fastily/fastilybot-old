@@ -22,9 +22,9 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.core.WParser.WTemplate;
 import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
-import fastily.jwiki.util.FSystem;
 import fastily.jwiki.util.GSONP;
 import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.DateUtils;
 import fastily.wptoolbox.WTP;
 import okhttp3.HttpUrl;
 
@@ -96,7 +96,7 @@ public class Reports
 				WTemplate t = WParser.parseText(wiki, BotUtils.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
 				reportText.append(String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						FSystem.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+						DateUtils.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k)));
 			}
 			catch (Throwable e)

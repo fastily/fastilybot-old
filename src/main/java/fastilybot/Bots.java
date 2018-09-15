@@ -25,7 +25,7 @@ import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
 import fastily.jwiki.util.MultiMap;
 import fastily.wptoolbox.BotUtils;
-import fastily.wptoolbox.DateUtils;
+import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.WTP;
 
 /**
@@ -34,7 +34,7 @@ import fastily.wptoolbox.WTP;
  * @author Fastily
  *
  */
-public class Bots
+class Bots
 {
 	/**
 	 * Wiki-text message stating that a bot did not nominate any files for deletion.
@@ -60,31 +60,7 @@ public class Bots
 	{
 		this.wiki = wiki;
 		
-		this.ncdFmt = String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(DateUtils.getUTCofNow()), wiki.whoami());
-	}
-	
-	/**
-	 * Finds broken SPI pages on enwp and reports on them.
-	 */
-	public void brokenSPI()
-	{
-		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
-		
-		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
-				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
-
-		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI case status", NS.PROJECT));
-		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI archive notice", NS.PROJECT));
-		spiCases.removeAll(wiki.getLinksOnPage(report + "/Ignore"));
-
-		ArrayList<String> l = new ArrayList<>();
-		MQuery.resolveRedirects(wiki, spiCases).forEach((k, v) -> {
-			if (k.equals(v)) // filter redirects
-				l.add(v);
-		});
-
-		wiki.edit(report, BotUtils.listify("{{/Header}}\n" + Settings.updatedAt, l, false),
-				String.format("BOT: Update list (%d items)", l.size()));
+		this.ncdFmt = String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(Dates.getUTCofNow()), wiki.whoami());
 	}
 
 	/**

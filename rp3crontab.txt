@@ -5,8 +5,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 ###############
 
 ## Daily
-# (FindBrokenSPI, DDNotifier, FindCommonsFFD, DateNowCommons)
-00 1 * * * java -Xmx512M -jar BMgr.jar -b 3,6,7,11 > bots-daily.txt 2>&1
+# (DDNotifier, FindCommonsFFD, DateNowCommons)
+00 1 * * * java -Xmx512M -jar BMgr.jar -b 6,7,11 > bots-daily.txt 2>&1
 
 # (FFDNotifier)
 55 23 * * * java -Xmx512M -jar BMgr.jar -b 12 >> bots-daily.txt 2>&1
@@ -32,8 +32,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 # 45 0,6,12,18 * * * java -Xmx512M -jar BMgr.jar -r 1  # FindUntaggedDD > reports-quad-daily.txt 2>&1
 
 ## Daily
-# (FilePRODSum)
-00 12 * * * java -Xmx512M -jar BMgr.jar -r 8 > reports-daily.txt 2>&1
+# (FindBrokenSPI, FilePRODSum)
+00 12 * * * java -Xmx512M -jar BMgr.jar -r 5,8 > reports-daily.txt 2>&1
 
 
 ## Weekly

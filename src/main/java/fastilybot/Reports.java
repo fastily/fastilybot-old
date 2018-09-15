@@ -1,5 +1,9 @@
 package fastilybot;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
+
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +28,8 @@ import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
 import fastily.wptoolbox.BotUtils;
-import fastily.wptoolbox.DateUtils;
+import fastily.wptoolbox.Dates;
+import fastily.wptoolbox.Requests;
 import fastily.wptoolbox.WTP;
 import okhttp3.HttpUrl;
 
@@ -34,13 +39,18 @@ import okhttp3.HttpUrl;
  * @author Fastily
  *
  */
-public class Reports
+class Reports
 {
 	/**
 	 * The type representation for a map like [ String : Boolean ].
 	 */
 	private static final Type strBoolHM = new TypeToken<HashMap<String, Boolean>>(){}.getType();
 	
+	/**
+	 * Used as part of report headers.
+	 */
+	private static final String updatedAt = "This report updated at <onlyinclude>~~~~~</onlyinclude>\n";
+
 	/**
 	 * The main Wiki object to use
 	 */
@@ -57,6 +67,30 @@ public class Reports
 	}
 
 	/**
+	 * Finds broken SPI pages on enwp and reports on them.
+	 */
+	public void brokenSPI()
+	{
+		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
+		
+		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
+				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
+
+		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI case status", NS.PROJECT));
+		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI archive notice", NS.PROJECT));
+		spiCases.removeAll(wiki.getLinksOnPage(report + "/Ignore"));
+
+		ArrayList<String> l = new ArrayList<>();
+		MQuery.resolveRedirects(wiki, spiCases).forEach((k, v) -> {
+			if (k.equals(v)) // filter redirects
+				l.add(v);
+		});
+
+		wiki.edit(report, BotUtils.listify("{{/Header}}\n" + updatedAt, l, false),
+				String.format("BOT: Update list (%d items)", l.size()));
+	}
+	
+	/**
 	 * Lists enwp files with a duplicate on Commons.
 	 */
 	public void dupeOnCom()
@@ -69,7 +103,7 @@ public class Reports
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
 	}
 
 	/**
@@ -80,7 +114,7 @@ public class Reports
 		// constants
 		DateTimeFormatter dateInFmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssz");
 		Pattern filePRODRegex = Pattern.compile(WTP.fprod.getRegex(wiki));
-		StringBuffer reportText = new StringBuffer("{{/header}}\n" + Settings.updatedAt
+		StringBuffer reportText = new StringBuffer("{{/header}}\n" + updatedAt
 				+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n");
 
 		ArrayList<String> fl = wiki.getCategoryMembers("Category:All files proposed for deletion", NS.FILE);
@@ -96,7 +130,7 @@ public class Reports
 				WTemplate t = WParser.parseText(wiki, BotUtils.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
 				reportText.append(String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						DateUtils.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+						Dates.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k)));
 			}
 			catch (Throwable e)
@@ -136,7 +170,7 @@ public class Reports
 				l.remove(k);
 		});
 
-		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(updatedAt, l, true), "Updating report");
 	}
 
 	/**
@@ -177,7 +211,7 @@ public class Reports
 				l.add(k);
 		});
 
-		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BotUtils.listify(Settings.updatedAt, l, true),
+		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BotUtils.listify(updatedAt, l, true),
 				String.format("Updating report (%d items)", l.size()));
 	}
 
@@ -189,7 +223,7 @@ public class Reports
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BotUtils.listify(Settings.updatedAt, l, true),
+		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BotUtils.listify(updatedAt, l, true),
 				"Updating report");
 	}
 
@@ -206,7 +240,7 @@ public class Reports
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(Settings.updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BotUtils.listify(updatedAt, l, true), "Updating report");
 	}
 
 	/**
@@ -228,7 +262,7 @@ public class Reports
 		// Generate transclusion count table
 		Collections.sort(rawTL);
 		
-		StringBuffer dump = new StringBuffer(Settings.updatedAt
+		StringBuffer dump = new StringBuffer(updatedAt
 				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n");
 		
 		int i = 0;
@@ -236,7 +270,7 @@ public class Reports
 			try
 			{
 				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
-						.matcher(BotUtils.httpGET(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
+						.matcher(Requests.httpGET(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
 								.newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
 				
 				dump.append( String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s,
@@ -258,7 +292,7 @@ public class Reports
 	 * 
 	 * @throws Throwable On IO error
 	 */
-	public void untaggedDD() throws Throwable
+	public void untaggedDD() throws Throwable //TODO: rewrite
 	{
 		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
 		int maxOldReports = 50;
@@ -269,7 +303,8 @@ public class Reports
 
 		if (!Files.exists(ddFL))
 		{
-			BotUtils.writeStringsToFile(ddFL, l);
+			Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
+//			BotUtils.writeStringsToFile(ddFL, l);
 			return;
 		}
 
@@ -289,6 +324,7 @@ public class Reports
 		}
 		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text, "Updating report");
 
-		BotUtils.writeStringsToFile(ddFL, l);
+		Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
+//		BotUtils.writeStringsToFile(ddFL, l);
 	}
 }

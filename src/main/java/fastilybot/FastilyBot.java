@@ -10,13 +10,13 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 /**
- * CLI interface which makes it easy to launch enwp bots/reports
+ * Entry point for running bots and reports
  * 
  * @author Fastily
  *
  */
-@Command(name = "BMgr", description = "FastilyBot Bot Manager", version = "BMgr 0.0.1", mixinStandardHelpOptions = true)
-public class BMgr implements Runnable
+@Command(name = "FastilyBot", description = "FastilyBot Bot Manager", version = "0.0.1", mixinStandardHelpOptions = true)
+public class FastilyBot implements Runnable
 {
 	/**
 	 * Flag which activates the WGen utility.
@@ -39,7 +39,7 @@ public class BMgr implements Runnable
 	/**
 	 * No public constructors
 	 */
-	private BMgr()
+	private FastilyBot()
 	{
 
 	}
@@ -51,7 +51,7 @@ public class BMgr implements Runnable
 	 */
 	public static void main(String[] args)
 	{
-		CommandLine.run(new BMgr(), args);
+		CommandLine.run(new FastilyBot(), args);
 	}
 
 	/**
@@ -59,13 +59,15 @@ public class BMgr implements Runnable
 	 */
 	@Override
 	public void run()
-	{		
+	{
+		// option for WikiGen
 		if (runWGen)
 		{
 			WGen.main(new String[0]);
 			return;
 		}
 		
+		// show usage if no args passed
 		if(botNums == null && repNums == null)
 		{
 			CommandLine.usage(this, System.err);
@@ -73,6 +75,13 @@ public class BMgr implements Runnable
 		}
 
 		Wiki wiki = BotUtils.getUserWP("FastilyBot");
+		
+		// check if disabled on-wiki
+		if(wiki.exists(String.format("User:%s/shutoff", wiki.whoami())))
+		{
+			System.err.println("SHUTOFF SWITCH ACTIVE, exiting");
+			return;
+		}
 		
 		if (botNums != null && !botNums.isEmpty())
 		{
@@ -91,10 +100,11 @@ public class BMgr implements Runnable
 							b.removeBadMTC();
 //							RemoveBadMTC.main(pArgs);
 							break;
-						case 3:
-							b.brokenSPI();
+//						case 3:
+							// See case 5 in the Reports section below
+//							b.brokenSPI();
 //							BrokenSPI.main(pArgs);
-							break;
+//							break;
 						case 4:
 							b.unflagOI();
 //							UnflagOI.main(pArgs);
@@ -166,9 +176,9 @@ public class BMgr implements Runnable
 							r.mtcRedirs();
 //							MTCRedirs.main(pArgs);
 							break;
-//						 case 5:
-//						 	r.freeLics();
-//						 	break;
+						 case 5:
+						 	r.brokenSPI();
+						 	break;
 						case 6:
 							r.orphanedKL();
 //							OrphanedKL.main(pArgs);

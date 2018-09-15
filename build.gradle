@@ -10,8 +10,7 @@ repositories {
 }
 
 
-
-mainClassName = "fastilybot.BMgr"
+mainClassName = "fastilybot.FastilyBot"
 
 dependencies {
   compile 'info.picocli:picocli:3.5.2'
@@ -19,14 +18,14 @@ dependencies {
 }
 
 task doDist(type: Jar) {
-  baseName = "BMgr"
+  baseName = "FastilyBot"
 
   from {
     configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
   }
 
   manifest {
-    attributes 'Main-Class': 'fastilybot.BMgr'
+    attributes 'Main-Class': "fastilybot.FastilyBot"
   }
 
   exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
@@ -35,5 +34,5 @@ task doDist(type: Jar) {
 }
 
 wrapper {
-    gradleVersion = '4.10'
+    gradleVersion = '4.10.1'
 }

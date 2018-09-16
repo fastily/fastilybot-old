@@ -27,9 +27,9 @@ import fastily.jwiki.core.WParser.WTemplate;
 import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
-import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.WikiX;
 import fastily.wptoolbox.Dates;
-import fastily.wptoolbox.Requests;
+import fastily.wptoolbox.HTTP;
 import fastily.wptoolbox.WTP;
 import okhttp3.HttpUrl;
 
@@ -86,7 +86,7 @@ class Reports
 				l.add(v);
 		});
 
-		wiki.edit(report, BotUtils.listify("{{/Header}}\n" + updatedAt, l, false),
+		wiki.edit(report, BUtils.listify("{{/Header}}\n" + updatedAt, l, false),
 				String.format("BOT: Update list (%d items)", l.size()));
 	}
 	
@@ -97,13 +97,13 @@ class Reports
 	{
 		String rPage = "Wikipedia:Database reports/Local files with a duplicate on Commons";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 1);
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Reports
 		MQuery.getPageText(wiki, fl).forEach((k, v) -> {
 			try
 			{
-				WTemplate t = WParser.parseText(wiki, BotUtils.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
+				WTemplate t = WParser.parseText(wiki, WikiX.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
 				reportText.append(String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
 						Dates.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
@@ -143,7 +143,7 @@ class Reports
 		reportText.append("|}\n");
 
 		if (!fails.isEmpty())
-			reportText.append(BotUtils.listify("\n== Possibly Malformed ==\n", fails, true));
+			reportText.append(BUtils.listify("\n== Possibly Malformed ==\n", fails, true));
 
 		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText.toString(), "Updating report");
 	}
@@ -155,9 +155,9 @@ class Reports
 	{
 		String rPage = "Wikipedia:Database reports/Files without a license tag";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 8);
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 5));
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 6));
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 8);
+		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 5));
+		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 6));
 
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file"));
 
@@ -170,7 +170,7 @@ class Reports
 				l.remove(k);
 		});
 
-		wiki.edit(rPage, BotUtils.listify(updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), "Updating report");
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Reports
 				l.add(k);
 		});
 
-		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BotUtils.listify(updatedAt, l, true),
+		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BUtils.listify(updatedAt, l, true),
 				String.format("Updating report (%d items)", l.size()));
 	}
 
@@ -223,7 +223,7 @@ class Reports
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BotUtils.listify(updatedAt, l, true),
+		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BUtils.listify(updatedAt, l, true),
 				"Updating report");
 	}
 
@@ -234,13 +234,13 @@ class Reports
 	{
 		String rPage = "Wikipedia:Database reports/Large fair-use images";
 
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 7);
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 7);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BotUtils.listify(updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), "Updating report");
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Reports
 				.flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
 		rawTL.removeAll(wiki.getLinksOnPage(reportPage + "/Ignore"));
 		
-		HashMap<String, Boolean> enwpOnCom = MQuery.exists(BotUtils.getCommons(wiki), rawTL);
+		HashMap<String, Boolean> enwpOnCom = MQuery.exists(WikiX.getCommons(wiki), rawTL);
 		wiki.edit(reportPage + "/Raw", GSONP.gson.toJson(enwpOnCom, strBoolHM), "Updating report");	
 
 		// Generate transclusion count table
@@ -270,7 +270,7 @@ class Reports
 			try
 			{
 				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
-						.matcher(Requests.httpGET(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
+						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
 								.newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
 				
 				dump.append( String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s,
@@ -304,7 +304,6 @@ class Reports
 		if (!Files.exists(ddFL))
 		{
 			Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
-//			BotUtils.writeStringsToFile(ddFL, l);
 			return;
 		}
 
@@ -322,9 +321,8 @@ class Reports
 
 			text = s.toString();
 		}
-		wiki.edit(rPage, BotUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text, "Updating report");
+		wiki.edit(rPage, BUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text, "Updating report");
 
 		Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
-//		BotUtils.writeStringsToFile(ddFL, l);
 	}
 }

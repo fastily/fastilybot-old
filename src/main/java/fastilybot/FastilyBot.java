@@ -3,7 +3,7 @@ package fastilybot;
 import java.util.ArrayList;
 
 import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.WikiX;
 import fastily.wptoolbox.WGen;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -74,7 +74,7 @@ public class FastilyBot implements Runnable
 			return;
 		}
 
-		Wiki wiki = BotUtils.getUserWP("FastilyBot");
+		Wiki wiki = WikiX.getUserWP("FastilyBot");
 		
 		// check if disabled on-wiki
 		if(wiki.exists(String.format("User:%s/shutoff", wiki.whoami())))

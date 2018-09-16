@@ -24,7 +24,7 @@ import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
 import fastily.jwiki.util.MultiMap;
-import fastily.wptoolbox.BotUtils;
+import fastily.wptoolbox.WikiX;
 import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.WTP;
 
@@ -71,7 +71,7 @@ class Bots
 	{
 		ArrayList<String> l = wiki
 				.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
-		l.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
+		l.removeAll(WikiX.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
 
 		String ncRegex = WTP.ncd.getRegex(wiki);
 		for (String s : l)
@@ -120,13 +120,13 @@ class Bots
 				if (talkPageBL.contains(k))
 					return;
 
-				ArrayList<String> notifyList = BotUtils.detLinksInHist(wiki, k, v, start, end);
+				ArrayList<String> notifyList = WikiX.detLinksInHist(wiki, k, v, start, end);
 				if (notifyList.isEmpty())
 					return;
 
 				String x = String.format("%n{{subst:%s|1=%s}}%n", templ, notifyList.get(0));
 				if (notifyList.size() > 1)
-					x += BotUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
+					x += BUtils.listify("\nAlso:\n", notifyList.subList(1, notifyList.size()), true);
 
 				wiki.addText(k, x + botNote, "BOT: Notify user of possible file issue(s)", false);
 			});
@@ -156,13 +156,13 @@ class Bots
 
 		// Skip files if user(s) have been notified, then notify accordingly
 		l.l.forEach((k, v) -> {
-			ArrayList<String> rl = BotUtils.detLinksInHist(wiki, k, v, start, end);
+			ArrayList<String> rl = WikiX.detLinksInHist(wiki, k, v, start, end);
 			if (rl.isEmpty())
 				return;
 
 			String x = String.format("%n{{subst:User:FastilyBot/Task12Note|%s|%s}}", rl.get(0), targetFFD);
 			if (rl.size() > 1)
-				x += BotUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
+				x += BUtils.listify("\nAlso:\n", rl.subList(1, rl.size()), true);
 			wiki.addText(k, x + botNote, "BOT: Notify user of FfD", false);
 		});
 	}
@@ -173,9 +173,9 @@ class Bots
 	public void findCommonsFFD()
 	{
 		String ncRegex = WTP.ncd.getRegex(wiki);
-		HashSet<String> fl = new HashSet<>(BotUtils.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
+		HashSet<String> fl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
-		BotUtils.getFirstOnlySharedDuplicate(wiki, wiki.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
+		WikiX.getFirstOnlySharedDuplicate(wiki, wiki.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
 			if (fl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
 				wiki.replaceText(k, ncRegex, String.format("{{Nominated for deletion on Commons|%s}}", wiki.nss(v)),
 						"BOT: File is up for deletion on Commons");
@@ -187,7 +187,7 @@ class Bots
 	 */
 	public void findDelComFFD()
 	{
-		Wiki com = BotUtils.getCommons(wiki);
+		Wiki com = WikiX.getCommons(wiki);
 
 		Pattern nomDelTemplPattern = Pattern.compile(WTP.nomDelOnCom.getRegex(wiki));
 		HashMap<String, String> pageTexts = MQuery.getPageText(wiki, wiki.whatTranscludesHere(WTP.nomDelOnCom.title, NS.FILE));
@@ -197,7 +197,7 @@ class Bots
 			try
 			{
 
-				String comFile = WParser.parseText(wiki, BotUtils.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1")
+				String comFile = WParser.parseText(wiki, WikiX.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1")
 						.toString();
 				if (comFile != null)
 					comPairs.put(k, wiki.convertIfNotInNS(comFile, NS.FILE));
@@ -224,9 +224,9 @@ class Bots
 		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
 //		String ncd = TemplateTools.ncdTemplateFor(wiki.whoami());
 
-		HashSet<String> cffdl = new HashSet<>(BotUtils.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
+		HashSet<String> cffdl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
-		BotUtils.getFirstOnlySharedDuplicate(wiki,
+		WikiX.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
 					if (!cffdl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
 						wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, v), "BOT: File is not up for deletion on Commons");
@@ -238,7 +238,7 @@ class Bots
 	 */
 	public void findLicConflict()
 	{
-		HashSet<String> fl = BotUtils.fetchLabsReportAsFiles(wiki, 2);
+		HashSet<String> fl = BUtils.fetchLabsReportAsFiles(wiki, 2);
 
 		for (String s : wiki.getLinksOnPage(String.format("User:%s/Task5/Ignore", wiki.whoami())))
 			fl.removeAll(wiki.whatTranscludesHere(s, NS.FILE));
@@ -252,8 +252,8 @@ class Bots
 	 */
 	public void flagOI()
 	{
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 3);
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 9)); // omit flagged orphaned files
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 3);
+		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 9)); // omit flagged orphaned files
 
 		for (String c : wiki.getLinksOnPage(String.format("User:%s/Task10/Ignore", wiki.whoami())))
 			l.removeAll(wiki.getCategoryMembers(c, NS.FILE));
@@ -261,7 +261,7 @@ class Bots
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
 
-		l.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 4));
+		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 4));
 		l.removeAll(MQuery.exists(wiki, false, l));
 
 		for (String s : l)
@@ -273,7 +273,7 @@ class Bots
 	 */
 	public void mtcHelper()
 	{
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 1);
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
 		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
 
@@ -281,7 +281,7 @@ class Bots
 		HashSet<String> ncdL = WTP.ncd.getTransclusionSet(wiki, NS.FILE);
 //		String ncdT = TemplateTools.ncdTemplateFor(wiki.whoami());
 
-		BotUtils.getFirstOnlySharedDuplicate(wiki, l).forEach((k, v) -> {
+		WikiX.getFirstOnlySharedDuplicate(wiki, l).forEach((k, v) -> {
 			if (ncdL.contains(k))
 				wiki.replaceText(k, tRegex, "BOT: File has already been copied to Commons");
 			else
@@ -302,7 +302,7 @@ class Bots
 	public void removeBadMTC()
 	{
 		HashSet<String> l = WTP.mtc.getTransclusionSet(wiki, NS.FILE);
-		l.removeAll(BotUtils.getCategoryMembersR(wiki, "Category:Copy to Wikimedia Commons reviewed by a human").y);
+		l.removeAll(WikiX.getCategoryMembersR(wiki, "Category:Copy to Wikimedia Commons reviewed by a human").y);
 		l.removeAll(wiki.getCategoryMembers("Category:Copy to Wikimedia Commons (inline-identified)"));
 
 		String tRegex = WTP.mtc.getRegex(wiki);
@@ -318,16 +318,16 @@ class Bots
 	public void unflagOI()
 	{
 		// Generate the set of files with no links of any sort
-		HashSet<String> oL = BotUtils.fetchLabsReportAsFiles(wiki, 3);
-		oL.removeAll(BotUtils.fetchLabsReportAsFiles(wiki, 4));
+		HashSet<String> oL = BUtils.fetchLabsReportAsFiles(wiki, 3);
+		oL.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 4));
 
 		// Get all files tagged with Orphan image which are not orphans
-		HashSet<String> l = BotUtils.fetchLabsReportAsFiles(wiki, 9);
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 9);
 		l.removeAll(oL);
 		l.removeAll(WTP.nobots.getTransclusionSet(wiki, NS.FILE));
 
 		// Restrict working set to Free files only
-		l.retainAll(BotUtils.fetchLabsReportAsFiles(wiki, 6));
+		l.retainAll(BUtils.fetchLabsReportAsFiles(wiki, 6));
 
 		String oiRegex = WTP.orphan.getRegex(wiki);
 		for (String s : l)

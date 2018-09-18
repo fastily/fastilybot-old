@@ -1,7 +1,7 @@
 plugins {
-    id 'java'
-    id 'eclipse'
-    id 'application'
+  id 'java'
+  id 'eclipse'
+  id 'application'
 }
 
 repositories {
@@ -13,7 +13,7 @@ repositories {
 mainClassName = "fastilybot.FastilyBot"
 
 dependencies {
-  compile 'info.picocli:picocli:3.5.2'
+  compile 'info.picocli:picocli:3.6.0'
   compile 'fastily:wp-toolbox:0.0.2'
 }
 
@@ -34,5 +34,5 @@ task doDist(type: Jar) {
 }
 
 wrapper {
-    gradleVersion = '4.10.1'
+  gradleVersion = '4.10.1'
 }

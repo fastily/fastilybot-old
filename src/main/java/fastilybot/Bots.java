@@ -192,11 +192,12 @@ class Bots
 		Pattern nomDelTemplPattern = Pattern.compile(WTP.nomDelOnCom.getRegex(wiki));
 		HashMap<String, String> pageTexts = MQuery.getPageText(wiki, wiki.whatTranscludesHere(WTP.nomDelOnCom.title, NS.FILE));
 
+		// TODO: Doesn't seem to be accounting for no param uses of the template
 		HashMap<String, String> comPairs = new HashMap<>();
 		pageTexts.forEach((k, v) -> {
 			try
 			{
-
+				//TODO: should ideally be parsing the entire page
 				String comFile = WParser.parseText(wiki, WikiX.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1")
 						.toString();
 				if (comFile != null)
@@ -204,7 +205,7 @@ class Bots
 			}
 			catch (Throwable e)
 			{
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		});
 
@@ -279,7 +280,6 @@ class Bots
 
 		String tRegex = WTP.mtc.getRegex(wiki);
 		HashSet<String> ncdL = WTP.ncd.getTransclusionSet(wiki, NS.FILE);
-//		String ncdT = TemplateTools.ncdTemplateFor(wiki.whoami());
 
 		WikiX.getFirstOnlySharedDuplicate(wiki, l).forEach((k, v) -> {
 			if (ncdL.contains(k))

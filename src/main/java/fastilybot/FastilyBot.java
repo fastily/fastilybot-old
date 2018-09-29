@@ -15,7 +15,7 @@ import picocli.CommandLine.Option;
  * @author Fastily
  *
  */
-@Command(name = "FastilyBot", description = "FastilyBot Bot Manager", version = "0.0.1", mixinStandardHelpOptions = true)
+@Command(name = "FastilyBot", description = "FastilyBot Bot Manager", version = "1.0.0", mixinStandardHelpOptions = true)
 public class FastilyBot implements Runnable
 {
 	/**
@@ -94,52 +94,38 @@ public class FastilyBot implements Runnable
 					{
 						case 1:
 							b.mtcHelper();
-//							MTCHelper.main(pArgs);
 							break;
 						case 2:
 							b.removeBadMTC();
-//							RemoveBadMTC.main(pArgs);
 							break;
 //						case 3:
 							// See case 5 in the Reports section below
-//							b.brokenSPI();
-//							BrokenSPI.main(pArgs);
-//							break;
 						case 4:
 							b.unflagOI();
-//							UnflagOI.main(pArgs);
 							break;
 						case 5:
 							b.findLicConflict();
-//							FindLicConflict.main(pArgs);
 							break;
 						case 6:
 							b.ddNotifier();
-//							DDNotifier.main(pArgs);
 							break;
 						case 7:
 							b.findCommonsFFD();
-//							FindCommonsFFD.main(pArgs);
 							break;
 						case 8:
 							b.findDelComFFD();
-//							FindDelComFFD.main(pArgs);
 							break;
 						case 9:
 							b.findKeptComFFD();
-//							FindKeptComFFD.main(pArgs);
 							break;
 						case 10:
 							b.flagOI();
-//							FlagOI.main(pArgs);
 							break;
 						case 11:
 							b.dateNowCommons();
-//							DateNowCommons.main(pArgs);
 							break;
 						case 12:
 							b.ffdNotifier();
-//							FFDNotifier.main(pArgs);
 							break;
 						default:
 							System.err.println("ERROR: Not a valid task number: " + i);
@@ -166,38 +152,30 @@ public class FastilyBot implements Runnable
 //							break;
 						case 2:
 							r.orphanedFFD();
-//							OrphanedFfD.main(pArgs);
 							break;
 						case 3:
 							r.tallyLics();
-//							TallyLics.main(pArgs);
 							break;
 						case 4:
 							r.mtcRedirs();
-//							MTCRedirs.main(pArgs);
 							break;
 						 case 5:
 						 	r.brokenSPI();
 						 	break;
 						case 6:
 							r.orphanedKL();
-//							OrphanedKL.main(pArgs);
 							break;
 						case 7:
 							r.oversizedFU();
-//							OversizedFU.main(pArgs);
 							break;
 						case 8:
 							r.fprodSum();
-//							FprodSum.main(pArgs);
 							break;
 						case 9:
 							r.missingFCT();
-//							MissingFCT.main(pArgs);
 							break;
 						case 10:
 							r.dupeOnCom();
-//							DupeOnCom.main(pArgs);
 							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);

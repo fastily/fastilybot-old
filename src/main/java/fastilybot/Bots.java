@@ -176,7 +176,7 @@ class Bots
 		HashSet<String> fl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		WikiX.getFirstOnlySharedDuplicate(wiki, wiki.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
-			if (fl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
+			if (fl.contains(v))
 				wiki.replaceText(k, ncRegex, String.format("{{Nominated for deletion on Commons|%s}}", wiki.nss(v)),
 						"BOT: File is up for deletion on Commons");
 		});
@@ -229,8 +229,8 @@ class Bots
 
 		WikiX.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
-					if (!cffdl.contains(wiki.convertIfNotInNS(v, NS.FILE)))
-						wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, v), "BOT: File is not up for deletion on Commons");
+					if (!cffdl.contains(v))
+						wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, wiki.nss(v)), "BOT: File is not up for deletion on Commons");
 				});
 	}
 
@@ -291,7 +291,7 @@ class Bots
 				if (oText.equals(nText)) // avoid in-line tags
 					return;
 
-				wiki.edit(k, String.format(ncdFmt, v) + nText, "BOT: File is available on Commons");
+				wiki.edit(k, String.format(ncdFmt, wiki.nss(v)) + nText, "BOT: File is available on Commons");
 			}
 		});
 	}

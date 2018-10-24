@@ -44,8 +44,9 @@ class Reports
 	/**
 	 * The type representation for a map like [ String : Boolean ].
 	 */
-	private static final Type strBoolHM = new TypeToken<HashMap<String, Boolean>>(){}.getType();
-	
+	private static final Type strBoolHM = new TypeToken<HashMap<String, Boolean>>() {
+	}.getType();
+
 	/**
 	 * Used as part of report headers.
 	 */
@@ -72,7 +73,7 @@ class Reports
 	public void brokenSPI()
 	{
 		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
-		
+
 		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
 				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
 
@@ -86,10 +87,9 @@ class Reports
 				l.add(v);
 		});
 
-		wiki.edit(report, BUtils.listify("{{/Header}}\n" + updatedAt, l, false),
-				String.format("BOT: Update list (%d items)", l.size()));
+		wiki.edit(report, BUtils.listify("{{/Header}}\n" + updatedAt, l, false), String.format("BOT: Update list (%d items)", l.size()));
 	}
-	
+
 	/**
 	 * Lists enwp files with a duplicate on Commons.
 	 */
@@ -99,6 +99,7 @@ class Reports
 
 		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
+		l.removeAll(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
@@ -181,10 +182,10 @@ class Reports
 		String reportPage = "Wikipedia:MTC!/Redirects";
 
 		HashSet<String> rawL = new HashSet<>(wiki.getLinksOnPage(reportPage + "/IncludeAlso", NS.TEMPLATE));
-		
+
 		HashMap<String, Boolean> m = GSONP.gson.fromJson(wiki.getPageText("User:FastilyBot/Free License Tags/Raw"), strBoolHM);
 		m.forEach((k, v) -> {
-			if(v)
+			if (v)
 				rawL.add(k);
 		});
 
@@ -247,24 +248,24 @@ class Reports
 	 * Counts up free license tags and checks if a Commons counterpart exists.
 	 */
 	public void tallyLics()
-	{		
+	{
 		// constants
 		String reportPage = String.format("User:%s/Free License Tags", wiki.whoami());
-		
+
 		// refresh license tag cache
 		ArrayList<String> rawTL = FL.toAL(wiki.getLinksOnPage(reportPage + "/Sources", NS.CATEGORY).stream()
 				.flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
 		rawTL.removeAll(wiki.getLinksOnPage(reportPage + "/Ignore"));
-		
+
 		HashMap<String, Boolean> enwpOnCom = MQuery.exists(WikiX.getCommons(wiki), rawTL);
-		wiki.edit(reportPage + "/Raw", GSONP.gson.toJson(enwpOnCom, strBoolHM), "Updating report");	
+		wiki.edit(reportPage + "/Raw", GSONP.gson.toJson(enwpOnCom, strBoolHM), "Updating report");
 
 		// Generate transclusion count table
 		Collections.sort(rawTL);
-		
+
 		StringBuffer dump = new StringBuffer(updatedAt
 				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n");
-		
+
 		int i = 0;
 		for (String s : rawTL)
 			try
@@ -272,27 +273,27 @@ class Reports
 				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
 						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
 								.newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
-				
-				dump.append( String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s,
-						enwpOnCom.get(s)));
-				
+
+				dump.append(String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s),
+						m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));
+
 			}
 			catch (Throwable e)
 			{
 				e.printStackTrace();
-			}			
-		
+			}
+
 		dump.append("|}");
-		
+
 		wiki.edit(reportPage, dump.toString(), "Updating report");
 	}
-	
+
 	/**
 	 * Reports files in daily deletion categories which were untagged since the previous run.
 	 * 
 	 * @throws Throwable On IO error
 	 */
-	public void untaggedDD() throws Throwable //TODO: rewrite
+	public void untaggedDD() throws Throwable // TODO: rewrite
 	{
 		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
 		int maxOldReports = 50;

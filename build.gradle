@@ -18,7 +18,7 @@ dependencies {
 }
 
 task doDist(type: Jar) {
-  baseName = "FastilyBot"
+  baseName = "FB"
 
   from {
     configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

@@ -27,10 +27,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 ## REPORT TASKS ##
 ##################
 
-## 4x Daily
-# (FindUntaggedDD)
-# 45 0,6,12,18 * * * java -Xmx512M -jar FB.jar -r 1  # FindUntaggedDD > reports-quad-daily.txt 2>&1
-
 ## Daily
 # (FindBrokenSPI, FilePRODSum)
 00 12 * * * java -Xmx512M -jar FB.jar -r 5,8 > reports-daily.txt 2>&1

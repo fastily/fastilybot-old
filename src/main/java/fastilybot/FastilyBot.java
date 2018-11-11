@@ -147,9 +147,7 @@ public class FastilyBot implements Runnable
 					switch (i)
 					{
 //						case 1:
-//							r.untaggedDD();
-//							UntaggedDD.main(pArgs);
-//							break;
+							// placeholder for discontinued report
 						case 2:
 							r.orphanedFFD();
 							break;

@@ -1,13 +1,6 @@
 package fastilybot;
 
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
-import static java.nio.file.StandardOpenOption.WRITE;
-
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -24,7 +17,6 @@ import fastily.jwiki.core.NS;
 import fastily.jwiki.core.WParser;
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.core.WParser.WTemplate;
-import fastily.jwiki.dwrap.PageSection;
 import fastily.jwiki.util.FL;
 import fastily.jwiki.util.GSONP;
 import fastily.wptoolbox.WikiX;
@@ -286,44 +278,5 @@ class Reports
 		dump.append("|}");
 
 		wiki.edit(reportPage, dump.toString(), "Updating report");
-	}
-
-	/**
-	 * Reports files in daily deletion categories which were untagged since the previous run.
-	 * 
-	 * @throws Throwable On IO error
-	 */
-	public void untaggedDD() throws Throwable // TODO: rewrite
-	{
-		String rPage = "Wikipedia:Database reports/Recently Untagged Files for Dated Deletion";
-		int maxOldReports = 50;
-		Path ddFL = Paths.get("WPDDFiles.txt");
-
-		HashSet<String> l = FL.toSet(
-				wiki.getLinksOnPage(rPage + "/Config", NS.CATEGORY).stream().flatMap(s -> wiki.getCategoryMembers(s, NS.FILE).stream()));
-
-		if (!Files.exists(ddFL))
-		{
-			Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
-			return;
-		}
-
-		HashSet<String> cacheList = FL.toSet(Files.lines(ddFL));
-		cacheList.removeAll(l);
-
-		String text = wiki.getPageText(rPage);
-		ArrayList<PageSection> sections = wiki.splitPageByHeader(rPage);
-		if (sections.size() > maxOldReports) // TODO: hack, fixme
-		{
-			sections = new ArrayList<>(sections.subList(1, maxOldReports));
-			StringBuilder s = new StringBuilder();
-			for (PageSection ps : sections)
-				s.append(ps.text);
-
-			text = s.toString();
-		}
-		wiki.edit(rPage, BUtils.listify("== ~~~~~ ==\n", MQuery.exists(wiki, true, cacheList), true) + text, "Updating report");
-
-		Files.write(ddFL, l, CREATE, WRITE, TRUNCATE_EXISTING);
 	}
 }

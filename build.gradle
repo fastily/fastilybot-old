@@ -13,7 +13,7 @@ repositories {
 mainClassName = "fastilybot.FastilyBot"
 
 dependencies {
-  compile 'info.picocli:picocli:3.7.0'
+  compile 'info.picocli:picocli:3.8.0'
   compile 'fastily:wp-toolbox:0.0.2'
 }
 

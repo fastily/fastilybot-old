@@ -34,7 +34,7 @@ class BUtils
 	 */
 	public static HashSet<String> fetchLabsReportSet(Wiki wiki, String report, String prefix)
 	{
-		String body = HTTP.get(String.format("https://tools.wmflabs.org/fastilybot/r/%s.txt", report));
+		String body = HTTP.get(String.format("https://tools.wmflabs.org/fastilybot-reports/r/%s.txt", report));
 		return body != null ? FL.toSet(Arrays.stream(body.split("\n")).map(s -> prefix + s.replace('_', ' '))) : new HashSet<>();
 	}
 

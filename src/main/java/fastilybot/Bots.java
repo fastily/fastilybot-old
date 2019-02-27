@@ -192,7 +192,6 @@ class Bots
 		Pattern nomDelTemplPattern = Pattern.compile(WTP.nomDelOnCom.getRegex(wiki));
 		HashMap<String, String> pageTexts = MQuery.getPageText(wiki, wiki.whatTranscludesHere(WTP.nomDelOnCom.title, NS.FILE));
 
-		// TODO: Doesn't seem to be accounting for no param uses of the template
 		HashMap<String, String> comPairs = new HashMap<>();
 		pageTexts.forEach((k, v) -> {
 			try
@@ -205,7 +204,7 @@ class Bots
 			}
 			catch (Throwable e)
 			{
-//				e.printStackTrace();
+				comPairs.put(k, k);
 			}
 		});
 
@@ -214,7 +213,6 @@ class Bots
 				.forEach((k, v) -> wiki.edit(k,
 						pageTexts.get(k).replaceAll(WTP.nomDelOnCom.getRegex(wiki), String.format("{{Deleted on Commons|%s}}", wiki.nss(v))),
 						"BOT: Adding note that file has been deleted on Commons"));
-
 	}
 
 	/**

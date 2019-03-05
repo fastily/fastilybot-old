@@ -146,8 +146,9 @@ public class FastilyBot implements Runnable
 				{
 					switch (i)
 					{
-//						case 1:
-							// placeholder for discontinued report
+						case 1:
+							r.shadowCommons();
+							break;
 						case 2:
 							r.orphanedFFD();
 							break;

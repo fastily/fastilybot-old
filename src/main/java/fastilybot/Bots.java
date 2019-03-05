@@ -221,8 +221,6 @@ class Bots
 	public void findKeptComFFD()
 	{
 		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
-//		String ncd = TemplateTools.ncdTemplateFor(wiki.whoami());
-
 		HashSet<String> cffdl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		WikiX.getFirstOnlySharedDuplicate(wiki,
@@ -252,7 +250,8 @@ class Bots
 	public void flagOI()
 	{
 		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 3);
-		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 9)); // omit flagged orphaned files
+		// omit flagged orphaned files
+		l.removeAll(BUtils.fetchLabsReportAsFiles(wiki, 9));
 
 		for (String c : wiki.getLinksOnPage(String.format("User:%s/Task10/Ignore", wiki.whoami())))
 			l.removeAll(wiki.getCategoryMembers(c, NS.FILE));
@@ -274,7 +273,8 @@ class Bots
 	{
 		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.retainAll(WTP.mtc.getTransclusionSet(wiki, NS.FILE));
-		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE)); // lots of in-line tags
+		// omit in-line tags
+		l.removeAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
 		String tRegex = WTP.mtc.getRegex(wiki);
 		HashSet<String> ncdL = WTP.ncd.getTransclusionSet(wiki, NS.FILE);

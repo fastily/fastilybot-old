@@ -242,7 +242,7 @@ class Reports
 	public void shadowCommons()
 	{
 		String rPage = "Wikipedia:Database reports/File description pages shadowing a Commons file or redirect";
-		
+
 		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 11);
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));

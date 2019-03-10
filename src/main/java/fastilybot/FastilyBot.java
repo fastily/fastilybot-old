@@ -176,6 +176,9 @@ public class FastilyBot implements Runnable
 						case 10:
 							r.dupeOnCom();
 							break;
+						case 11:
+							r.lowResFreeFiles();
+							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);
 					}

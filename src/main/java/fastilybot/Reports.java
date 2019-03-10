@@ -45,6 +45,11 @@ class Reports
 	private static final String updatedAt = "This report updated at <onlyinclude>~~~~~</onlyinclude>\n";
 
 	/**
+	 * Default reason to use when updating reports
+	 */
+	private static final String updatingReport = "Updating report";
+
+	/**
 	 * The main Wiki object to use
 	 */
 	private Wiki wiki;
@@ -96,7 +101,7 @@ class Reports
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), updatingReport);
 	}
 
 	/**
@@ -138,7 +143,16 @@ class Reports
 		if (!fails.isEmpty())
 			reportText.append(BUtils.listify("\n== Possibly Malformed ==\n", fails, true));
 
-		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText.toString(), "Updating report");
+		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText.toString(), updatingReport);
+	}
+
+	/**
+	 * Publishes a list of low-resolution free files.
+	 */
+	public void lowResFreeFiles()
+	{
+		wiki.edit("Wikipedia:Database reports/Orphaned low-resolution free files",
+				BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 10), true), updatingReport);
 	}
 
 	/**
@@ -163,7 +177,7 @@ class Reports
 				l.remove(k);
 		});
 
-		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), updatingReport);
 	}
 
 	/**
@@ -190,7 +204,7 @@ class Reports
 
 		b.append("</pre>");
 
-		wiki.edit(reportPage, b.toString(), "Updating report");
+		wiki.edit(reportPage, b.toString(), updatingReport);
 	}
 
 	/**
@@ -205,7 +219,7 @@ class Reports
 		});
 
 		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BUtils.listify(updatedAt, l, true),
-				String.format("Updating report (%d items)", l.size()));
+				updatingReport + String.format(" (%d items)", l.size()));
 	}
 
 	/**
@@ -217,7 +231,7 @@ class Reports
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
 		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BUtils.listify(updatedAt, l, true),
-				"Updating report");
+				updatingReport);
 	}
 
 	/**
@@ -233,7 +247,7 @@ class Reports
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), "Updating report");
+		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), updatingReport);
 	}
 
 	/**
@@ -248,7 +262,7 @@ class Reports
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
 		wiki.edit(rPage, updatedAt + "\n" + String.join("\n", FL.toAL(l.stream().map(s -> "* {{No redirect|" + s + "}}"))),
-				"Updating report");
+				updatingReport);
 	}
 
 	/**
@@ -292,6 +306,6 @@ class Reports
 
 		dump.append("|}");
 
-		wiki.edit(reportPage, dump.toString(), "Updating report");
+		wiki.edit(reportPage, dump.toString(), updatingReport);
 	}
 }

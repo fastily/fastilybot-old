@@ -179,6 +179,9 @@ public class FastilyBot implements Runnable
 						case 11:
 							r.lowResFreeFiles();
 							break;
+						case 12:
+							r.possiblyUnsourcedFiles();
+							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);
 					}

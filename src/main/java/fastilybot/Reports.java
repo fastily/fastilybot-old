@@ -251,6 +251,15 @@ class Reports
 	}
 
 	/**
+	 * Lists possibly unsourced free files on enwp.
+	 */
+	public void possiblyUnsourcedFiles()
+	{
+		wiki.edit("Wikipedia:Database reports/Free files without a machine-readable source",
+				BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 12), true), updatingReport);
+	}
+
+	/**
 	 * Identifies enwp file description pages shadowing a Commons file or redirect
 	 */
 	public void shadowCommons()

@@ -28,10 +28,10 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 ##################
 
 ## Daily
-# (brokenSPI, fprodSum)
-00 12 * * * java -Xmx512M -jar FB.jar -r 5,8 > reports-daily.txt 2>&1
+# (fprodSum)
+00 12 * * * java -Xmx512M -jar FB.jar -r 8 > reports-daily.txt 2>&1
 
 
 ## Weekly
-# (shadowCommons, orphanedFFD, tallyLics, mtcRedirs, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles)
-00 20 * * 2 java -Xmx512M -jar FB.jar -r 1,2,3,4,6,7,9,10,11 > reports-weekly.txt 2>&1
+# (shadowCommons, orphanedFFD, tallyLics, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
+00 20 * * 2 java -Xmx512M -jar FB.jar -r 1,2,3,4,5,6,7,9,10,11,12 > reports-weekly.txt 2>&1

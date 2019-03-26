@@ -33,5 +33,5 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 
 
 ## Weekly
-# (shadowCommons, orphanedFFD, tallyLics, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
-00 20 * * 2 java -Xmx512M -jar FB.jar -r 1,2,3,4,5,6,7,9,10,11,12 > reports-weekly.txt 2>&1
+# (shadowCommons, orphanedFFD, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
+00 20 * * 2 java -Xmx512M -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12 > reports-weekly.txt 2>&1

@@ -1,11 +1,14 @@
 package fastilybot;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
+import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.HTTP;
 
 /**
@@ -69,5 +72,15 @@ class BUtils
 			x.append(String.format(fmtStr, s));
 
 		return x.toString();
+	}
+
+	/**
+	 * Generates a ZonedDateTime of now in UTC with h/m/s set to 0.
+	 * 
+	 * @return A ZonedDateTime of the currrent time in UTC with h/m/s set to 0.
+	 */
+	public static ZonedDateTime utcWithTodaysDate()
+	{
+		return Dates.getUTCofNow().truncatedTo(ChronoUnit.DAYS);
 	}
 }

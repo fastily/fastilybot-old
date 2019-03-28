@@ -5,11 +5,8 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 ###############
 
 ## Daily
-# (ddNotifier, findCommonsFFD, dateNowCommons)
-00 1 * * *  jsub -once -mem 32g -quiet -j y -o bots-daily.txt java -Xmx16g -jar FB.jar -b 6,7,11
-
-# (ffdNotifier)
-55 23 * * * jsub -once -mem 32g -quiet -j y -o bots-daily.txt java -Xmx16g -jar FB.jar -b 12
+# (ddNotifier, findCommonsFFD, dateNowCommons, ffdNotifier)
+00 1 * * *  jsub -once -mem 32g -quiet -j y -o bots-daily.txt java -Xmx16g -jar FB.jar -b 6,7,11,12
 
 
 ## Tri-Weekly

@@ -5,11 +5,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 ###############
 
 ## Daily
-# (ddNotifier, findCommonsFFD, dateNowCommons)
-00 1 * * * java -Xmx512M -jar FB.jar -b 6,7,11 > bots-daily.txt 2>&1
-
-# (ffdNotifier)
-55 23 * * * java -Xmx512M -jar FB.jar -b 12 >> bots-daily.txt 2>&1
+# (ddNotifier, findCommonsFFD, dateNowCommons, ffdNotifier)
+00 1 * * * java -Xmx512M -jar FB.jar -b 6,7,11,12 > bots-daily.txt 2>&1
 
 
 ## Tri-Weekly

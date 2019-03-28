@@ -1,9 +1,6 @@
 package fastilybot;
 
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -85,8 +82,7 @@ class Bots
 	{
 		//constants
 		String baseConfig = String.format("User:%s/Task/6/", wiki.whoami());
-		ZonedDateTime targetDT = ZonedDateTime.of(LocalDate.now(ZoneOffset.UTC), LocalTime.of(0, 0), ZoneOffset.UTC)
-				.minusDays(1);
+		ZonedDateTime targetDT = BUtils.utcWithTodaysDate().minusDays(1);
 		
 		Instant start = Instant.from(targetDT), end = Instant.now();
 		
@@ -139,11 +135,11 @@ class Bots
 	public void ffdNotifier()
 	{
 		// Constants
-		ZonedDateTime today = ZonedDateTime.of(LocalDate.now(ZoneOffset.UTC), LocalTime.of(0, 0), ZoneOffset.UTC);
-		Instant start = today.toInstant(), end = Instant.now();
+		ZonedDateTime targetDT = BUtils.utcWithTodaysDate().minusDays(1);
+		Instant start = targetDT.toInstant(), end = Instant.now();
 
-		String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", today.getYear(),
-				today.getMonth().getDisplayName(TextStyle.FULL, Locale.US), today.getDayOfMonth());
+		String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", targetDT.getYear(),
+				targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getDayOfMonth());
 		HashSet<String> noBots = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
 
 		// Associate possibly eligible files by user

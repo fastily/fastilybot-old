@@ -37,12 +37,12 @@ class Bots
 	 * Wiki-text message stating that a bot did not nominate any files for deletion.
 	 */
 	private static final String botNote = "\n{{subst:User:FastilyBot/BotNote}}";
-	
+
 	/**
 	 * Template string for ncd instances.
 	 */
 	private String ncdFmt;
-	
+
 	/**
 	 * The main Wiki object to use
 	 */
@@ -56,13 +56,13 @@ class Bots
 	protected Bots(Wiki wiki)
 	{
 		this.wiki = wiki;
-		
+
 		this.ncdFmt = String.format("{{Now Commons|%%s|date=%s|bot=%s}}%n", DateTimeFormatter.ISO_LOCAL_DATE.format(Dates.getUTCofNow()), wiki.whoami());
 	}
 
 	/**
-	 * Fills in date parameter (and other missing parameters) for files in Category:Wikipedia files with the same name
-	 * on Wikimedia Commons as of unknown date.
+	 * Fills in date parameter (and other missing parameters) for files in Category:Wikipedia files with the same name on
+	 * Wikimedia Commons as of unknown date.
 	 */
 	public void dateNowCommons()
 	{
@@ -80,28 +80,28 @@ class Bots
 	 */
 	public void ddNotifier()
 	{
-		//constants
+		// constants
 		String baseConfig = String.format("User:%s/Task/6/", wiki.whoami());
 		ZonedDateTime targetDT = BUtils.utcWithTodaysDate().minusDays(1);
-		
+
 		Instant start = Instant.from(targetDT), end = Instant.now();
-		
+
 		String targetDateStr = String.format("%d %s %d", targetDT.getDayOfMonth(),
 				targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getYear());
 		HashSet<String> talkPageBL = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
-		HashSet<String> idkL = FL.toSet(
-				wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream().flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
+		HashSet<String> idkL = FL.toSet(wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream()
+				.flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
 
-		
 		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText(baseConfig + "Rules"), new TypeToken<HashMap<String, String>>(){}.getType());
-		
-		//logic
+
+		// logic
 		rules.forEach((rootCat, templ) -> {
-			
+			// Find yesterday's daily deletion category if it exists
 			Optional<String> cat = wiki.getCategoryMembers(rootCat, NS.CATEGORY).stream().filter(s -> s.endsWith(targetDateStr)).findAny();
 			if (!cat.isPresent())
 				return;
 
+			// Associate possibly eligible files by user
 			MultiMap<String, String> ml = new MultiMap<>();
 			wiki.getCategoryMembers(cat.get(), NS.FILE).forEach(s -> {
 				if (idkL.contains(s))
@@ -110,6 +110,12 @@ class Bots
 				String author = wiki.getPageCreator(s);
 				if (author != null)
 					ml.put(wiki.convertIfNotInNS(author, NS.USER_TALK), s);
+			});
+
+			// skip talk page redirects
+			MQuery.resolveRedirects(wiki, ml.l.keySet()).forEach((k, v) -> {
+				if (!k.equals(v))
+					ml.l.remove(k);
 			});
 
 			ml.l.forEach((k, v) -> {
@@ -128,7 +134,7 @@ class Bots
 			});
 		});
 	}
-	
+
 	/**
 	 * Leaves courtesy notifications (where possible) for users whose files were nominated at FfD.
 	 */
@@ -148,6 +154,12 @@ class Bots
 			String author = wiki.getPageCreator(t.header);
 			if (author != null && !noBots.contains(author = wiki.convertIfNotInNS(author, NS.USER_TALK)))
 				l.put(author, t.header);
+		});
+
+		// skip talk page redirects
+		MQuery.resolveRedirects(wiki, l.l.keySet()).forEach((k, v) -> {
+			if (!k.equals(v))
+				l.l.remove(k);
 		});
 
 		// Skip files if user(s) have been notified, then notify accordingly
@@ -192,7 +204,7 @@ class Bots
 		pageTexts.forEach((k, v) -> {
 			try
 			{
-				//TODO: should ideally be parsing the entire page
+				// TODO: should ideally be parsing the entire page
 				String comFile = WParser.parseText(wiki, WikiX.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1")
 						.toString();
 				if (comFile != null)

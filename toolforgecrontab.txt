@@ -25,7 +25,7 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 
 ## Daily
 # (fprodSum)
-00 12 * * * jsub -once -mem 32g -quiet -j y -o reports-daily.txt java -Xmx16g -jar FB.jar -r 8
+#00 12 * * * jsub -once -mem 32g -quiet -j y -o reports-daily.txt java -Xmx16g -jar FB.jar -r 8
 
 
 ## Weekly

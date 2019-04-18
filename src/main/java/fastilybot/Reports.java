@@ -151,8 +151,10 @@ class Reports
 	 */
 	public void lowResFreeFiles()
 	{
-		wiki.edit("Wikipedia:Database reports/Orphaned low-resolution free files",
-				BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 10), true), updatingReport);
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 10);
+		l.removeAll(wiki.getCategoryMembers("Category:Wikipedia images available as SVG", NS.FILE));
+
+		wiki.edit("Wikipedia:Database reports/Orphaned low-resolution free files", BUtils.listify(updatedAt, l, true), updatingReport);
 	}
 
 	/**

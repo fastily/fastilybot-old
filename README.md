@@ -7,4 +7,4 @@
 Fastily's Wikipedia Bots
 
 ### See Also
-* [toollabs reports](https://tools.wmflabs.org/fastilybot/)
+* [toollabs reports](https://tools.wmflabs.org/fastilybot-reports/)

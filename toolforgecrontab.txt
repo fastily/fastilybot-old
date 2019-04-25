@@ -6,17 +6,17 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 
 ## Daily
 # (ddNotifier, findCommonsFFD, dateNowCommons, ffdNotifier)
-00 1 * * *  jsub -once -mem 32g -quiet -j y -o bots-daily.txt java -Xmx16g -jar FB.jar -b 6,7,11,12
+00 1 * * *  jsub -once -mem 20g -quiet -j y -o bots-daily.txt java -Xmx16g -jar FB.jar -b 6,7,11,12
 
 
 ## Tri-Weekly
 # (mtcHelper, removeBadMTC, findDelComFFD)
-00 4 * * 1,3,5 jsub -once -mem 32g -quiet -j y -o bots-tri-weekly.txt java -Xmx16g -jar FB.jar -b 1,2,8
+00 4 * * 1,3,5 jsub -once -mem 20g -quiet -j y -o bots-tri-weekly.txt java -Xmx16g -jar FB.jar -b 1,2,8
 
 
 ## Weekly
 # (unflagOI, findLicConflict, findKeptComFFD, flagOI)
-00 7 * * 0     jsub -once -mem 32g -quiet -j y -o bots-weekly.txt java -Xmx16g -jar FB.jar -b 4,5,9,10
+00 7 * * 0     jsub -once -mem 20g -quiet -j y -o bots-weekly.txt java -Xmx16g -jar FB.jar -b 4,5,9,10
 
 
 ##################
@@ -25,9 +25,9 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 
 ## Daily
 # (fprodSum)
-#00 12 * * * jsub -once -mem 32g -quiet -j y -o reports-daily.txt java -Xmx16g -jar FB.jar -r 8
+#00 12 * * * jsub -once -mem 20g -quiet -j y -o reports-daily.txt java -Xmx16g -jar FB.jar -r 8
 
 
 ## Weekly
 # (shadowCommons, orphanedFFD, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
-00 20 * * 2 jsub -once -mem 32g -quiet -j y -o reports-weekly.txt java -Xmx16g -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12
+00 20 * * 2 jsub -once -mem 20g -quiet -j y -o reports-weekly.txt java -Xmx16g -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12

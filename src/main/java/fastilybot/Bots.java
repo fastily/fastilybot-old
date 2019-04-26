@@ -150,11 +150,12 @@ class Bots
 
 		// Associate possibly eligible files by user
 		MultiMap<String, String> l = new MultiMap<>();
-		wiki.splitPageByHeader(targetFFD).stream().filter(t -> t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE)).forEach(t -> {
-			String author = wiki.getPageCreator(t.header);
+		for(String s : MQuery.exists(wiki, true, FL.toAL(wiki.splitPageByHeader(targetFFD).stream().filter(t -> t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE)).map(t -> t.header))))
+		{
+			String author = wiki.getPageCreator(s);
 			if (author != null && !noBots.contains(author = wiki.convertIfNotInNS(author, NS.USER_TALK)))
-				l.put(author, t.header);
-		});
+				l.put(author, s);
+		}
 
 		// skip talk page redirects
 		MQuery.resolveRedirects(wiki, l.l.keySet()).forEach((k, v) -> {

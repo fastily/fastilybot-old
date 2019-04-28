@@ -182,7 +182,7 @@ class Bots
 	public void findCommonsFFD()
 	{
 		String ncRegex = WTP.ncd.getRegex(wiki);
-		HashSet<String> fl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
+		HashSet<String> fl = new HashSet<>(BUtils.getCom().whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		WikiX.getFirstOnlySharedDuplicate(wiki, wiki.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
 			if (fl.contains(v))
@@ -196,7 +196,7 @@ class Bots
 	 */
 	public void findDelComFFD()
 	{
-		Wiki com = WikiX.getCommons(wiki);
+		Wiki com = BUtils.getCom();
 
 		Pattern nomDelTemplPattern = Pattern.compile(WTP.nomDelOnCom.getRegex(wiki));
 		HashMap<String, String> pageTexts = MQuery.getPageText(wiki, wiki.whatTranscludesHere(WTP.nomDelOnCom.title, NS.FILE));
@@ -230,7 +230,7 @@ class Bots
 	public void findKeptComFFD()
 	{
 		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
-		HashSet<String> cffdl = new HashSet<>(WikiX.getCommons(wiki).whatTranscludesHere("Template:Deletion template tag", NS.FILE));
+		HashSet<String> cffdl = new HashSet<>(BUtils.getCom().whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		WikiX.getFirstOnlySharedDuplicate(wiki,
 				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {

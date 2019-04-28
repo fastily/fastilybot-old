@@ -20,6 +20,13 @@ import fastily.wptoolbox.HTTP;
 class BUtils
 {
 	/**
+	 * Wiki pointing to the Wikimedia Commons
+	 * 
+	 * @see #getCom()
+	 */
+	private static Wiki commons;
+
+	/**
 	 * Constructors disallowed
 	 */
 	private BUtils()
@@ -82,5 +89,15 @@ class BUtils
 	public static ZonedDateTime utcWithTodaysDate()
 	{
 		return Dates.getUTCofNow().truncatedTo(ChronoUnit.DAYS);
+	}
+
+	/**
+	 * Creates an anonymous Wiki pointing to the Wikimedia Commons. This method is cached.
+	 * 
+	 * @return An anonymous Wiki pointing to the Wikimedia Commons
+	 */
+	public static Wiki getCom()
+	{
+		return commons == null ? (commons = new Wiki("commons.wikimedia.org")) : commons;
 	}
 }

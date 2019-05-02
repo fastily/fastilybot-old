@@ -2,7 +2,6 @@ package fastilybot;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -45,7 +44,7 @@ class BUtils
 	public static HashSet<String> fetchLabsReportSet(Wiki wiki, String report, String prefix)
 	{
 		String body = HTTP.get(String.format("https://tools.wmflabs.org/fastilybot-reports/r/%s.txt", report));
-		return body != null ? FL.toSet(Arrays.stream(body.split("\n")).map(s -> prefix + s.replace('_', ' '))) : new HashSet<>();
+		return body != null ? FL.toSet(body.lines().map(s -> prefix + s.replace('_', ' '))) : new HashSet<>();
 	}
 
 	/**

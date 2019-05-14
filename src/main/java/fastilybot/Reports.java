@@ -155,7 +155,7 @@ class Reports
 		l.removeAll(wiki.getCategoryMembers("Category:Wikipedia images available as SVG", NS.FILE));
 		l.removeAll(wiki.getCategoryMembers("Category:All files proposed for deletion", NS.FILE));
 
-		wiki.edit("Wikipedia:Database reports/Orphaned low-resolution free files", BUtils.listify(updatedAt, l, true), updatingReport);
+		wiki.edit("Wikipedia:Database reports/Orphaned low-resolution free files", BUtils.listify(updatedAt, MQuery.exists(wiki, true, l), true), updatingReport);
 	}
 
 	/**

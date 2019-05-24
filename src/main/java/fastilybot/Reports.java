@@ -96,7 +96,7 @@ class Reports
 
 		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 1);
 		l.removeAll(wiki.whatTranscludesHere("Template:Deletable file", NS.FILE));
-		l.removeAll(BUtils.getCom().whatTranscludesHere("Template:Deletion template tag", NS.FILE));
+		l.removeAll(WikiX.getCommons().whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
@@ -290,7 +290,7 @@ class Reports
 				.flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
 		rawTL.removeAll(wiki.getLinksOnPage(reportPage + "/Ignore"));
 
-		HashMap<String, Boolean> enwpOnCom = MQuery.exists(BUtils.getCom(), rawTL);
+		HashMap<String, Boolean> enwpOnCom = MQuery.exists(WikiX.getCommons(), rawTL);
 		wiki.edit(reportPage + "/Raw", GSONP.gson.toJson(enwpOnCom, strBoolHM), "Updating report");
 
 		// Generate transclusion count table

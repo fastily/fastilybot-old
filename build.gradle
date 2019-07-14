@@ -37,5 +37,5 @@ task doDist(type: Jar) {
 }
 
 wrapper {
-  gradleVersion = '5.5'
+  gradleVersion = '5.5.1'
 }

@@ -51,7 +51,7 @@ public class FastilyBot implements Runnable
 	 */
 	public static void main(String[] args)
 	{
-		CommandLine.run(new FastilyBot(), args);
+		new CommandLine(new FastilyBot()).execute(args);
 	}
 
 	/**

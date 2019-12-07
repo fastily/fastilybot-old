@@ -30,4 +30,4 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 
 ## Weekly
 # (shadowCommons, orphanedFFD, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
-30 12 * * 1 jsub -once -mem 20g -quiet -j y -o reports-weekly.txt java -Xmx16g -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12
+30 12 * * 1 jsub -once -mem 20g -quiet -j y -o reports-weekly.txt java -Xmx16g -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12,13

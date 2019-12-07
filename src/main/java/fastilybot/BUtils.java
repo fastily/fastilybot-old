@@ -1,9 +1,13 @@
 package fastilybot;
 
+import java.lang.reflect.Type;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+
+import com.google.gson.reflect.TypeToken;
 
 import fastily.jwiki.core.Wiki;
 import fastily.jwiki.util.FL;
@@ -18,6 +22,12 @@ import fastily.wptoolbox.HTTP;
  */
 class BUtils
 {
+	/**
+	 * The Type representation for a HashMap of [ String : String ].
+	 */
+	protected static final Type strStrHM = new TypeToken<HashMap<String, String>>() {
+	}.getType();
+
 	/**
 	 * Constructors disallowed
 	 */
@@ -41,8 +51,7 @@ class BUtils
 	}
 
 	/**
-	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code File:} and where
-	 * underscores are replaced by spaces.
+	 * Fetch a simple report from fastilybot's toollabs dumps where each entry is prefixed with {@code File:} and where underscores are replaced by spaces.
 	 * 
 	 * @param wiki The Wiki object to use
 	 * @param rNum The report number to fetch.
@@ -58,8 +67,7 @@ class BUtils
 	 * 
 	 * @param header A header/lead string to apply at the beginning of the returned String.
 	 * @param titles The titles to use
-	 * @param doEscape Set as true to escape titles. i.e. adds a {@code :} before each link so that files and categories
-	 *           are properly escaped and appear as links.
+	 * @param doEscape Set as true to escape titles. i.e. adds a {@code :} before each link so that files and categories are properly escaped and appear as links.
 	 * @return A String with the titles as a linked, unordered list, in Wiki-text.
 	 */
 	public static String listify(String header, Collection<String> titles, boolean doEscape)

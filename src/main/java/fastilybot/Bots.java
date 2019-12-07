@@ -12,8 +12,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import com.google.gson.reflect.TypeToken;
-
 import fastily.jwiki.core.MQuery;
 import fastily.jwiki.core.NS;
 import fastily.jwiki.core.WParser;
@@ -92,7 +90,7 @@ class Bots
 		HashSet<String> idkL = FL.toSet(wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream()
 				.flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
 
-		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText(baseConfig + "Rules"), new TypeToken<HashMap<String, String>>(){}.getType());
+		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText(baseConfig + "Rules"), BUtils.strStrHM);
 
 		// logic
 		rules.forEach((rootCat, templ) -> {

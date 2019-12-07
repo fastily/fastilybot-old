@@ -66,27 +66,27 @@ public class FastilyBot implements Runnable
 			WGen.main(new String[0]);
 			return;
 		}
-		
+
 		// show usage if no args passed
-		if(botNums == null && repNums == null)
+		if (botNums == null && repNums == null)
 		{
 			CommandLine.usage(this, System.err);
 			return;
 		}
 
 		Wiki wiki = WikiX.getUserWP("FastilyBot");
-		
+
 		// check if disabled on-wiki
-		if(wiki.exists(String.format("User:%s/shutoff", wiki.whoami())))
+		if (wiki.exists(String.format("User:%s/shutoff", wiki.whoami())))
 		{
 			System.err.println("SHUTOFF SWITCH ACTIVE, exiting");
 			return;
 		}
-		
+
 		if (botNums != null && !botNums.isEmpty())
 		{
 			Bots b = new Bots(wiki);
-			
+
 			for (int i : botNums)
 				try
 				{
@@ -98,8 +98,8 @@ public class FastilyBot implements Runnable
 						case 2:
 							b.removeBadMTC();
 							break;
-//						case 3:
-							// See case 5 in the Reports section below
+						// case 3:
+						// See case 5 in the Reports section below
 						case 4:
 							b.unflagOI();
 							break;
@@ -140,7 +140,7 @@ public class FastilyBot implements Runnable
 		if (repNums != null && !repNums.isEmpty())
 		{
 			Reports r = new Reports(wiki);
-			
+
 			for (int i : repNums)
 				try
 				{
@@ -158,9 +158,9 @@ public class FastilyBot implements Runnable
 						case 4:
 							r.mtcRedirs();
 							break;
-						 case 5:
-						 	r.brokenSPI();
-						 	break;
+						case 5:
+							r.brokenSPI();
+							break;
 						case 6:
 							r.orphanedKL();
 							break;
@@ -181,6 +181,9 @@ public class FastilyBot implements Runnable
 							break;
 						case 12:
 							r.possiblyUnsourcedFiles();
+							break;
+						case 13:
+							r.impossibleDD();
 							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);

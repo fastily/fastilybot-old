@@ -71,8 +71,8 @@ class Reports
 	{
 		String report = "Wikipedia:Sockpuppet investigations/SPI/Malformed Cases Report";
 
-		HashSet<String> spiCases = FL.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream()
-				.filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
+		HashSet<String> spiCases = FL
+				.toSet(wiki.prefixIndex(NS.PROJECT, "Sockpuppet investigations/").stream().filter(s -> !(s.endsWith("/Archive") || s.startsWith("Wikipedia:Sockpuppet investigations/SPI/"))));
 
 		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI case status", NS.PROJECT));
 		spiCases.removeAll(wiki.whatTranscludesHere("Template:SPI archive notice", NS.PROJECT));
@@ -112,8 +112,8 @@ class Reports
 		// constants
 		DateTimeFormatter dateInFmt = DateTimeFormatter.ofPattern("yyyyMMddHHmmssz");
 		Pattern filePRODRegex = Pattern.compile(WTP.fprod.getRegex(wiki));
-		StringBuffer reportText = new StringBuffer("{{/header}}\n" + updatedAt
-				+ "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n");
+		StringBuilder reportText = new StringBuilder(
+				"{{/header}}\n" + updatedAt + "{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;\"\n! Date\n! File\n! Reason\n! Use count\n");
 
 		ArrayList<String> fl = wiki.getCategoryMembers("Category:All files proposed for deletion", NS.FILE);
 
@@ -127,8 +127,7 @@ class Reports
 			{
 				WTemplate t = WParser.parseText(wiki, WikiX.extractTemplate(filePRODRegex, v)).getTemplates().get(0);
 
-				reportText.append(String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n",
-						Dates.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
+				reportText.append(String.format("|-%n| %s%n| [[:%s]]%n| %s%n | %d%n", Dates.iso8601dtf.format(ZonedDateTime.parse(t.get("timestamp").toString() + "UTC", dateInFmt)), k,
 						t.get("concern").toString(), counts.get(k)));
 			}
 			catch (Throwable e)
@@ -144,6 +143,30 @@ class Reports
 			reportText.append(BUtils.listify("\n== Possibly Malformed ==\n", fails, true));
 
 		wiki.edit(String.format("User:%s/File PROD Summary", wiki.whoami()), reportText.toString(), updatingReport);
+	}
+
+	/**
+	 * Finds files nominated for daily deletion with malformed or expired nomination dates.
+	 */
+	public void impossibleDD()
+	{
+		String rPage = "Wikipedia:Database reports/Files for daily deletion with an impossible date";
+		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText("User:FastilyBot/Daily Deletion Categories"), BUtils.strStrHM);
+
+		HashSet<String> out = new HashSet<>();
+
+		// rootCat : groupCat
+		rules.forEach((k, v) -> {
+			HashSet<String> l = new HashSet<>(wiki.getCategoryMembers(v, NS.FILE));
+			for (String cat : wiki.getCategoryMembers(k, NS.CATEGORY))
+				if (cat.matches(".+?" + Dates.DMYRegex))
+					l.removeAll(wiki.getCategoryMembers(cat, NS.FILE));
+
+			if (!l.isEmpty())
+				out.addAll(l);
+		});
+
+		wiki.edit(rPage, BUtils.listify(updatedAt, out, true), updatingReport);
 	}
 
 	/**
@@ -198,8 +221,7 @@ class Reports
 				rawL.add(k);
 		});
 
-		StringBuilder b = new StringBuilder(
-				"<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n");
+		StringBuilder b = new StringBuilder("<!-- This is a bot-generated regex library for MTC!, please don't change, thanks! -->\n<pre>\n");
 		MQuery.linksHere(wiki, true, new ArrayList<>(rawL)).forEach((k, v) -> {
 			v.add(0, k); // original template is included in results
 			b.append(FL.pipeFence(wiki.nss(v)) + "\n");
@@ -221,8 +243,7 @@ class Reports
 				l.add(k);
 		});
 
-		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BUtils.listify(updatedAt, l, true),
-				updatingReport + String.format(" (%d items)", l.size()));
+		wiki.edit(String.format("User:%s/Orphaned FfD", wiki.whoami()), BUtils.listify(updatedAt, l, true), updatingReport + String.format(" (%d items)", l.size()));
 	}
 
 	/**
@@ -233,8 +254,7 @@ class Reports
 		HashSet<String> l = WTP.orphan.getTransclusionSet(wiki, NS.FILE);
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
-		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BUtils.listify(updatedAt, l, true),
-				updatingReport);
+		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BUtils.listify(updatedAt, l, true), updatingReport);
 	}
 
 	/**
@@ -258,8 +278,7 @@ class Reports
 	 */
 	public void possiblyUnsourcedFiles()
 	{
-		wiki.edit("Wikipedia:Database reports/Free files without a machine-readable source",
-				BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 12), true), updatingReport);
+		wiki.edit("Wikipedia:Database reports/Free files without a machine-readable source", BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 12), true), updatingReport);
 	}
 
 	/**
@@ -273,8 +292,7 @@ class Reports
 		for (String s : wiki.getLinksOnPage(rPage + "/Ignore", NS.CATEGORY))
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
-		wiki.edit(rPage, updatedAt + "\n" + String.join("\n", FL.toAL(l.stream().map(s -> "* {{No redirect|" + s + "}}"))),
-				updatingReport);
+		wiki.edit(rPage, updatedAt + "\n" + String.join("\n", FL.toAL(l.stream().map(s -> "* {{No redirect|" + s + "}}"))), updatingReport);
 	}
 
 	/**
@@ -286,8 +304,8 @@ class Reports
 		String reportPage = String.format("User:%s/Free License Tags", wiki.whoami());
 
 		// refresh license tag cache
-		ArrayList<String> rawTL = FL.toAL(wiki.getLinksOnPage(reportPage + "/Sources", NS.CATEGORY).stream()
-				.flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
+		ArrayList<String> rawTL = FL
+				.toAL(wiki.getLinksOnPage(reportPage + "/Sources", NS.CATEGORY).stream().flatMap(cat -> wiki.getCategoryMembers(cat, NS.TEMPLATE).stream()).filter(s -> !s.endsWith("/sandbox")));
 		rawTL.removeAll(wiki.getLinksOnPage(reportPage + "/Ignore"));
 
 		HashMap<String, Boolean> enwpOnCom = MQuery.exists(WikiX.getCommons(), rawTL);
@@ -296,19 +314,16 @@ class Reports
 		// Generate transclusion count table
 		Collections.sort(rawTL);
 
-		StringBuffer dump = new StringBuffer(updatedAt
-				+ "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n");
+		StringBuilder dump = new StringBuilder(updatedAt + "\n{| class=\"wikitable sortable\" style=\"margin-left: auto; margin-right: auto;width:100%;\" \n! # !! Name !! Transclusions !! Commons? \n");
 
 		int i = 0;
 		for (String s : rawTL)
 			try
 			{
 				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
-						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10")
-								.newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
+						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10").newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
 
-				dump.append(String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s),
-						m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));
+				dump.append(String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));
 
 			}
 			catch (Throwable e)

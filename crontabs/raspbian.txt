@@ -24,11 +24,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 ## REPORT TASKS ##
 ##################
 
-## Daily
-# (fprodSum)
-#00 12 * * * java -Xmx512M -jar FB.jar -r 8 > reports-daily.txt 2>&1
-
-
 ## Weekly
-# (shadowCommons, orphanedFFD, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles)
-30 12 * * 1 java -Xmx512M -jar FB.jar -r 1,2,4,5,6,7,9,10,11,12,13 > reports-weekly.txt 2>&1
+# (shadowCommons, orphanedFFD, mtcRedirs, brokenSPI, orphanedKL, oversizedFU, fprodSum, missingFCT, dupeOnCom, lowResFreeFiles, possiblyUnsourcedFiles, impossibleDD)
+30 12 * * 1 java -Xmx512M -jar FB.jar -r 1,2,4,5,6,7,8,9,10,11,12,13 > reports-weekly.txt 2>&1

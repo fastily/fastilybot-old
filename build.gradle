@@ -16,7 +16,7 @@ targetCompatibility = JavaVersion.VERSION_11
 mainClassName = "fastilybot.FastilyBot"
 
 dependencies {
-  compile 'info.picocli:picocli:4.0.4'
+  compile 'info.picocli:picocli:4.1.4'
   compile 'fastily:wp-toolbox:0.0.2'
 }
 
@@ -37,5 +37,5 @@ task doDist(type: Jar) {
 }
 
 wrapper {
-  gradleVersion = '6.0'
+  gradleVersion = '6.0.1'
 }

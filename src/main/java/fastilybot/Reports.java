@@ -243,7 +243,7 @@ class Reports
 				l.add(k);
 		});
 
-		wiki.edit(String.format("Wikipedia:Database reports/Files tagged for FfD missing an FfD nomination", wiki.whoami()), BUtils.listify(updatedAt, l, true), updatingReport + String.format(" (%d items)", l.size()));
+		wiki.edit("Wikipedia:Database reports/Files tagged for FfD missing an FfD nomination", BUtils.listify(updatedAt, l, true), updatingReport + String.format(" (%d items)", l.size()));
 	}
 
 	/**

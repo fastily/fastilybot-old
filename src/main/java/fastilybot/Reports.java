@@ -10,19 +10,20 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fastily.jwiki.core.MQuery;
+import org.fastily.jwiki.core.NS;
+import org.fastily.jwiki.core.WParser;
+import org.fastily.jwiki.core.WParser.WTemplate;
+import org.fastily.jwiki.core.Wiki;
+import org.fastily.jwiki.util.FL;
+import org.fastily.jwiki.util.GSONP;
+
 import com.google.gson.reflect.TypeToken;
 
-import fastily.jwiki.core.MQuery;
-import fastily.jwiki.core.NS;
-import fastily.jwiki.core.WParser;
-import fastily.jwiki.core.Wiki;
-import fastily.jwiki.core.WParser.WTemplate;
-import fastily.jwiki.util.FL;
-import fastily.jwiki.util.GSONP;
-import fastily.wptoolbox.WikiX;
 import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.HTTP;
 import fastily.wptoolbox.WTP;
+import fastily.wptoolbox.WikiX;
 import okhttp3.HttpUrl;
 
 /**

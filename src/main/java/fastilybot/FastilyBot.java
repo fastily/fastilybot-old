@@ -2,9 +2,10 @@ package fastilybot;
 
 import java.util.ArrayList;
 
-import fastily.jwiki.core.Wiki;
-import fastily.wptoolbox.WikiX;
+import org.fastily.jwiki.core.Wiki;
+
 import fastily.wptoolbox.WGen;
+import fastily.wptoolbox.WikiX;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

@@ -12,16 +12,17 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import fastily.jwiki.core.MQuery;
-import fastily.jwiki.core.NS;
-import fastily.jwiki.core.WParser;
-import fastily.jwiki.core.Wiki;
-import fastily.jwiki.util.FL;
-import fastily.jwiki.util.GSONP;
-import fastily.jwiki.util.MultiMap;
-import fastily.wptoolbox.WikiX;
+import org.fastily.jwiki.core.MQuery;
+import org.fastily.jwiki.core.NS;
+import org.fastily.jwiki.core.WParser;
+import org.fastily.jwiki.core.Wiki;
+import org.fastily.jwiki.util.FL;
+import org.fastily.jwiki.util.GSONP;
+import org.fastily.jwiki.util.MultiMap;
+
 import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.WTP;
+import fastily.wptoolbox.WikiX;
 
 /**
  * Fastily's Wikipedia Bots

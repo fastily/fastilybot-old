@@ -7,10 +7,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.fastily.jwiki.core.Wiki;
+import org.fastily.jwiki.util.FL;
+
 import com.google.gson.reflect.TypeToken;
 
-import fastily.jwiki.core.Wiki;
-import fastily.jwiki.util.FL;
 import fastily.wptoolbox.Dates;
 import fastily.wptoolbox.HTTP;
 

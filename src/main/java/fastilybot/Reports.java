@@ -285,7 +285,7 @@ class Reports
 	/**
 	 * Identifies enwp file description pages shadowing a Commons file or redirect
 	 */
-	public void shadowCommons()
+	public void shadowCommonsDescriptionPages()
 	{
 		String rPage = "Wikipedia:Database reports/File description pages shadowing a Commons file or redirect";
 
@@ -294,6 +294,19 @@ class Reports
 			l.removeAll(wiki.getCategoryMembers(s, NS.FILE));
 
 		wiki.edit(rPage, updatedAt + "\n" + String.join("\n", FL.toAL(l.stream().map(s -> "* {{No redirect|" + s + "}}"))), updatingReport);
+	}
+
+	/**
+	 * Find all non-free files shadowing a Commons file (specifically titles where the respective files are not the same)
+	 */
+	public void shadowCommonsNonFree()
+	{
+		String rPage = "Wikipedia:Database reports/Non-free files shadowing a Commons file";
+
+		HashSet<String> l = BUtils.fetchLabsReportAsFiles(wiki, 13);
+		l.retainAll(BUtils.fetchLabsReportAsFiles(wiki, 5));
+
+		wiki.edit(rPage, BUtils.listify(updatedAt, l, true), updatingReport);
 	}
 
 	/**

@@ -148,7 +148,7 @@ public class FastilyBot implements Runnable
 					switch (i)
 					{
 						case 1:
-							r.shadowCommons();
+							r.shadowCommonsDescriptionPages();
 							break;
 						case 2:
 							r.orphanedFFD();
@@ -185,6 +185,9 @@ public class FastilyBot implements Runnable
 							break;
 						case 13:
 							r.impossibleDD();
+							break;
+						case 14:
+							r.shadowCommonsNonFree();
 							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);

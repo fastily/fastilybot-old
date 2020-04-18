@@ -17,13 +17,13 @@ import org.fastily.jwiki.core.WParser.WTemplate;
 import org.fastily.jwiki.core.Wiki;
 import org.fastily.jwiki.util.FL;
 import org.fastily.jwiki.util.GSONP;
+import org.fastily.wptoolbox.Dates;
+import org.fastily.wptoolbox.HTTP;
+import org.fastily.wptoolbox.WTP;
+import org.fastily.wptoolbox.WikiX;
 
 import com.google.gson.reflect.TypeToken;
 
-import fastily.wptoolbox.Dates;
-import fastily.wptoolbox.HTTP;
-import fastily.wptoolbox.WTP;
-import fastily.wptoolbox.WikiX;
 import okhttp3.HttpUrl;
 
 /**
@@ -334,7 +334,7 @@ class Reports
 		for (String s : rawTL)
 			try
 			{
-				Matcher m = Pattern.compile("(?<=\\<p\\>)\\d+(?= transclusion)")
+				Matcher m = Pattern.compile("\\d+(?= transclusion\\(s\\) found)")
 						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10").newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
 
 				dump.append(String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));

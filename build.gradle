@@ -1,39 +1,41 @@
 plugins {
-  id 'java'
   id 'eclipse'
-  id 'application'
+  id 'java'
+}
+
+dependencies {
+	implementation 'org.fastily:wp-toolbox:0.0.3'
+	implementation 'info.picocli:picocli:4.2.0'
 }
 
 repositories {
-  mavenLocal()
-  jcenter()
+	mavenLocal()
+  	mavenCentral()
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
-
-
-mainClassName = "fastilybot.FastilyBot"
-
-dependencies {
-  compile 'info.picocli:picocli:4.2.0'
-  compile 'fastily:wp-toolbox:0.0.2'
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }
 
-task doDist(type: Jar) {
-  baseName = "FB"
 
+task fastilybot(type: Jar) {
+  archiveClassifier = 'uber'
+
+  archiveBaseName = "FB"
+
+  from sourceSets.main.output
+
+  dependsOn configurations.runtimeClasspath
   from {
-    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
   }
 
   manifest {
-    attributes 'Main-Class': "fastilybot.FastilyBot"
+    attributes 'Main-Class': 'fastilybot.FastilyBot'
   }
 
   exclude "META-INF/*.SF", "**/LICENSE*", "**/NOTICE*", "**/maven/**"
-
-  with jar
 }
 
 wrapper {

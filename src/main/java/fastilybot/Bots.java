@@ -19,10 +19,9 @@ import org.fastily.jwiki.core.Wiki;
 import org.fastily.jwiki.util.FL;
 import org.fastily.jwiki.util.GSONP;
 import org.fastily.jwiki.util.MultiMap;
-
-import fastily.wptoolbox.Dates;
-import fastily.wptoolbox.WTP;
-import fastily.wptoolbox.WikiX;
+import org.fastily.wptoolbox.Dates;
+import org.fastily.wptoolbox.WTP;
+import org.fastily.wptoolbox.WikiX;
 
 /**
  * Fastily's Wikipedia Bots
@@ -60,13 +59,11 @@ class Bots
 	}
 
 	/**
-	 * Fills in date parameter (and other missing parameters) for files in Category:Wikipedia files with the same name on
-	 * Wikimedia Commons as of unknown date.
+	 * Fills in date parameter (and other missing parameters) for files in Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date.
 	 */
 	public void dateNowCommons()
 	{
-		ArrayList<String> l = wiki
-				.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
+		ArrayList<String> l = wiki.getCategoryMembers("Category:Wikipedia files with the same name on Wikimedia Commons as of unknown date", NS.FILE);
 		l.removeAll(WikiX.getCategoryMembersR(wiki, "Category:Wikipedia files reviewed on Wikimedia Commons").y);
 
 		String ncRegex = WTP.ncd.getRegex(wiki);
@@ -85,11 +82,9 @@ class Bots
 
 		Instant start = Instant.from(targetDT), end = Instant.now();
 
-		String targetDateStr = String.format("%d %s %d", targetDT.getDayOfMonth(),
-				targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getYear());
+		String targetDateStr = String.format("%d %s %d", targetDT.getDayOfMonth(), targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getYear());
 		HashSet<String> talkPageBL = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
-		HashSet<String> idkL = FL.toSet(wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream()
-				.flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
+		HashSet<String> idkL = FL.toSet(wiki.getLinksOnPage(baseConfig + "Ignore", NS.TEMPLATE).stream().flatMap(s -> wiki.whatTranscludesHere(s, NS.FILE).stream()));
 
 		HashMap<String, String> rules = GSONP.gson.fromJson(wiki.getPageText(baseConfig + "Rules"), BUtils.strStrHM);
 
@@ -143,13 +138,12 @@ class Bots
 		ZonedDateTime targetDT = BUtils.utcWithTodaysDate().minusDays(1);
 		Instant start = targetDT.toInstant(), end = Instant.now();
 
-		String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", targetDT.getYear(),
-				targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getDayOfMonth());
+		String targetFFD = String.format("Wikipedia:Files for discussion/%d %s %d", targetDT.getYear(), targetDT.getMonth().getDisplayName(TextStyle.FULL, Locale.US), targetDT.getDayOfMonth());
 		HashSet<String> noBots = WTP.nobots.getTransclusionSet(wiki, NS.USER_TALK);
 
 		// Associate possibly eligible files by user
 		MultiMap<String, String> l = new MultiMap<>();
-		for(String s : MQuery.exists(wiki, true, FL.toAL(wiki.splitPageByHeader(targetFFD).stream().filter(t -> t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE)).map(t -> t.header))))
+		for (String s : MQuery.exists(wiki, true, FL.toAL(wiki.splitPageByHeader(targetFFD).stream().filter(t -> t.level == 4 && wiki.whichNS(t.header).equals(NS.FILE)).map(t -> t.header))))
 		{
 			String author = wiki.getPageCreator(s);
 			if (author != null && !noBots.contains(author = wiki.convertIfNotInNS(author, NS.USER_TALK)))
@@ -185,8 +179,7 @@ class Bots
 
 		WikiX.getFirstOnlySharedDuplicate(wiki, wiki.whatTranscludesHere(WTP.ncd.title, NS.FILE)).forEach((k, v) -> {
 			if (fl.contains(v))
-				wiki.replaceText(k, ncRegex, String.format("{{Nominated for deletion on Commons|%s}}", wiki.nss(v)),
-						"BOT: File is up for deletion on Commons");
+				wiki.replaceText(k, ncRegex, String.format("{{Nominated for deletion on Commons|%s}}", wiki.nss(v)), "BOT: File is up for deletion on Commons");
 		});
 	}
 
@@ -205,8 +198,7 @@ class Bots
 			try
 			{
 				// TODO: should ideally be parsing the entire page
-				String comFile = WParser.parseText(wiki, WikiX.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1")
-						.toString();
+				String comFile = WParser.parseText(wiki, WikiX.extractTemplate(nomDelTemplPattern, v)).getTemplates().get(0).get("1").toString();
 				if (comFile != null)
 					comPairs.put(k, wiki.convertIfNotInNS(comFile, NS.FILE));
 			}
@@ -216,11 +208,8 @@ class Bots
 			}
 		});
 
-		FL.toHM(MQuery.exists(com, false, comPairs.keySet()).stream()
-				.filter(s -> !com.getLogs(comPairs.get(s), null, "delete", 1).isEmpty()), Function.identity(), comPairs::get)
-				.forEach((k, v) -> wiki.edit(k,
-						pageTexts.get(k).replaceAll(WTP.nomDelOnCom.getRegex(wiki), String.format("{{Deleted on Commons|%s}}", wiki.nss(v))),
-						"BOT: Adding note that file has been deleted on Commons"));
+		FL.toHM(MQuery.exists(com, false, comPairs.keySet()).stream().filter(s -> !com.getLogs(comPairs.get(s), null, "delete", 1).isEmpty()), Function.identity(), comPairs::get).forEach((k, v) -> wiki
+				.edit(k, pageTexts.get(k).replaceAll(WTP.nomDelOnCom.getRegex(wiki), String.format("{{Deleted on Commons|%s}}", wiki.nss(v))), "BOT: Adding note that file has been deleted on Commons"));
 	}
 
 	/**
@@ -231,11 +220,10 @@ class Bots
 		String nfdcRegex = WTP.nomDelOnCom.getRegex(wiki);
 		HashSet<String> cffdl = new HashSet<>(WikiX.getCommons().whatTranscludesHere("Template:Deletion template tag", NS.FILE));
 
-		WikiX.getFirstOnlySharedDuplicate(wiki,
-				wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
-					if (!cffdl.contains(v))
-						wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, wiki.nss(v)), "BOT: File is not up for deletion on Commons");
-				});
+		WikiX.getFirstOnlySharedDuplicate(wiki, wiki.getCategoryMembers("Category:Files nominated for deletion on Wikimedia Commons", NS.FILE)).forEach((k, v) -> {
+			if (!cffdl.contains(v))
+				wiki.replaceText(k, nfdcRegex, String.format(ncdFmt, wiki.nss(v)), "BOT: File is not up for deletion on Commons");
+		});
 	}
 
 	/**
@@ -313,8 +301,7 @@ class Bots
 
 		String tRegex = WTP.mtc.getRegex(wiki);
 
-		wiki.getLinksOnPage(String.format("User:%s/Task2/Blacklist", wiki.whoami())).stream()
-				.flatMap(s -> wiki.getCategoryMembers(s, NS.FILE).stream()).filter(l::contains)
+		wiki.getLinksOnPage(String.format("User:%s/Task2/Blacklist", wiki.whoami())).stream().flatMap(s -> wiki.getCategoryMembers(s, NS.FILE).stream()).filter(l::contains)
 				.forEach(s -> wiki.replaceText(s, tRegex, "BOT: file may not be eligible for Commons"));
 	}
 

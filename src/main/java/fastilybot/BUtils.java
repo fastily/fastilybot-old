@@ -9,11 +9,10 @@ import java.util.HashSet;
 
 import org.fastily.jwiki.core.Wiki;
 import org.fastily.jwiki.util.FL;
+import org.fastily.wptoolbox.Dates;
+import org.fastily.wptoolbox.HTTP;
 
 import com.google.gson.reflect.TypeToken;
-
-import fastily.wptoolbox.Dates;
-import fastily.wptoolbox.HTTP;
 
 /**
  * Shared static methods used by FastilyBot

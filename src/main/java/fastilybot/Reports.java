@@ -336,9 +336,7 @@ class Reports
 			{
 				Matcher m = Pattern.compile("\\d+(?= transclusion\\(s\\) found)")
 						.matcher(HTTP.get(HttpUrl.parse("https://tools.wmflabs.org/templatecount/index.php?lang=en&namespace=10").newBuilder().addQueryParameter("name", wiki.nss(s)).build()));
-
-				dump.append(String.format("|-%n|%d ||{{Tlx|%s}} || %d ||[[c:%s|%b]] %n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));
-
+				dump.append(String.format("|-%n|%d%n|{{Tlx|%s}}%n|%d%n|[[c:%s|%b]]%n", ++i, wiki.nss(s), m.find() ? Integer.parseInt(m.group()) : -1, s, enwpOnCom.get(s)));
 			}
 			catch (Throwable e)
 			{

@@ -9,8 +9,8 @@ dependencies {
 }
 
 repositories {
-	mavenLocal()
-  	mavenCentral()
+  mavenLocal()
+  mavenCentral()
 }
 
 java {

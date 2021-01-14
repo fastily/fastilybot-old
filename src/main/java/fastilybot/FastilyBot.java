@@ -189,6 +189,15 @@ public class FastilyBot implements Runnable
 						case 14:
 							r.shadowCommonsNonFree();
 							break;
+						case 15:
+							r.nonFreePDFs();
+							break;
+						case 16:
+							r.orphanedFileTalk();
+							break;
+						case 17:
+							r.orphanedPDFs();
+							break;
 						default:
 							System.err.println("ERROR: Not a valid report number: " + i);
 					}

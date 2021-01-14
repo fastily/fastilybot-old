@@ -234,6 +234,14 @@ class Reports
 	}
 
 	/**
+	 * Lists pdf files tagged non-free.
+	 */
+	public void nonFreePDFs()
+	{
+		wiki.edit("Wikipedia:Database reports/Non-free PDFs", BUtils.listify(updatedAt, BUtils.fetchLabsReportAsFiles(wiki, 15), true), updatingReport);
+	}
+
+	/**
 	 * Lists pages tagged for FfD with no corresponding FfD page/entry.
 	 */
 	public void orphanedFFD()
@@ -248,6 +256,17 @@ class Reports
 	}
 
 	/**
+	 * List orphaned file talk pages
+	 */
+	public void orphanedFileTalk()
+	{
+		HashSet<String> l = BUtils.fetchLabsReportSet(wiki, "report16", "File talk:");
+		l.removeAll(wiki.getCategoryMembers("Category:Wikipedia orphaned talk pages that should not be speedily deleted", NS.FILE_TALK));
+
+		wiki.edit("Wikipedia:Database reports/Orphaned file talk pages", BUtils.listify(updatedAt, l, false), updatingReport);
+	}
+
+	/**
 	 * Lists enwp files that are tagged keep local, but orphaned.
 	 */
 	public void orphanedKL()
@@ -256,6 +275,15 @@ class Reports
 		l.retainAll(WTP.keeplocal.getTransclusionSet(wiki, NS.FILE));
 
 		wiki.edit("Wikipedia:Database reports/Orphaned free files tagged keep local", BUtils.listify(updatedAt, l, true), updatingReport);
+	}
+
+	/**
+	 * Lists unused PDFs on enwp
+	 */
+	public void orphanedPDFs()
+	{
+		wiki.edit("Wikipedia:Database reports/Orphaned PDFs", BUtils.listify(updatedAt, FL.toAL(BUtils.fetchLabsReportAsFiles(wiki, 9).stream().filter(s -> s.toLowerCase().endsWith(".pdf"))), true),
+				updatingReport);
 	}
 
 	/**
